@@ -24,81 +24,31 @@ public class MMenuBehaviour : MonoBehaviour
         screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
     }
 
-
-
-
     //Main Menu -> Options Menu
-    public void GoToScreen2() => StartCoroutine(nameof(GoToScreen2Coroutine));
-    IEnumerator GoToScreen2Coroutine()
-    {
-        float elapsedTime = 0f;
-        eventSystem.SetActive(false);
-        while(elapsedTime < screenChangeWaitTime)
-        {
-            mMenuGO.transform.position = Vector3.Lerp(screen1Position, screen2Position, (elapsedTime / screenChangeWaitTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        mMenuGO.transform.position = screen2Position;
-        eventSystem.SetActive(true);
-        yield return null;
-    }
-
-    //Options Menu -> Main Menu
-    public void GoToScreen1From2() => StartCoroutine(nameof(GoToScreen1From2Coroutine));
-    IEnumerator GoToScreen1From2Coroutine()
-    {
-        float elapsedTime = 0f;
-        eventSystem.SetActive(false);
-        while (elapsedTime < screenChangeWaitTime)
-        {
-            mMenuGO.transform.position = Vector3.Lerp(screen2Position, screen1Position, (elapsedTime / screenChangeWaitTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        mMenuGO.transform.position = screen1Position;
-        eventSystem.SetActive(true);
-        yield return null;
-    }
-
+    public void GoToScreen2() => StartCoroutine(MoveToScreenCoroutine(screen1Position, screen2Position));
     //Main Menu -> Multiplayer Menu
-    public void GoToScreen3() => StartCoroutine(nameof(GoToScreen3Coroutine));
-    IEnumerator GoToScreen3Coroutine()
-    {
-        float elapsedTime = 0f;
-        eventSystem.SetActive(false);
-        while (elapsedTime < screenChangeWaitTime)
-        {
-            mMenuGO.transform.position = Vector3.Lerp(screen1Position, screen3Position, (elapsedTime / screenChangeWaitTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        mMenuGO.transform.position = screen3Position;
-        eventSystem.SetActive(true);
-        yield return null;
-    }
-
+    public void GoToScreen3() => StartCoroutine(MoveToScreenCoroutine(screen1Position, screen3Position));
+    //Options Menu -> Main Menu
+    public void GoToScreen1From2() => StartCoroutine(MoveToScreenCoroutine(screen2Position, screen1Position));
     //Multiplayer Menu -> Main Menu
-    public void GoToScreen1From3() => StartCoroutine(nameof(GoToScreen1From3Coroutine));
-    IEnumerator GoToScreen1From3Coroutine()
+    public void GoToScreen1From3() => StartCoroutine(MoveToScreenCoroutine(screen3Position, screen1Position));
+    IEnumerator MoveToScreenCoroutine(Vector3 fromPos, Vector3 toPos)
     {
         float elapsedTime = 0f;
         eventSystem.SetActive(false);
         while (elapsedTime < screenChangeWaitTime)
         {
-            mMenuGO.transform.position = Vector3.Lerp(screen3Position, screen1Position, (elapsedTime / screenChangeWaitTime));
+            mMenuGO.transform.position = Vector3.Lerp(fromPos, toPos, (elapsedTime / screenChangeWaitTime));
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        mMenuGO.transform.position = screen1Position;
+        mMenuGO.transform.position = toPos;
         eventSystem.SetActive(true);
         yield return null;
     }
 
 
-
-
-    public void GoToGame()
+    public void StartGame()
     {
         SceneManager.LoadScene("Ricci_Test", LoadSceneMode.Single);
     }
