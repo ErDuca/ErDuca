@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 07db0b65a7e770141b18d6c44ddee558, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -393,6 +393,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1894893961}
     m_Modifications:
+    - target: {fileID: 37265655319296348, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 928c8716c44420b40919bc0bc7f0b1b0, type: 3}
     - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -523,7 +527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
-      value: PH TO SCREEN 4
+      value: RECORDS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
@@ -632,6 +636,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1894893961}
     m_Modifications:
+    - target: {fileID: 37265655319296348, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d8a6a04a48541b342bf7d762be509b14, type: 3}
     - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -1184,6 +1192,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1894893961}
     m_Modifications:
+    - target: {fileID: 37265655319296348, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 44e1de4b1090d8545baf1b30cf2c6435, type: 3}
     - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -1586,6 +1598,7 @@ GameObject:
   - component: {fileID: 808467523}
   - component: {fileID: 808467522}
   - component: {fileID: 808467526}
+  - component: {fileID: 808467527}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1691,6 +1704,25 @@ MonoBehaviour:
   eventSystem: {fileID: 844849359}
   mMenuGO: {fileID: 1166907919}
   screenChangeWaitTime: 0.5
+--- !u!95 &808467527
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808467521}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 92dc4a311f02ea645ad9b27d0a4d00f3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &844849359
 GameObject:
   m_ObjectHideFlags: 0
@@ -2492,7 +2524,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
-      value: BACK TO MENU
+      value: BACK
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
@@ -3109,18 +3141,6 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3174,7 +3194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
-      value: BACK TO MENU
+      value: BACK
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
@@ -3339,6 +3359,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1316731589}
     m_Modifications:
+    - target: {fileID: 37265655319296348, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e27ec5e105ffad147bbffd669cd635d9, type: 3}
     - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -3469,7 +3493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
-      value: 'START MATCH '
+      value: CONNECT
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
@@ -3693,7 +3717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
-      value: BACK TO MENU
+      value: BACK
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
