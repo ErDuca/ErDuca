@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameUIBehaviour : MonoBehaviour
@@ -31,6 +30,7 @@ public class GameUIBehaviour : MonoBehaviour
             yield return null;
         }
         infoImage.transform.localScale = Vector3.one;
+
         yield return null;
     }
 }
