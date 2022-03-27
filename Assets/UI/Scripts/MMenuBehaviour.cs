@@ -53,10 +53,4 @@ public class MMenuBehaviour : MonoBehaviour
         eventSystem.SetActive(true);
         yield return null;
     }
-
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Ricci_Test", LoadSceneMode.Single);
-    }
 }

@@ -36,6 +36,9 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private AnimationClip pauseMenuOpenAnimation;
     [SerializeField] private AnimationClip pauseMenuCloseAnimation;
 
+    [Header("Transitions related")]
+    [SerializeField] private Animator transitionAnimator;
+
     public void PauseGame() => StartCoroutine(PauseGameCoroutine());
     private IEnumerator PauseGameCoroutine()
     {
@@ -130,7 +133,7 @@ public class GameUIBehaviour : MonoBehaviour
         turnText.text = "OPPONENT'S\nTURN";
         timeSlider.direction = Slider.Direction.RightToLeft;
         timeSliderFill.GetComponent<Image>().color = colorRed;
-        //TODO: The image bugs out (the position is resolution dependent)
+        //TODO: The image bugs out (position is resolution dependent)
         timeSliderImage.transform.position = new Vector3(timeSlider.transform.position.x + timerSliderRectTransform.rect.width / 2, timeSlider.transform.position.y, timeSlider.transform.position.z);
 
         opponentsTurnLogos.SetActive(false);
@@ -143,6 +146,7 @@ public class GameUIBehaviour : MonoBehaviour
     {
         //TODO: A mechanism to choose who starts (other scene?)
 
+        transitionAnimator.SetTrigger("sceneStart");
         timerSliderRectTransform = (RectTransform)timeSlider.transform;
         turnText.text = "PLAYER'S\nTURN";
         timeText.text = "00:00";
