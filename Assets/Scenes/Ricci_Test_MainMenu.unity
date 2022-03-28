@@ -2737,8 +2737,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 673, y: -464}
-  m_SizeDelta: {x: 579.24, y: 164.7222}
+  m_AnchoredPosition: {x: 673, y: -586.8006}
+  m_SizeDelta: {x: 579.24, y: 410.3235}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1411478658
 MonoBehaviour:
@@ -2773,11 +2773,16 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Settings window comes out a little bit too low when on 18:9 resolution.
+  m_Text: 'BUG: Settings window comes out a little bit too low when on 18:9 resolution.
 
 
-    Cannot
-    set EventSystem inactive during scene swap animation.'
+    BUG:
+    Cannot set EventSystem inactive during scene swap animation.
+
+
+    TODO: if the
+    eventSystem issue gets solved check if it''s possible to show the first time
+    screen directly here as a new screen.'
 --- !u!222 &1411478659
 CanvasRenderer:
   m_ObjectHideFlags: 0

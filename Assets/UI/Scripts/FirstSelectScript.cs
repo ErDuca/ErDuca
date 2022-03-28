@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class FirstSelectScript : MonoBehaviour
 {
@@ -23,6 +22,8 @@ public class FirstSelectScript : MonoBehaviour
     [SerializeField] private GameObject SceneTransitionManager;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator choiceAnimator;
+    [SerializeField] private AnimationClip playerChoiceAnimation;
+    [SerializeField] private AnimationClip resultAnimation;
     [SerializeField] private GameObject firstPhaseGroup;
     [SerializeField] private GameObject secondPhaseGroup;
     private int chosenByPlayer;
@@ -35,7 +36,12 @@ public class FirstSelectScript : MonoBehaviour
     private int result;
     private TransitionScript transitionScript;
     [Header("Timer related")]
-    [SerializeField] private GameObject temp;
+    [SerializeField] private Slider timeSlider;
+    [SerializeField] private float choiceTime;
+    [SerializeField] private Text timeText;
+    private float timeRemaining;
+    private float timeToDisplay;
+    private bool choiceDone;
 
     private void Start()
     {
@@ -45,11 +51,14 @@ public class FirstSelectScript : MonoBehaviour
         chosenByOpponent = -1;
         secondPhaseGroup.SetActive(false);
         transitionScript = SceneTransitionManager.GetComponent<TransitionScript>();
+        choiceDone = false;
+        timeRemaining = choiceTime;
     }
 
     public void SymbolPressed(int value) => StartCoroutine(SymbolPressedCoroutine(value));
     private IEnumerator SymbolPressedCoroutine(int value)
     {
+        choiceDone = true;
         switch (value)
         {
             case (int)Symbols.Rock:
@@ -72,7 +81,7 @@ public class FirstSelectScript : MonoBehaviour
                 yield return 1;
                 break;
         }
-        yield return new WaitForSeconds(choiceAnimator.runtimeAnimatorController.animationClips[0].length);
+        yield return new WaitForSeconds(playerChoiceAnimation.length);
         firstPhaseGroup.SetActive(false);
         secondPhaseGroup.SetActive(true);
         yield return new WaitUntil(() => chosenByOpponent !=-1);
@@ -165,8 +174,7 @@ public class FirstSelectScript : MonoBehaviour
                 break;
         }
 
-        //TODO: Update the waiting values with exact animationClip names (this is too confusing)
-        yield return new WaitForSeconds(choiceAnimator.runtimeAnimatorController.animationClips[4].length);
+        yield return new WaitForSeconds(resultAnimation.length);
 
         if(result == (int)Results.Draw)
         {
@@ -183,5 +191,27 @@ public class FirstSelectScript : MonoBehaviour
     {
         //TODO: implement the real way to get chosenByOpponent
         chosenByOpponent = Random.Range(0, 3);
+    }
+
+    private void Update()
+    {
+        if(!choiceDone)
+        {
+            if (timeRemaining > 0)
+            {                
+                timeRemaining -= Time.deltaTime;
+                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
+                timeToDisplay = timeRemaining + 1;
+                //Sets time text to minutes:seconds, both always displayed as 2 digits
+                timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
+                timeSlider.value = timeRemaining / choiceTime;
+            }
+            else
+            {
+                //If time's up then player's choice gets randomized
+                choiceDone = true;
+                SymbolPressed(Random.Range(0, 3));                
+            }
+        }        
     }
 }

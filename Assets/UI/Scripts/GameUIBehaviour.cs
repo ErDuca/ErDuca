@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameUIBehaviour : MonoBehaviour
 {
@@ -21,9 +22,9 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Timer related")]
     [SerializeField] private Text timeText;
     [SerializeField] private Slider timeSlider; 
-    private RectTransform timerSliderRectTransform; //used to get timeSlider's width to move the image on the other side
     [SerializeField] private GameObject timeSliderFill;
-    [SerializeField] private GameObject timeSliderImage;
+    [SerializeField] private GameObject timeSliderImageLeft;
+    [SerializeField] private GameObject timeSliderImageRight;
     private bool changingTurn;
     private float timeRemaining;
     private float timeToDisplay;
@@ -107,12 +108,12 @@ public class GameUIBehaviour : MonoBehaviour
         yield return new WaitForSeconds(turnSwapAnimation.length);
 
         //Everything tunr-related gets moved on the left side
+        timeSliderImageRight.SetActive(false);
+        timeSliderImageLeft.SetActive(true);
         turnText.alignment = TextAnchor.MiddleLeft;
         turnText.text = "PLAYER'S\nTURN";
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
-        //TODO: The image bugs out (the position is resolution dependent)
-        timeSliderImage.transform.position = new Vector3(timeSlider.transform.position.x - timerSliderRectTransform.rect.width / 2, timeSlider.transform.position.y, timeSlider.transform.position.z);
 
         playersTurnLogos.SetActive(false);
         timeRemaining = turnTime;
@@ -129,13 +130,13 @@ public class GameUIBehaviour : MonoBehaviour
         yield return new WaitForSeconds(turnSwapAnimation.length);
 
         //Everything tunr-related gets moved on the right side
+        timeSliderImageLeft.SetActive(false);
+        timeSliderImageRight.SetActive(true);
         turnText.alignment = TextAnchor.MiddleRight;
         turnText.text = "OPPONENT'S\nTURN";
         timeSlider.direction = Slider.Direction.RightToLeft;
         timeSliderFill.GetComponent<Image>().color = colorRed;
-        //TODO: The image bugs out (position is resolution dependent)
-        timeSliderImage.transform.position = new Vector3(timeSlider.transform.position.x + timerSliderRectTransform.rect.width / 2, timeSlider.transform.position.y, timeSlider.transform.position.z);
-
+        
         opponentsTurnLogos.SetActive(false);
         thinkingIcon.SetActive(true);
         timeRemaining = turnTime;
@@ -144,10 +145,9 @@ public class GameUIBehaviour : MonoBehaviour
 
     private void Start()
     {
-        //TODO: A mechanism to choose who starts (other scene?)
+        //TODO: Implement who starts (get value from other scene)
 
         transitionAnimator.SetTrigger("sceneStart");
-        timerSliderRectTransform = (RectTransform)timeSlider.transform;
         turnText.text = "PLAYER'S\nTURN";
         timeText.text = "00:00";
         timeRemaining = turnTime;
@@ -156,7 +156,10 @@ public class GameUIBehaviour : MonoBehaviour
         thinkingIcon.SetActive(false);
         playersTurnLogos.SetActive(false);
         opponentsTurnLogos.SetActive(false);
+        timeSliderImageLeft.SetActive(false);
+        timeSliderImageRight.SetActive(false);
         infoBlock.SetActive(false);
+        
     }
 
     private void Update()
@@ -166,7 +169,7 @@ public class GameUIBehaviour : MonoBehaviour
             if(!changingTurn)
             {
                 timeRemaining -= Time.deltaTime;
-                //We add 1 because it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
+                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
                 timeToDisplay = timeRemaining + 1;
                 //Sets time text to minutes:seconds, both always displayed as 2 digits
                 timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
@@ -178,5 +181,11 @@ public class GameUIBehaviour : MonoBehaviour
             //TODO: add real action for when time runs out
             Debug.Log("TIME'S UP");
         }
+    }
+
+    //TODO: Remove and implement a "giving up" system if you want to go back to main menu
+    public void ToMM()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }
