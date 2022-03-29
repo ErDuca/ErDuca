@@ -148,10 +148,10 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement who starts (get value from other scene)
 
         transitionAnimator.SetTrigger("sceneStart");
-        turnText.text = "PLAYER'S\nTURN";
-        timeText.text = "00:00";
+        turnText.text = "PLACEHOLDER\nTEXT";
+        timeText.text = "88:88";
         timeRemaining = turnTime;
-        changingTurn = false;
+        changingTurn = true;
         pauseMenu.SetActive(false);
         thinkingIcon.SetActive(false);
         playersTurnLogos.SetActive(false);

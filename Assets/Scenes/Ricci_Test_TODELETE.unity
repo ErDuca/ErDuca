@@ -462,9 +462,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbf8aca7463afc4ca75c08ef2e85fd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventSystem: {fileID: 844849359}
   mMenuGO: {fileID: 1166907919}
+  eventSystem: {fileID: 844849359}
   screenChangeWaitTime: 0.5
+  hostIPText: {fileID: 0}
 --- !u!95 &808467527
 Animator:
   serializedVersion: 3
@@ -764,12 +765,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Text
-      value: 'WELCOME TO *INCREDIBILE GAME TITLE*!
-
-        THIS SEEMS TO BE THE
-        FIRST TIME YOU''RE PLAYING.
-
-        DO YOU WANT TO CHECK THE GAME RULES?'
+      value: TEMP
       objectReference: {fileID: 0}
     - target: {fileID: 2361738307282175222, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Pivot.x

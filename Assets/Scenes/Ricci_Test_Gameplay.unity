@@ -649,13 +649,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 928692293}
     m_Modifications:
+    - target: {fileID: 4192565487615604058, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
+      propertyPath: m_Name
+      value: TurnIcon
+      objectReference: {fileID: 0}
     - target: {fileID: 4192565487615604060, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0d6e84901d2a8d24f9148861db494646, type: 3}
+      objectReference: {fileID: 21300000, guid: 2d221d1728342964aaae059e04fbafaa, type: 3}
     - target: {fileID: 4192565489053107864, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_Name
-      value: GameButton
+      value: TurnButton
       objectReference: {fileID: 0}
     - target: {fileID: 4192565489053107867, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_Pivot.x
