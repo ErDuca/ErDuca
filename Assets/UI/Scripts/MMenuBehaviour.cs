@@ -25,6 +25,9 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private InputField ipInputPortText;
     private char[] ipDelimitators;
     private Regex regex;
+    [Header("Transitions related")]
+    [SerializeField] private GameObject sceneTransitionManager;
+    private TransitionScript transitionScript;
 
     //Screen 1 = Main Menu
     //Screen 2 = Options Menu
@@ -42,10 +45,16 @@ public class MMenuBehaviour : MonoBehaviour
 
         ipDelimitators = new char[] { '.', ':' };
         regex = new Regex(@"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}\b");
+
+        transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
     }
 
 
     //TEST PLAYERPREFSEDITOR
+
+    //ON WINDOWS PLAYERPREFS ARE STORED IN HKCU\Software\ExampleCompanyName\ExampleProductName registry key.
+    //ON ANDROID PLAYERPREFS ARE STORED IN /data/data/pkg-name/shared_prefs/pkg-name.v2.playerprefs.xml
+
     //PlayerPrefsUtility.SetEncryptedInt("test", 50);
     //int loadedNumber = PlayerPrefsUtility.GetEncryptedInt("test");
     //Debug.Log(loadedNumber);
@@ -106,8 +115,7 @@ public class MMenuBehaviour : MonoBehaviour
     public void PasteIPFromClipboard()
     {
         string clipboardText = UniClipboard.GetText();
-        bool isIpValid = regex.IsMatch(clipboardText);
-        if(isIpValid)
+        if(IPRegexCheck(clipboardText))
         {
             Debug.Log("IP IS VALID");
             string[] ipParts = clipboardText.Split(ipDelimitators);
@@ -120,7 +128,38 @@ public class MMenuBehaviour : MonoBehaviour
         else
         {
             Debug.Log("IP IS INVALID");
+        }   
+    }
+
+    private bool IPRegexCheck(string str)
+    {
+        return regex.IsMatch(str);
+    }
+
+    public void HostBeginMatch()
+    {
+        transitionScript.LoadSceneByID(1);
+    }
+
+    public void JoinSearch()
+    {
+        string enteredIpAddress = ipInput0Text.text+'.'+ipInput1Text.text+'.'+ipInput2Text.text+'.'+ipInput3Text.text+':'+ipInputPortText.text;
+        if(IPRegexCheck(enteredIpAddress))
+        {
+            //TODO: Wait for host's reply
+            Debug.Log("ENTERED IP VALID");
+            JoinBeginMatch();
+        }
+        else
+        {
+            Debug.Log("ENTERED IP INVALID");
+            //TODO: Show error toast (invalid IP address entered)
         }
         
+    }
+
+    public void JoinBeginMatch()
+    {
+        transitionScript.LoadSceneByID(1);
     }
 }
