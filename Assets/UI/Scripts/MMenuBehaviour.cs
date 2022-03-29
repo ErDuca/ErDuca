@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MMenuBehaviour : MonoBehaviour
 {
@@ -25,6 +24,16 @@ public class MMenuBehaviour : MonoBehaviour
         screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
         screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
         screen4Position = new Vector3(mMenuGO.transform.position.x - Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
+
+
+        //TEST PLAYERPREFSEDITOR
+        //PlayerPrefsUtility.SetEncryptedInt("test", 50);
+        //int loadedNumber = PlayerPrefsUtility.GetEncryptedInt("test");
+        //Debug.Log(loadedNumber);
+        //TO CHECK IF PLAYERPREFS HAS ALREADY BEEN SET
+        //if (!PlayerPrefs.HasKey("example"))
+        //TEST PLAYERPREFSEDITOR
+
     }
 
     //Main Menu -> Options Menu
