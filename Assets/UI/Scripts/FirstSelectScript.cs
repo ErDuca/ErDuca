@@ -1,217 +1,45 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FirstSelectScript : MonoBehaviour
 {
-    private enum Symbols
+    private enum Result
     {
-        Rock, //0
-        Paper, //1
-        Scissors //2
-    }
-
-    private enum Results
-    {
-        PlayerWin, //0
-        Draw, //1
-        PlayerLose //2
+        Undefined = -1, //-1
+        Player, //0
+        Opponent, //1
     }
 
     [Header("Animations related")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject youGoGO;
+    [SerializeField] private GameObject opponentGoesGO;
+    [SerializeField] private GameObject firstBlueGO;
+    [SerializeField] private GameObject firstRedGO;
+
+    [Header("Transitions related")] 
     [SerializeField] private GameObject SceneTransitionManager;
     [SerializeField] private Animator transitionAnimator;
-    [SerializeField] private Animator choiceAnimator;
-    [SerializeField] private AnimationClip playerChoiceAnimation;
-    [SerializeField] private AnimationClip resultAnimation;
-    [SerializeField] private GameObject firstPhaseGroup;
-    [SerializeField] private GameObject secondPhaseGroup;
-    private int chosenByPlayer;
-    private int chosenByOpponent;
-    [SerializeField] private GameObject chosenByPlayerImageGO;
-    [SerializeField] private GameObject chosenByOpponentImageGO;
-    [SerializeField] private Sprite rockImage;
-    [SerializeField] private Sprite paperImage;
-    [SerializeField] private Sprite scissorsImage;
-    private int result;
     private TransitionScript transitionScript;
-    [Header("Timer related")]
-    [SerializeField] private Slider timeSlider;
-    [SerializeField] private float choiceTime;
-    [SerializeField] private Text timeText;
-    private float timeRemaining;
-    private float timeToDisplay;
-    private bool choiceDone;
+
+    private int startingPlayer;
 
     private void Start()
     {
         transitionAnimator.SetTrigger("sceneStart");
-        choiceAnimator.SetInteger("symbolChosen", -1);
-        chosenByPlayer = -1;
-        chosenByOpponent = -1;
-        secondPhaseGroup.SetActive(false);
+        animator.SetInteger("StartingPlayer", (int)Result.Undefined);
         transitionScript = SceneTransitionManager.GetComponent<TransitionScript>();
-        choiceDone = false;
-        timeRemaining = choiceTime;
+
+        //TODO: Change with the proper value (networking)
+        startingPlayer = Random.Range(0, 2);
+        animator.SetInteger("StartingPlayer", startingPlayer);
+
+        StartCoroutine(WaitForAnimationCoroutine());
     }
 
-    public void SymbolPressed(int value) => StartCoroutine(SymbolPressedCoroutine(value));
-    private IEnumerator SymbolPressedCoroutine(int value)
+    private IEnumerator WaitForAnimationCoroutine()
     {
-        choiceDone = true;
-        switch (value)
-        {
-            case (int)Symbols.Rock:
-                chosenByPlayer = (int)Symbols.Rock;
-                choiceAnimator.SetInteger("symbolChosen", (int)Symbols.Rock);
-                chosenByPlayerImageGO.GetComponent<Image>().sprite = rockImage;
-                break;
-            case (int)Symbols.Paper:
-                chosenByPlayer = (int)Symbols.Paper;
-                choiceAnimator.SetInteger("symbolChosen", (int)Symbols.Paper);
-                chosenByPlayerImageGO.GetComponent<Image>().sprite = paperImage;
-                break;
-            case (int)Symbols.Scissors:
-                chosenByPlayer = (int)Symbols.Scissors;
-                choiceAnimator.SetInteger("symbolChosen", (int)Symbols.Scissors);
-                chosenByPlayerImageGO.GetComponent<Image>().sprite = scissorsImage;
-                break;
-            default:
-                Debug.Log("ERROR: Invalid symbol value");
-                yield return 1;
-                break;
-        }
-        yield return new WaitForSeconds(playerChoiceAnimation.length);
-        firstPhaseGroup.SetActive(false);
-        secondPhaseGroup.SetActive(true);
-        yield return new WaitUntil(() => chosenByOpponent !=-1);
-
-        switch(chosenByPlayer)
-        {
-            case (int)Symbols.Rock:
-                switch(chosenByOpponent)
-                {
-                    case (int)Symbols.Rock:
-                        result = (int)Results.Draw;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = rockImage;
-                        break;
-                    case (int)Symbols.Paper:
-                        result = (int)Results.PlayerLose;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = paperImage;
-                        break;
-                    case (int)Symbols.Scissors:
-                        result = (int)Results.PlayerWin;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = scissorsImage;
-                        break;
-                    default:
-                        Debug.Log("ERROR: Invalid opponent's symbol value");
-                        yield return 1;
-                        break;
-                }
-                break;
-            case (int)Symbols.Paper:
-                switch (chosenByOpponent)
-                {
-                    case (int)Symbols.Rock:
-                        result = (int)Results.PlayerWin;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = rockImage;
-                        break;
-                    case (int)Symbols.Paper:
-                        result = (int)Results.Draw;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = paperImage;
-                        break;
-                    case (int)Symbols.Scissors:
-                        result = (int)Results.PlayerLose;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = scissorsImage;
-                        break;
-                    default:
-                        Debug.Log("ERROR: Invalid opponent's symbol value");
-                        yield return 1;
-                        break;
-                }
-                break;
-            case (int)Symbols.Scissors:
-                switch (chosenByOpponent)
-                {
-                    case (int)Symbols.Rock:
-                        result = (int)Results.PlayerWin;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = rockImage;
-                        break;
-                    case (int)Symbols.Paper:
-                        result = (int)Results.PlayerLose;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = paperImage;
-                        break;
-                    case (int)Symbols.Scissors:
-                        result = (int)Results.Draw;
-                        chosenByOpponentImageGO.GetComponent<Image>().sprite = scissorsImage;
-                        break;
-                    default:
-                        Debug.Log("ERROR: Invalid opponent's symbol value");
-                        yield return 1;
-                        break;
-                }
-                break;
-            default:
-                Debug.Log("ERROR: Invalid symbol value");
-                yield return 1;
-                break;
-        }
-
-        switch(result)
-        {
-            case (int)Results.PlayerWin:
-                choiceAnimator.SetInteger("result", (int)Results.PlayerWin);
-                break;
-            case (int)Results.Draw:
-                choiceAnimator.SetInteger("result", (int)Results.Draw);
-                break;
-            case (int)Results.PlayerLose:
-                choiceAnimator.SetInteger("result", (int)Results.PlayerLose);
-                break;
-            default:
-                Debug.Log("ERROR: Invalid result value");
-                yield return 1;
-                break;
-        }
-
-        yield return new WaitForSeconds(resultAnimation.length);
-
-        if(result == (int)Results.Draw)
-        {
-            transitionScript.LoadSceneByID(1);
-        }
-        else
-        {
-            //TODO: Set in some way the result so that next scene can read it            
-            transitionScript.LoadSceneByID(2);
-        }
-    }
-
-    public void OpponentRandomChoice()
-    {
-        //TODO: implement the real way to get chosenByOpponent
-        chosenByOpponent = Random.Range(0, 3);
-    }
-
-    private void Update()
-    {
-        if(!choiceDone)
-        {
-            if (timeRemaining > 0)
-            {                
-                timeRemaining -= Time.deltaTime;
-                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
-                timeToDisplay = timeRemaining + 1;
-                //Sets time text to minutes:seconds, both always displayed as 2 digits
-                timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
-                timeSlider.value = timeRemaining / choiceTime;
-            }
-            else
-            {
-                //If time's up then player's choice gets randomized
-                choiceDone = true;
-                SymbolPressed(Random.Range(0, 3));                
-            }
-        }        
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("EndState"));
+        transitionScript.LoadSceneByID(2);
     }
 }
