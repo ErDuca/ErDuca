@@ -1,3 +1,3 @@
 # ErDuca
 
-Test readme 2
+The Best Game You Will Ever Play!
