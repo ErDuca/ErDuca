@@ -12,8 +12,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Turns related")]
     [SerializeField] private GameObject thinkingIcon;
-    [SerializeField] private GameObject playersTurnLogos;
-    [SerializeField] private GameObject opponentsTurnLogos;
     [SerializeField] private AnimationClip turnSwapAnimation;
     [SerializeField] private Text turnText;
     private Color colorBlue = new Color(0.35f, 0.41f, 0.96f);
@@ -25,7 +23,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
-    private bool changingTurn;
+    private bool changingTurn; //TODO: this can be used to prevent raycasts during animations (alternatively make the black plane a raycast target
     private float timeRemaining;
     private float timeToDisplay;
     [SerializeField] private float turnTime;
@@ -33,19 +31,18 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Pause menu related")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject eventSystem;
-    [SerializeField] private Animator pauseAnimator;
-    [SerializeField] private AnimationClip pauseMenuOpenAnimation;
-    [SerializeField] private AnimationClip pauseMenuCloseAnimation;
 
     [Header("Transitions related")]
     [SerializeField] private Animator transitionAnimator;
+    [SerializeField] private Animator gameAnimator;
 
     public void PauseGame() => StartCoroutine(PauseGameCoroutine());
     private IEnumerator PauseGameCoroutine()
     {
         eventSystem.SetActive(false);
         pauseMenu.SetActive(true);
-        yield return new WaitForSeconds(pauseMenuOpenAnimation.length);
+        gameAnimator.SetBool("paused", true);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("paused"));
         eventSystem.SetActive(true);
     }
 
@@ -53,9 +50,8 @@ public class GameUIBehaviour : MonoBehaviour
     private IEnumerator ResumeGameCoroutine()
     {
         eventSystem.SetActive(false);
-        pauseAnimator.SetTrigger("closePauseMenu");
-        yield return new WaitForSeconds(pauseMenuCloseAnimation.length);
-        pauseAnimator.SetTrigger("closePauseMenu");
+        gameAnimator.SetBool("paused", false);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
         pauseMenu.SetActive(false);
         eventSystem.SetActive(true);
     }
@@ -71,6 +67,7 @@ public class GameUIBehaviour : MonoBehaviour
     }
 
     //TODO: Replace int with proper GameObject type
+    //PieceInfoTurning
     public void PieceInfoTurn(int piece) => StartCoroutine(PieceInfoTurnCoroutine(piece));
     private IEnumerator PieceInfoTurnCoroutine(int piece)
     {
@@ -102,12 +99,12 @@ public class GameUIBehaviour : MonoBehaviour
     {
         //changingturn stops time during turn swap animations
         changingTurn = true;
+        //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
-        playersTurnLogos.SetActive(true);
-        //animation starts immediately when enabled
+        gameAnimator.SetTrigger("playersTurn");
         yield return new WaitForSeconds(turnSwapAnimation.length);
 
-        //Everything tunr-related gets moved on the left side
+        //Everything tunr-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
         timeSliderImageLeft.SetActive(true);
         turnText.alignment = TextAnchor.MiddleLeft;
@@ -115,7 +112,6 @@ public class GameUIBehaviour : MonoBehaviour
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
 
-        playersTurnLogos.SetActive(false);
         timeRemaining = turnTime;
         changingTurn = false;
     }
@@ -125,19 +121,18 @@ public class GameUIBehaviour : MonoBehaviour
     {
         //changingturn stops turn timer during turn swap animations
         changingTurn = true;
-        opponentsTurnLogos.SetActive(true);
-        //animation starts immediately when enabled
+        gameAnimator.SetTrigger("opponentsTurn");
         yield return new WaitForSeconds(turnSwapAnimation.length);
 
-        //Everything tunr-related gets moved on the right side
+        //Everything tunr-related gets moved to the right side
         timeSliderImageLeft.SetActive(false);
         timeSliderImageRight.SetActive(true);
         turnText.alignment = TextAnchor.MiddleRight;
         turnText.text = "OPPONENT'S\nTURN";
         timeSlider.direction = Slider.Direction.RightToLeft;
         timeSliderFill.GetComponent<Image>().color = colorRed;
-        
-        opponentsTurnLogos.SetActive(false);
+
+        //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(true);
         timeRemaining = turnTime;
         changingTurn = false;
@@ -148,18 +143,25 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement who starts (get value from other scene)
 
         transitionAnimator.SetTrigger("sceneStart");
-        turnText.text = "PLACEHOLDER\nTEXT";
-        timeText.text = "88:88";
         timeRemaining = turnTime;
         changingTurn = true;
-        pauseMenu.SetActive(false);
-        thinkingIcon.SetActive(false);
-        playersTurnLogos.SetActive(false);
-        opponentsTurnLogos.SetActive(false);
-        timeSliderImageLeft.SetActive(false);
-        timeSliderImageRight.SetActive(false);
+        //pauseMenu.SetActive(false);
         infoBlock.SetActive(false);
-        
+
+        StartCoroutine(GameStartAnimationCoroutine());        
+    }
+
+    private IEnumerator GameStartAnimationCoroutine()
+    {
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
+        if(FirstSelectScript.startingPlayer == 0)
+        {
+            PlayersTurnStart();
+        }
+        else if(FirstSelectScript.startingPlayer == 1)
+        {
+            OpponentsTurnStart();
+        }
     }
 
     private void Update()
@@ -183,7 +185,7 @@ public class GameUIBehaviour : MonoBehaviour
         }
     }
 
-    //TODO: Remove and implement a "giving up" system if you want to go back to main menu
+    //TODO: Remove and implement a "giving up" system if you want to go back to main menu and automatically lose
     public void ToMM()
     {
         SceneManager.LoadScene(0, LoadSceneMode.Single);

@@ -22,7 +22,7 @@ public class FirstSelectScript : MonoBehaviour
     [SerializeField] private Animator transitionAnimator;
     private TransitionScript transitionScript;
 
-    private int startingPlayer;
+    public static int startingPlayer;
 
     private void Start()
     {

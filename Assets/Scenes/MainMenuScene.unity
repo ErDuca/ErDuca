@@ -4562,18 +4562,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'TODO: Lock 16:9 resolution
+  m_Text: 'TODO: Implement first time screen
 
 
-    TODO: Implement first time screen
-
-
-    FIX:
-    Wrong font for the following scene''s titles (right one: METRO, not SQUARE)
-
-
-    TODO:
-    add toast to copytoclipboard'
+    TODO: add toast to copytoclipboard'
 --- !u!222 &1411478659
 CanvasRenderer:
   m_ObjectHideFlags: 0
