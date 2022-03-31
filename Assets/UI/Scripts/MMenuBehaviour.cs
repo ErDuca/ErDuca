@@ -107,29 +107,29 @@ public class MMenuBehaviour : MonoBehaviour
         yield return null;
     }
 
-    //public void CopyIPToClipboard()
-    //{
-    //    UniClipboard.SetText(hostIPText.text);
-    //}
+    public void CopyIPToClipboard()
+    {
+        UniClipboard.SetText(hostIPText.text);
+    }
 
-    //public void PasteIPFromClipboard()
-    //{
-    //    string clipboardText = UniClipboard.GetText();
-    //    if(IPRegexCheck(clipboardText))
-    //    {
-    //        Debug.Log("IP IS VALID");
-    //        string[] ipParts = clipboardText.Split(ipDelimitators);
-    //        ipInput0Text.text = ipParts[0];
-    //        ipInput1Text.text = ipParts[1];
-    //        ipInput2Text.text = ipParts[2];
-    //        ipInput3Text.text = ipParts[3];
-    //        ipInputPortText.text = ipParts[4];
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("IP IS INVALID");
-    //    }   
-    //}
+    public void PasteIPFromClipboard()
+    {
+        string clipboardText = UniClipboard.GetText();
+        if (IPRegexCheck(clipboardText))
+        {
+            Debug.Log("IP IS VALID");
+            string[] ipParts = clipboardText.Split(ipDelimitators);
+            ipInput0Text.text = ipParts[0];
+            ipInput1Text.text = ipParts[1];
+            ipInput2Text.text = ipParts[2];
+            ipInput3Text.text = ipParts[3];
+            ipInputPortText.text = ipParts[4];
+        }
+        else
+        {
+            Debug.Log("IP IS INVALID");
+        }
+    }
 
     private bool IPRegexCheck(string str)
     {
