@@ -399,7 +399,7 @@ public class PlayerPrefsEditor : EditorWindow
             EditorGUILayout.BeginHorizontal();
 
 			// The type of player pref being stored (in auto decrypt mode this works with the decrypted values too)
-            System.Type valueType;
+            Type valueType;
 
 			// If it's an encrypted playerpref, we're automatically decrypting and it didn't fail the earlier 
 			// auto decrypt test
@@ -758,7 +758,7 @@ public class PlayerPrefsEditor : EditorWindow
             PlayerPrefPair[] importedPairs = RetrieveSavedPrefs(importCompanyName, importProductName);
             for (int i = 0; i < importedPairs.Length; i++)
             {
-                System.Type type = importedPairs[i].Value.GetType();
+                Type type = importedPairs[i].Value.GetType();
                 if (type == typeof(float))
                     PlayerPrefs.SetFloat(importedPairs[i].Key, (float)importedPairs[i].Value);
                 else if (type == typeof(int))

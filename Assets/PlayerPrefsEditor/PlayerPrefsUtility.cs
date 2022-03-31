@@ -267,7 +267,7 @@ public static class PlayerPrefsUtility
 	/// passed, passing null will mean you need to do a null check where you call this method. Generally try to use the
 	/// generic version of this method instead: GetEnum<T>
 	/// </summary>
-	public static object GetEnum(string key, System.Type enumType, object defaultValue)
+	public static object GetEnum(string key, Type enumType, object defaultValue)
 	{
 		// Fetch the string value from PlayerPrefs
 		string value = PlayerPrefs.GetString (key);

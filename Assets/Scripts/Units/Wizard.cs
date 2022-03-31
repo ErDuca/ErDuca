@@ -6,23 +6,23 @@ public class Wizard : Piece
 {
     void Start()
     {
-        mPhaseOneMovementArray.Add(new Movement(-1, -1, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(0, -1, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(1, -1, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(1, 0, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(1, 1, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(0, 1, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(-1, 1, Type.Move));
-        mPhaseOneMovementArray.Add(new Movement(-1, 0, Type.Move));
+        mPhaseOneMovementArray.Add(new Movement(-1, -1, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(1, -1, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(-1, 1, Ptype.Move));
+        mPhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Move));
 
-        mPhaseTwoMovementArray.Add(new Movement(-2, -2, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(0, -2, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(2, -2, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(2, 0, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(2, 2, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(0, 2, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(-2, 2, Type.Jump));
-        mPhaseTwoMovementArray.Add(new Movement(-2, 0, Type.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(-2, -2, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(0, -2, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(2, -2, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(2, 0, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(2, 2, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(0, 2, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(-2, 2, Ptype.Jump));
+        mPhaseTwoMovementArray.Add(new Movement(-2, 0, Ptype.Jump));
 
     }
 

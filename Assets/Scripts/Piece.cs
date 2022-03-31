@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Type {
+public enum Ptype {
     Move,
     Jump,
     Slide,
@@ -41,9 +41,9 @@ public class Piece : MonoBehaviour
 public struct Movement { 
     public int mOffsetX;
     public int mOffsetY;
-    public Type mType;
+    public Ptype mType;
 
-    public Movement(int x, int y, Type type) {
+    public Movement(int x, int y, Ptype type) {
         mOffsetX = x;
         mOffsetY = y;
         mType = type;
