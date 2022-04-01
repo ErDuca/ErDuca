@@ -25,6 +25,11 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private InputField ipInputPortText;
     private char[] ipDelimitators;
     private Regex regex;
+    [SerializeField] private GameObject invalidToast;
+    [SerializeField] private GameObject connectingText;
+    [SerializeField] private GameObject copiedToast;
+    [SerializeField] private GameObject pastedToast;
+    [SerializeField] private GameObject pastedInvalidToast;
     [Header("Transitions related")]
     [SerializeField] private GameObject sceneTransitionManager;
     private TransitionScript transitionScript;
@@ -37,7 +42,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     private void Start()
     {
-        screen1Position = mMenuGO.transform.position;      
+        screen1Position = mMenuGO.transform.position;
         screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
         screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
         screen4Position = new Vector3(mMenuGO.transform.position.x - Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
@@ -110,6 +115,8 @@ public class MMenuBehaviour : MonoBehaviour
     public void CopyIPToClipboard()
     {
         UniClipboard.SetText(hostIPText.text);
+        copiedToast.SetActive(false);
+        copiedToast.SetActive(true);
     }
 
     public void PasteIPFromClipboard()
@@ -124,10 +131,15 @@ public class MMenuBehaviour : MonoBehaviour
             ipInput2Text.text = ipParts[2];
             ipInput3Text.text = ipParts[3];
             ipInputPortText.text = ipParts[4];
+
+            pastedToast.SetActive(false);
+            pastedToast.SetActive(true);
         }
         else
         {
-            Debug.Log("IP IS INVALID");
+            pastedInvalidToast.SetActive(false);
+            pastedInvalidToast.SetActive(true);
+            Debug.Log("IP IS NOT VALID");
         }
     }
 
@@ -143,19 +155,21 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void JoinSearch()
     {
-        string enteredIpAddress = ipInput0Text.text+'.'+ipInput1Text.text+'.'+ipInput2Text.text+'.'+ipInput3Text.text+':'+ipInputPortText.text;
-        if(IPRegexCheck(enteredIpAddress))
+        string enteredIpAddress = ipInput0Text.text + '.' + ipInput1Text.text + '.' + ipInput2Text.text + '.' + ipInput3Text.text + ':' + ipInputPortText.text;
+        if (IPRegexCheck(enteredIpAddress))
         {
-            //TODO: Wait for host's reply
             Debug.Log("ENTERED IP VALID");
+            connectingText.SetActive(true);
+            //TODO: Wait for host's reply
             JoinBeginMatch();
         }
         else
         {
             Debug.Log("ENTERED IP INVALID");
-            //TODO: Show error toast (invalid IP address entered)
+            invalidToast.SetActive(false);
+            invalidToast.SetActive(true);
         }
-        
+
     }
 
     public void JoinBeginMatch()

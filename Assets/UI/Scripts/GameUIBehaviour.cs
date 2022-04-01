@@ -9,13 +9,14 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private float infoTurnAnimTime;
     [SerializeField] private GameObject infoImage;
     [SerializeField] private GameObject infoBlock;
+    [SerializeField] private Animator infoAnimator;
 
     [Header("Turns related")]
     [SerializeField] private GameObject thinkingIcon;
     [SerializeField] private AnimationClip turnSwapAnimation;
     [SerializeField] private Text turnText;
-    private Color colorBlue = new Color(0.35f, 0.41f, 0.96f);
-    private Color colorRed = new Color(0.96f, 0.41f, 0.35f);
+    [SerializeField] private Color colorBlue;
+    [SerializeField] private Color colorRed;
 
     [Header("Timer related")]
     [SerializeField] private Text timeText;
@@ -23,7 +24,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
-    private bool changingTurn; //TODO: this can be used to prevent raycasts during animations (alternatively make the black plane a raycast target
+    private bool changingTurn; //TODO: this can be used to prevent raycasts during animations (alternatively make the black plane a raycast target)
     private float timeRemaining;
     private float timeToDisplay;
     [SerializeField] private float turnTime;
@@ -35,6 +36,52 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Transitions related")]
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
+
+    private void Start()
+    {
+        //TODO: Implement who starts (get value from other scene)
+        transitionAnimator.SetTrigger("sceneStart");
+        timeRemaining = turnTime;
+        eventSystem.SetActive(false);
+        changingTurn = true;
+        //pauseMenu.SetActive(false);
+        infoBlock.SetActive(false);
+        StartCoroutine(GameStartAnimationCoroutine());
+    }
+
+    private IEnumerator GameStartAnimationCoroutine()
+    {
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
+        if (FirstSelectScript.startingPlayer == 0)
+        {
+            PlayersTurnStart();
+        }
+        else if (FirstSelectScript.startingPlayer == 1)
+        {
+            OpponentsTurnStart();
+        }
+    }
+
+    private void Update()
+    {
+        if (timeRemaining > 0)
+        {
+            if (!changingTurn)
+            {
+                timeRemaining -= Time.deltaTime;
+                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
+                timeToDisplay = timeRemaining + 1;
+                //Sets time text to minutes:seconds, both always displayed as 2 digits
+                timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
+                timeSlider.value = timeRemaining / turnTime;
+            }
+        }
+        else
+        {
+            //TODO: add real action for when time runs out
+            Debug.Log("TIME'S UP");
+        }
+    }
 
     public void PauseGame() => StartCoroutine(PauseGameCoroutine());
     private IEnumerator PauseGameCoroutine()
@@ -61,8 +108,11 @@ public class GameUIBehaviour : MonoBehaviour
     {
         infoBlock.SetActive(true);
     }
-    public void HidePieceInfo()
+    public void HidePieceInfo() => StartCoroutine(HidePieceInfoCoroutine());
+    private IEnumerator HidePieceInfoCoroutine()
     {
+        infoAnimator.SetTrigger("hide");
+        yield return new WaitUntil(() => infoAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"));
         infoBlock.SetActive(false);
     }
 
@@ -97,12 +147,13 @@ public class GameUIBehaviour : MonoBehaviour
     public void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()
     {
+        eventSystem.SetActive(false);
         //changingturn stops time during turn swap animations
         changingTurn = true;
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitForSeconds(turnSwapAnimation.length);
+        yield return new WaitForSeconds(turnSwapAnimation.length / 2);
 
         //Everything tunr-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
@@ -112,13 +163,17 @@ public class GameUIBehaviour : MonoBehaviour
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
 
+        yield return new WaitForSeconds(turnSwapAnimation.length / 2);
+
         timeRemaining = turnTime;
         changingTurn = false;
+        eventSystem.SetActive(true);
     }
 
     public void OpponentsTurnStart() => StartCoroutine(OpponentsTurnStartCoroutine());
     private IEnumerator OpponentsTurnStartCoroutine()
     {
+        eventSystem.SetActive(false);
         //changingturn stops turn timer during turn swap animations
         changingTurn = true;
         gameAnimator.SetTrigger("opponentsTurn");
@@ -136,53 +191,7 @@ public class GameUIBehaviour : MonoBehaviour
         thinkingIcon.SetActive(true);
         timeRemaining = turnTime;
         changingTurn = false;
-    }
-
-    private void Start()
-    {
-        //TODO: Implement who starts (get value from other scene)
-
-        transitionAnimator.SetTrigger("sceneStart");
-        timeRemaining = turnTime;
-        changingTurn = true;
-        //pauseMenu.SetActive(false);
-        infoBlock.SetActive(false);
-
-        StartCoroutine(GameStartAnimationCoroutine());        
-    }
-
-    private IEnumerator GameStartAnimationCoroutine()
-    {
-        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
-        if(FirstSelectScript.startingPlayer == 0)
-        {
-            PlayersTurnStart();
-        }
-        else if(FirstSelectScript.startingPlayer == 1)
-        {
-            OpponentsTurnStart();
-        }
-    }
-
-    private void Update()
-    {
-        if(timeRemaining > 0)
-        {
-            if(!changingTurn)
-            {
-                timeRemaining -= Time.deltaTime;
-                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
-                timeToDisplay = timeRemaining + 1;
-                //Sets time text to minutes:seconds, both always displayed as 2 digits
-                timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
-                timeSlider.value = timeRemaining / turnTime;
-            } 
-        }
-        else
-        {
-            //TODO: add real action for when time runs out
-            Debug.Log("TIME'S UP");
-        }
+        eventSystem.SetActive(true);
     }
 
     //TODO: Remove and implement a "giving up" system if you want to go back to main menu and automatically lose
