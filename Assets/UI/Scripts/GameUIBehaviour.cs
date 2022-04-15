@@ -24,22 +24,21 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
-    private bool changingTurn; //TODO: this can be used to prevent raycasts during animations (alternatively make the black plane a raycast target)
+    private bool changingTurn; //TODO: this can be used to prevent ray casts during animations (alternatively make the black plane a ray cast target)
     private float timeRemaining;
     private float timeToDisplay;
     [SerializeField] private float turnTime;
 
-    [Header("Pause menu related")]
+    [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject eventSystem;
 
     [Header("Transitions related")]
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
-
+    
     private void Start()
     {
-        //TODO: Implement who starts (get value from other scene)
         transitionAnimator.SetTrigger("sceneStart");
         timeRemaining = turnTime;
         eventSystem.SetActive(false);
@@ -153,17 +152,15 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitForSeconds(turnSwapAnimation.length / 2);
+        yield return new WaitForSeconds(turnSwapAnimation.length);
 
-        //Everything tunr-related gets moved to the left side
+        //Everything turn-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
         timeSliderImageLeft.SetActive(true);
         turnText.alignment = TextAnchor.MiddleLeft;
         turnText.text = "PLAYER'S\nTURN";
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
-
-        yield return new WaitForSeconds(turnSwapAnimation.length / 2);
 
         timeRemaining = turnTime;
         changingTurn = false;
@@ -179,7 +176,7 @@ public class GameUIBehaviour : MonoBehaviour
         gameAnimator.SetTrigger("opponentsTurn");
         yield return new WaitForSeconds(turnSwapAnimation.length);
 
-        //Everything tunr-related gets moved to the right side
+        //Everything turn-related gets moved to the right side
         timeSliderImageLeft.SetActive(false);
         timeSliderImageRight.SetActive(true);
         turnText.alignment = TextAnchor.MiddleRight;
