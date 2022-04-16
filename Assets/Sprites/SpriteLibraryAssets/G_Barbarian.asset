@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: G_Barbarian
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Idle
+    m_Hash: 2081823275
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 3504082580565110247, guid: 39cf417dd22faf64199990555841ab6a, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 3848648131838089709, guid: 39cf417dd22faf64199990555841ab6a, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 7934427481319011773, guid: 39cf417dd22faf64199990555841ab6a, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -7049382269011990114, guid: 39cf417dd22faf64199990555841ab6a, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 5779202997937969241, guid: 39cf417dd22faf64199990555841ab6a, type: 3}
+  - m_Name: Attack
+    m_Hash: 1080829965
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -851070167446074080, guid: ba135c26a2cfe9e46bfc57b6face1df6, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -1387710452094251482, guid: ba135c26a2cfe9e46bfc57b6face1df6, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -2477082871333479662, guid: ba135c26a2cfe9e46bfc57b6face1df6, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 9153470126101645018, guid: ba135c26a2cfe9e46bfc57b6face1df6, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -7928262757144161602, guid: ba135c26a2cfe9e46bfc57b6face1df6, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -2863371075044105325, guid: ba135c26a2cfe9e46bfc57b6face1df6, type: 3}
+  - m_Name: Death
+    m_Hash: 646380074
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 6377631811125129863, guid: 83580eba4297544439bd3a277e394628, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -7992945549761549880, guid: 83580eba4297544439bd3a277e394628, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 5409541373805318703, guid: 83580eba4297544439bd3a277e394628, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 2095139280057916268, guid: 83580eba4297544439bd3a277e394628, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 6066930569583476820, guid: 83580eba4297544439bd3a277e394628, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: 3280822128926344702, guid: 83580eba4297544439bd3a277e394628, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: 5163685814465317699, guid: 83580eba4297544439bd3a277e394628, type: 3}
+  - m_Name: Walk
+    m_Hash: 765711723
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -5398259772712265798, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -1871438325912600339, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -8516018746157952108, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 1431960109052724979, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 5751977861604789654, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: 6846958649706688909, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: 1093351352014207297, guid: 5e1ae0da5e0391849b8a4fcee4e83f2b, type: 3}

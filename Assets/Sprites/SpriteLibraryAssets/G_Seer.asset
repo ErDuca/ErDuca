@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: G_Seer
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Idle
+    m_Hash: 2081823275
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -6599106718930300730, guid: 44596bbeb34757249878cddcbdb7f9be, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 194310064244026241, guid: 44596bbeb34757249878cddcbdb7f9be, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -286383887358293944, guid: 44596bbeb34757249878cddcbdb7f9be, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -7526278167929526506, guid: 44596bbeb34757249878cddcbdb7f9be, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 1100511147498897707, guid: 44596bbeb34757249878cddcbdb7f9be, type: 3}
+  - m_Name: Attack
+    m_Hash: 1080829965
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -6301936194906917150, guid: 18d5bbf3efb832345b901f30537443aa, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -5072468391509599788, guid: 18d5bbf3efb832345b901f30537443aa, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -7206596361351232515, guid: 18d5bbf3efb832345b901f30537443aa, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 4511893671369279304, guid: 18d5bbf3efb832345b901f30537443aa, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -1778370541715218208, guid: 18d5bbf3efb832345b901f30537443aa, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -6550007474103674092, guid: 18d5bbf3efb832345b901f30537443aa, type: 3}
+  - m_Name: Death
+    m_Hash: 646380074
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -2025192213246206934, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 4150801251713984702, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 25094734176338340, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -692401161577467318, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 8541218840428964620, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -825812849485737515, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: 3802866809610702112, guid: 39aa2c1a75d75d940aa5c56c93cc8126, type: 3}
+  - m_Name: Walk
+    m_Hash: 765711723
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 4178637148672431488, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -8984187055909246534, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -5345634653783566926, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 770084166213582456, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 3767629311598592686, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -4453289140419752878, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: -8851863382014671050, guid: dd588c026e88f3b4c99715c62232a071, type: 3}
