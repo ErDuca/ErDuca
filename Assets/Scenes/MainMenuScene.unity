@@ -4990,7 +4990,13 @@ MonoBehaviour:
   m_Text: 'TODO: Implement first time screen
 
 
-    BUG: IP Address regex bugged (1.1.1.1:1)'
+    BUG: IP Address regex bugged (1.1.1.1:1)
+
+
+    TODO:
+    Schermata HOST: inserimento nome sessione e button crea
+
+    Schermata JOIN: '
 --- !u!222 &1411478659
 CanvasRenderer:
   m_ObjectHideFlags: 0
