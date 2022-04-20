@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 32142207322104854}
   - component: {fileID: 1396262740923896018}
   m_Layer: 5
-  m_Name: Tile
+  m_Name: (OLD2D)Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -8,10 +8,13 @@ using Mirror;
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkManager.html
 */
 
-public class CustomErDucaNetworkManager : NetworkManager
+public class ErDucaNetworkManager : NetworkManager
 {
-    //private PlayerScript _host;
-    //private PlayerScript _opponent;
+    private int boardSize = 480;
+    private int tileSize = 80;
+
+    private GameObject _host;
+    private GameObject _opponent;
 
     //My Methods
     public void SwitchTurn()
@@ -24,7 +27,7 @@ public class CustomErDucaNetworkManager : NetworkManager
     }
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
-    public static new CustomErDucaNetworkManager singleton { get; private set; }
+    public static new ErDucaNetworkManager singleton { get; private set; }
 
     #region Unity Callbacks
 
@@ -164,36 +167,42 @@ public class CustomErDucaNetworkManager : NetworkManager
     {
         //base.OnServerAddPlayer(conn);
 
-        /*
-        Vector3 position0 = new Vector3(-3f, 0f, 3f);
-        Vector3 position1 = new Vector3(3f, 0f, 3f);
-
-        Vector3 start = numPlayers == 0 ? position0 : position1;
-        GameObject player = Instantiate(playerPrefab, start, Quaternion.identity);
+        GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         NetworkServer.AddPlayerForConnection(conn, player);
+        player.GetComponent<ErDucaPlayer>()._isMyTurn = true;
+
+        //DEBUG
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                Vector3 position = new Vector3(-(((boardSize / 2) - ((tileSize) / 2))) + (j * tileSize), -644, -(((boardSize / 2) - ((tileSize) / 2))) + (i * tileSize));
+                GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
+                NetworkServer.Spawn(tile);
+            }
+        }
 
         if (numPlayers == 2)
         {
-            _opponent = player.GetComponent<PlayerScript>();
-            player.GetComponent<PlayerScript>()._isMyTurn = true;
-            player.GetComponent<PlayerScript>()._myColor = Color.red;
-
-            for (int i = 0; i < 3; i++)
+            _opponent = player;
+            player.GetComponent<ErDucaPlayer>()._myColor = Color.red;
+            /*
+            for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < 6; j++)
                 {
-                    Vector3 position = new Vector3(i - 1, 0, j - 1);
+                    Vector3 position = new Vector3(-(((boardSize/2)-((tileSize)/2))) + (j * tileSize), -644, -(((boardSize / 2) - ((tileSize) / 2))) + (i * tileSize));
                     GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
                     NetworkServer.Spawn(tile);
                 }
             }
+            */
         }
         else
         {
-            _host = player.GetComponent<PlayerScript>();
-            player.GetComponent<PlayerScript>()._myColor = Color.blue;
+            _host = player;
+            player.GetComponent<ErDucaPlayer>()._myColor = Color.blue;
         }
-        */
     }
 
     /// <summary>

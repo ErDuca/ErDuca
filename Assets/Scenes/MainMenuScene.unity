@@ -5783,10 +5783,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1769651078}
-  - component: {fileID: 1769651077}
   - component: {fileID: 1769651076}
   - component: {fileID: 1769651075}
   - component: {fileID: 1769651074}
+  - component: {fileID: 1769651077}
   m_Layer: 0
   m_Name: NetworkManagerGameObject
   m_TagString: Untagged
@@ -5877,7 +5877,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1769651073}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d91ee03af7366249a459c7eee86a2f6, type: 3}
+  m_Script: {fileID: 11500000, guid: edddf9a5c984d0e459a69f8abb4c4888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
@@ -5888,12 +5888,14 @@ MonoBehaviour:
   onlineScene: Assets/Scenes/GameplayScene.unity
   transport: {fileID: 1769651076}
   networkAddress: localhost
-  maxConnections: 2
+  maxConnections: 100
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 6425948880399284538, guid: 6668aa51a1ead9e41ad21fef0fc537e3, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 4139634051971890689, guid: 119b1d4e107d3a7498a70c6974b96411, type: 3}
+  - {fileID: 2236925843793184952, guid: 9ecffcdf958b8f54cb9e4cdf4bbbc74e, type: 3}
 --- !u!4 &1769651078
 Transform:
   m_ObjectHideFlags: 0

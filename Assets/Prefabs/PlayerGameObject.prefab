@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6425948880399284536}
   - component: {fileID: 6425948880399284539}
   m_Layer: 0
-  m_Name: ErDucaPlayer
+  m_Name: PlayerGameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 6668aa51a1ead9e41ad21fef0fc537e3
   hasSpawned: 0
 --- !u!114 &6425948880399284539
 MonoBehaviour:
@@ -64,3 +64,5 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _isMyTurn: 0
+  _myColor: {r: 0, g: 0, b: 0, a: 0}
+  piecePrefab1: {fileID: 2236925843793184952, guid: 9ecffcdf958b8f54cb9e4cdf4bbbc74e, type: 3}
