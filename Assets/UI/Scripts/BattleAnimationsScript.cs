@@ -98,50 +98,6 @@ public class BattleAnimationsScript : MonoBehaviour
         OPPONENT_SEER        //25
     }
 
-    private void AssignPlayerSpriteLibrary(int _playerId)
-    {
-        playerSpriteLibrary.spriteLibraryAsset = _playerId switch
-        {
-            (int)SpriteID.PLAYER_DUKE => playerDuke,
-            (int)SpriteID.PLAYER_ASSASSIN => playerAssassin,
-            (int)SpriteID.PLAYER_BARBARIAN => playerBarbarian,
-            (int)SpriteID.PLAYER_BOWMAN => playerBowman,
-            (int)SpriteID.PLAYER_CHAMPION => playerChampion,
-            (int)SpriteID.PLAYER_DRAGOON => playerDragoon,
-            (int)SpriteID.PLAYER_ENGINEER => playerEngineer,
-            (int)SpriteID.PLAYER_FOOTMAN => playerFootman,
-            (int)SpriteID.PLAYER_KNIGHT => playerKnight,
-            (int)SpriteID.PLAYER_LONGBOWMAN => playerLongbowman,
-            (int)SpriteID.PLAYER_MAGE => playerMage,
-            (int)SpriteID.PLAYER_PIKEMAN => playerPikeman,
-            (int)SpriteID.PLAYER_PRIEST => playerPriest,
-            (int)SpriteID.PLAYER_SEER => playerSeer,
-            _ => null,
-        };
-    }
-
-    private void AssignOpponentSpriteLibrary(int _opponentId)
-    {
-        opponentSpriteLibrary.spriteLibraryAsset = _opponentId switch
-        {
-            (int)SpriteID.OPPONENT_DUKE => opponentDuke,
-            (int)SpriteID.OPPONENT_ASSASSIN => opponentAssassin,
-            (int)SpriteID.OPPONENT_BARBARIAN => opponentBarbarian,
-            (int)SpriteID.OPPONENT_BOWMAN => opponentBowman,
-            (int)SpriteID.OPPONENT_CHAMPION => opponentChampion,
-            (int)SpriteID.OPPONENT_DRAGOON => opponentDragoon,
-            (int)SpriteID.OPPONENT_ENGINEER => opponentEngineer,
-            (int)SpriteID.OPPONENT_FOOTMAN => opponentFootman,
-            (int)SpriteID.OPPONENT_KNIGHT => opponentKnight,
-            (int)SpriteID.OPPONENT_LONGBOWMAN => opponentLongbowman,
-            (int)SpriteID.OPPONENT_MAGE => opponentMage,
-            (int)SpriteID.OPPONENT_PIKEMAN => opponentPikeman,
-            (int)SpriteID.OPPONENT_PRIEST => opponentPriest,
-            (int)SpriteID.OPPONENT_SEER => opponentSeer,
-            _ => null,
-        };
-    }
-
     //TEMP: Necessary to assign the method to an UI button. Remove later
     public void OnClickAttack() => SpritesAnimation(animationID, playerSpriteID, opponentSpriteID);
     public void SpritesAnimation(int animationID, int playerId, int opponentId)
@@ -231,5 +187,49 @@ public class BattleAnimationsScript : MonoBehaviour
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
         gameAnimator.SetInteger("animID", (int)AnimID.IDLE);
         eventSystem.SetActive(true);
+    }
+
+    private void AssignPlayerSpriteLibrary(int _playerId)
+    {
+        playerSpriteLibrary.spriteLibraryAsset = _playerId switch
+        {
+            (int)SpriteID.PLAYER_DUKE => playerDuke,
+            (int)SpriteID.PLAYER_ASSASSIN => playerAssassin,
+            (int)SpriteID.PLAYER_BARBARIAN => playerBarbarian,
+            (int)SpriteID.PLAYER_BOWMAN => playerBowman,
+            (int)SpriteID.PLAYER_CHAMPION => playerChampion,
+            (int)SpriteID.PLAYER_DRAGOON => playerDragoon,
+            (int)SpriteID.PLAYER_ENGINEER => playerEngineer,
+            (int)SpriteID.PLAYER_FOOTMAN => playerFootman,
+            (int)SpriteID.PLAYER_KNIGHT => playerKnight,
+            (int)SpriteID.PLAYER_LONGBOWMAN => playerLongbowman,
+            (int)SpriteID.PLAYER_MAGE => playerMage,
+            (int)SpriteID.PLAYER_PIKEMAN => playerPikeman,
+            (int)SpriteID.PLAYER_PRIEST => playerPriest,
+            (int)SpriteID.PLAYER_SEER => playerSeer,
+            _ => null,
+        };
+    }
+
+    private void AssignOpponentSpriteLibrary(int _opponentId)
+    {
+        opponentSpriteLibrary.spriteLibraryAsset = _opponentId switch
+        {
+            (int)SpriteID.OPPONENT_DUKE => opponentDuke,
+            (int)SpriteID.OPPONENT_ASSASSIN => opponentAssassin,
+            (int)SpriteID.OPPONENT_BARBARIAN => opponentBarbarian,
+            (int)SpriteID.OPPONENT_BOWMAN => opponentBowman,
+            (int)SpriteID.OPPONENT_CHAMPION => opponentChampion,
+            (int)SpriteID.OPPONENT_DRAGOON => opponentDragoon,
+            (int)SpriteID.OPPONENT_ENGINEER => opponentEngineer,
+            (int)SpriteID.OPPONENT_FOOTMAN => opponentFootman,
+            (int)SpriteID.OPPONENT_KNIGHT => opponentKnight,
+            (int)SpriteID.OPPONENT_LONGBOWMAN => opponentLongbowman,
+            (int)SpriteID.OPPONENT_MAGE => opponentMage,
+            (int)SpriteID.OPPONENT_PIKEMAN => opponentPikeman,
+            (int)SpriteID.OPPONENT_PRIEST => opponentPriest,
+            (int)SpriteID.OPPONENT_SEER => opponentSeer,
+            _ => null,
+        };
     }
 }
