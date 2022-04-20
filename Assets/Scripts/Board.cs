@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    [SerializeField] private float mTileSize = 1f;
+    //[SerializeField] private float mTileSize = 1f;
     [SerializeField] private Material mTileMaterial;
 
     private const int mBoardHeight = 6;
