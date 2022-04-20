@@ -13,7 +13,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Turns related")]
     [SerializeField] private GameObject thinkingIcon;
-    [SerializeField] private AnimationClip turnSwapAnimation;
     [SerializeField] private Text turnText;
     [SerializeField] private Color colorBlue;
     [SerializeField] private Color colorRed;
@@ -152,7 +151,7 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitForSeconds(turnSwapAnimation.length);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
 
         //Everything turn-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
@@ -174,7 +173,7 @@ public class GameUIBehaviour : MonoBehaviour
         //changingturn stops turn timer during turn swap animations
         changingTurn = true;
         gameAnimator.SetTrigger("opponentsTurn");
-        yield return new WaitForSeconds(turnSwapAnimation.length);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
 
         //Everything turn-related gets moved to the right side
         timeSliderImageLeft.SetActive(false);
