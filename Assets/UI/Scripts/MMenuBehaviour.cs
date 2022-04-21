@@ -21,9 +21,11 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject sceneTransitionManager;
     private TransitionScript transitionScript;
 
-    [Header("Join screen related")]
+    [Header("Join/Host screen related")]
     [SerializeField] private GameObject scrollViewContentGO;
     [SerializeField] private GameObject roomButtonPrefab;
+    [SerializeField] private Text roomNameTextGO;
+    private string roomName;
 
     //Screen 1 = Main Menu
     //Screen 2 = Options Menu
@@ -76,6 +78,12 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void HostBeginMatch()
     {
+        roomName = roomNameTextGO.text;
+        if (roomName.Equals(""))
+        {
+            roomName = "GameRoom"; 
+        }
+
         transitionScript.LoadSceneByID(1);
     }
 
@@ -83,22 +91,21 @@ public class MMenuBehaviour : MonoBehaviour
     {
         //TODO: Actual searching of the match
 
-        //Placeholders strings
-        string roomIPAddress = "888.888.888.888:888888";
-        //Set a max of 20 characters for the name in gameplay scene
+        //Placeholders string
+        //TODO: Set a max of 40 characters for the name
         string roomName = "Lorem Ipsum dolor sit";
 
-        createRoomButton(roomIPAddress, roomName);
+        CreateRoomButton(roomName);
     }
 
-    public void createRoomButton(string roomIPAddress, string roomName)
+    public void CreateRoomButton(string roomName)
     {
-        GameObject roomButton = Instantiate(roomButtonPrefab) as GameObject;
+        GameObject roomButton = Instantiate(roomButtonPrefab);
         roomButton.transform.SetParent(scrollViewContentGO.transform);
         //TODO: This is a stupid fix, why these value changes from prefab???
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
-        roomButton.GetComponentInChildren<Text>().text = roomIPAddress + " - " + roomName;
+        roomButton.GetComponentInChildren<Text>().text = roomName;
     }
 
     public void JoinBeginMatch()

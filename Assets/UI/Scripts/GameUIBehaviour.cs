@@ -45,18 +45,14 @@ public class GameUIBehaviour : MonoBehaviour
 
     private void Start()
     {
-        //TODO: The panel turns transparent during certain starting animations (even if not present in the animation at all)
-        blackPanelImage.color = new Color(0f, 0f, 0f, 0.8f);
         transitionAnimator.SetTrigger("sceneStart");
-        infoBlock.SetActive(false);
-        pauseMenu.SetActive(false);
 
-        isHost = true;
+        //HOST TESTING
+        isHost = false;
         if(isHost)
         {
             gameAnimator.SetBool("hostScreen", true);
-            hostMenuGO.SetActive(true);
-            
+            hostMenuGO.SetActive(true);            
         }
         else
         {
@@ -73,8 +69,6 @@ public class GameUIBehaviour : MonoBehaviour
         
         eventSystem.SetActive(false);
         StartCoroutine(GameStartAnimationCoroutine());
-        //TODO: The panel turns transparent during certain starting animations (even if not present in the animation at all)
-        blackPanelImage.color = new Color(0f, 0f, 0f, 0f);
     }
 
     private IEnumerator GameStartAnimationCoroutine()
