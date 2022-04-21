@@ -39,8 +39,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
-    [SerializeField] private Image bgImage;
-    [SerializeField] private Gradient gradient;
 
     //Get this from the main menu or via networking in some way
     public static bool isHost;
@@ -53,17 +51,16 @@ public class GameUIBehaviour : MonoBehaviour
         infoBlock.SetActive(false);
         pauseMenu.SetActive(false);
 
-        isHost = false;
+        isHost = true;
         if(isHost)
         {
             gameAnimator.SetBool("hostScreen", true);
             hostMenuGO.SetActive(true);
-            //When there are 2 players:
-            //GameStart();
+            
         }
         else
         {
-            
+            hostMenuGO.SetActive(false);
             gameAnimator.SetBool("hostScreen", false);
             GameStart();
         }
@@ -71,11 +68,8 @@ public class GameUIBehaviour : MonoBehaviour
 
     private void GameStart()
     {
-        hostMenuGO.SetActive(false);
-
         timeRemaining = turnTime;
         changingTurn = true;
-
         
         eventSystem.SetActive(false);
         StartCoroutine(GameStartAnimationCoroutine());
@@ -196,8 +190,6 @@ public class GameUIBehaviour : MonoBehaviour
         turnText.text = "PLAYER'S\nTURN";
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
-        bgImage.color = colorBlue;
-
 
         timeRemaining = turnTime;
         changingTurn = false;
@@ -220,7 +212,6 @@ public class GameUIBehaviour : MonoBehaviour
         turnText.text = "OPPONENT'S\nTURN";
         timeSlider.direction = Slider.Direction.RightToLeft;
         timeSliderFill.GetComponent<Image>().color = colorRed;
-        bgImage.color = colorRed;
 
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(true);
