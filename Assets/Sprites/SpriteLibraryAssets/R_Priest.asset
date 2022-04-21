@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: R_Priest
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Idle
+    m_Hash: 2081823275
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 6462725984043071500, guid: 87c4b0940b8453345a1f78984f479b23, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 3305752099092516346, guid: 87c4b0940b8453345a1f78984f479b23, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -5751485091672658181, guid: 87c4b0940b8453345a1f78984f479b23, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 4161343959371185012, guid: 87c4b0940b8453345a1f78984f479b23, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -268964043588253355, guid: 87c4b0940b8453345a1f78984f479b23, type: 3}
+  - m_Name: Attack
+    m_Hash: 1080829965
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 743681564618311753, guid: d67191430c4d62c4ca7bec2ae961e076, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 379689210495635737, guid: d67191430c4d62c4ca7bec2ae961e076, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -2421473214512967483, guid: d67191430c4d62c4ca7bec2ae961e076, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 6536818645805296407, guid: d67191430c4d62c4ca7bec2ae961e076, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 3455218499990959957, guid: d67191430c4d62c4ca7bec2ae961e076, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -4353401859395979173, guid: d67191430c4d62c4ca7bec2ae961e076, type: 3}
+  - m_Name: Death
+    m_Hash: 646380074
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -7505845835329877115, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 1223268475483597019, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 4420520802447675361, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -1409276737530687404, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -2749266442754969770, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -6748400030677615904, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: -5871975260418817380, guid: 511e8f97ef4829e4f9e7e96a4fc59d7e, type: 3}
+  - m_Name: Walk
+    m_Hash: 765711723
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: -472169612202558252, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -2810269916292100204, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 6365692119604514444, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -5239020933982835399, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -3977576969308650966, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -3092894045228265733, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: 2673346802154212112, guid: 2cb497de1dff5394ea87d6361e3223f4, type: 3}

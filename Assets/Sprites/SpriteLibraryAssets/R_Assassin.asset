@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: R_Assassin
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Idle
+    m_Hash: 2081823275
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 2644635399128292709, guid: 66011c5308eafc44e99f314917c17124, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 5746948060327910502, guid: 66011c5308eafc44e99f314917c17124, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -5857609592901605214, guid: 66011c5308eafc44e99f314917c17124, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 3633199337279008984, guid: 66011c5308eafc44e99f314917c17124, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 7385806244981052547, guid: 66011c5308eafc44e99f314917c17124, type: 3}
+  - m_Name: Attack
+    m_Hash: 1080829965
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 603302277184590285, guid: ecd212a521b80a44aa75a4babab963bc, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: -963767465862202528, guid: ecd212a521b80a44aa75a4babab963bc, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: -7575143129330624097, guid: ecd212a521b80a44aa75a4babab963bc, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -5791177240365521810, guid: ecd212a521b80a44aa75a4babab963bc, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -5077703133699840582, guid: ecd212a521b80a44aa75a4babab963bc, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -4512807666640616671, guid: ecd212a521b80a44aa75a4babab963bc, type: 3}
+  - m_Name: Death
+    m_Hash: 646380074
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 5709418188679812765, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 993797670139098549, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 5481719697750159482, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: 2343387215911682774, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: 2571480152886875326, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -8460305553658200385, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: 8988171319323931838, guid: 28462b77086ae914ca22b0e92ab730e8, type: 3}
+  - m_Name: Walk
+    m_Hash: 765711723
+    m_CategoryList:
+    - m_Name: 0
+      m_Hash: -186917087
+      m_Sprite: {fileID: 5859476545023479548, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}
+    - m_Name: 1
+      m_Hash: -2082672713
+      m_Sprite: {fileID: 8971952004286736208, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}
+    - m_Name: 2
+      m_Hash: 450215437
+      m_Sprite: {fileID: 5166371534478556072, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}
+    - m_Name: 3
+      m_Hash: 1842515611
+      m_Sprite: {fileID: -3206980974057063662, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}
+    - m_Name: 4
+      m_Hash: -206169288
+      m_Sprite: {fileID: -8997054820477554529, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}
+    - m_Name: 5
+      m_Hash: -2068763730
+      m_Sprite: {fileID: -496280319614044104, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}
+    - m_Name: 6
+      m_Hash: 498629140
+      m_Sprite: {fileID: -8060333513546004794, guid: 2d99847b01eb34f4491e4d4696299e74, type: 3}

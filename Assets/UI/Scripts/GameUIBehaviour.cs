@@ -13,7 +13,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Turns related")]
     [SerializeField] private GameObject thinkingIcon;
-    [SerializeField] private AnimationClip turnSwapAnimation;
     [SerializeField] private Text turnText;
     [SerializeField] private Color colorBlue;
     [SerializeField] private Color colorRed;
@@ -24,42 +23,71 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
-    private bool changingTurn; //TODO: this can be used to prevent raycasts during animations (alternatively make the black plane a raycast target)
+    private bool changingTurn; //TODO: this can be used to prevent ray casts during animations (alternatively make the black plane a ray cast target)
     private float timeRemaining;
     private float timeToDisplay;
     [SerializeField] private float turnTime;
 
-    [Header("Pause menu related")]
+    [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject eventSystem;
 
     [Header("Transitions related")]
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
+    [SerializeField] private Image blackPanelImage;
+
+    [Header("Host menu related")]
+    [SerializeField] private GameObject hostMenuGO;
+
+    //Get this from the main menu or via networking in some way
+    public static bool isHost;
 
     private void Start()
     {
-        //TODO: Implement who starts (get value from other scene)
+        //TODO: The panel turns transparent during certain starting animations (even if not present in the animation at all)
+        blackPanelImage.color = new Color(0f, 0f, 0f, 0.8f);
         transitionAnimator.SetTrigger("sceneStart");
-        timeRemaining = turnTime;
-        eventSystem.SetActive(false);
-        changingTurn = true;
-        //pauseMenu.SetActive(false);
         infoBlock.SetActive(false);
+        pauseMenu.SetActive(false);
+
+        isHost = true;
+        if(isHost)
+        {
+            gameAnimator.SetBool("hostScreen", true);
+            hostMenuGO.SetActive(true);
+            
+        }
+        else
+        {
+            hostMenuGO.SetActive(false);
+            gameAnimator.SetBool("hostScreen", false);
+            GameStart();
+        }
+    }
+
+    private void GameStart()
+    {
+        timeRemaining = turnTime;
+        changingTurn = true;
+        
+        eventSystem.SetActive(false);
         StartCoroutine(GameStartAnimationCoroutine());
+        //TODO: The panel turns transparent during certain starting animations (even if not present in the animation at all)
+        blackPanelImage.color = new Color(0f, 0f, 0f, 0f);
     }
 
     private IEnumerator GameStartAnimationCoroutine()
     {
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
-        if (FirstSelectScript.startingPlayer == 0)
+        if (gameAnimator.GetInteger("startingPlayer") == 0)
         {
             PlayersTurnStart();
         }
-        else if (FirstSelectScript.startingPlayer == 1)
+        else if (gameAnimator.GetInteger("startingPlayer") == 1)
         {
             OpponentsTurnStart();
-        }
+        }        
     }
 
     private void Update()
@@ -153,17 +181,15 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitForSeconds(turnSwapAnimation.length / 2);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone"));
 
-        //Everything tunr-related gets moved to the left side
+        //Everything turn-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
         timeSliderImageLeft.SetActive(true);
         turnText.alignment = TextAnchor.MiddleLeft;
         turnText.text = "PLAYER'S\nTURN";
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
-
-        yield return new WaitForSeconds(turnSwapAnimation.length / 2);
 
         timeRemaining = turnTime;
         changingTurn = false;
@@ -177,9 +203,9 @@ public class GameUIBehaviour : MonoBehaviour
         //changingturn stops turn timer during turn swap animations
         changingTurn = true;
         gameAnimator.SetTrigger("opponentsTurn");
-        yield return new WaitForSeconds(turnSwapAnimation.length);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone"));
 
-        //Everything tunr-related gets moved to the right side
+        //Everything turn-related gets moved to the right side
         timeSliderImageLeft.SetActive(false);
         timeSliderImageRight.SetActive(true);
         turnText.alignment = TextAnchor.MiddleRight;

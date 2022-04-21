@@ -13,32 +13,23 @@ public class MMenuBehaviour : MonoBehaviour
     private Vector3 screen2Position;
     private Vector3 screen3Position;
     private Vector3 screen4Position;
-    private Vector3 screen3_1Position;
+    private Vector3 screen5Position;
     [SerializeField] private GameObject hostScreen;
     [SerializeField] private GameObject joinScreen;
-    [Header("IP Insertion related")]
-    [SerializeField] private Text hostIPText;
-    [SerializeField] private InputField ipInput0Text;
-    [SerializeField] private InputField ipInput1Text;
-    [SerializeField] private InputField ipInput2Text;
-    [SerializeField] private InputField ipInput3Text;
-    [SerializeField] private InputField ipInputPortText;
-    private char[] ipDelimitators;
-    private Regex regex;
-    [SerializeField] private GameObject invalidToast;
-    [SerializeField] private GameObject connectingText;
-    [SerializeField] private GameObject copiedToast;
-    [SerializeField] private GameObject pastedToast;
-    [SerializeField] private GameObject pastedInvalidToast;
+
     [Header("Transitions related")]
     [SerializeField] private GameObject sceneTransitionManager;
     private TransitionScript transitionScript;
+
+    [Header("Join screen related")]
+    [SerializeField] private GameObject scrollViewContentGO;
+    [SerializeField] private GameObject roomButtonPrefab;
 
     //Screen 1 = Main Menu
     //Screen 2 = Options Menu
     //Screen 3 = Multiplayer Match Settings Menu
     //Screen 4 = TODO Stats? Deck builder?
-    //Screen 3_1 = Host/Join Menu
+    //Screen 5 = Join Menu
 
     private void Start()
     {
@@ -46,28 +37,10 @@ public class MMenuBehaviour : MonoBehaviour
         screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
         screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
         screen4Position = new Vector3(mMenuGO.transform.position.x - Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
-        screen3_1Position = new Vector3(screen3Position.x + Screen.width, screen3Position.y, screen3Position.z);
-
-        ipDelimitators = new char[] { '.', ':' };
-        regex = new Regex(@"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}\b");
+        screen5Position = new Vector3(screen3Position.x + Screen.width, screen3Position.y, screen3Position.z);
 
         transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
     }
-
-
-    //TEST PLAYERPREFSEDITOR
-
-    //ON WINDOWS PLAYERPREFS ARE STORED IN HKCU\Software\ExampleCompanyName\ExampleProductName registry key.
-    //ON ANDROID PLAYERPREFS ARE STORED IN /data/data/pkg-name/shared_prefs/pkg-name.v2.playerprefs.xml
-
-    //PlayerPrefsUtility.SetEncryptedInt("test", 50);
-    //int loadedNumber = PlayerPrefsUtility.GetEncryptedInt("test");
-    //Debug.Log(loadedNumber);
-    //TO CHECK IF PLAYERPREFS HAS ALREADY BEEN SET
-    //if (!PlayerPrefs.HasKey("example"))
-    //TEST PLAYERPREFSEDITOR
-
-
 
     //Main Menu -> Options Menu
     public void GoToScreen2() => StartCoroutine(MoveToScreenCoroutine(screen1Position, screen2Position));
@@ -81,22 +54,11 @@ public class MMenuBehaviour : MonoBehaviour
     public void GoToScreen1From3() => StartCoroutine(MoveToScreenCoroutine(screen3Position, screen1Position));
     //Screen 4 -> Main Menu
     public void GoToScreen1From4() => StartCoroutine(MoveToScreenCoroutine(screen4Position, screen1Position));
-    //Screen Multiplayer Menu -> Host Menu
-    public void GoToScreen3_1From3Host()
-    {
-        joinScreen.SetActive(false);
-        hostScreen.SetActive(true);
-        StartCoroutine(MoveToScreenCoroutine(screen3Position, screen3_1Position));
-    }
     //Screen Multiplayer Menu -> Join Menu
-    public void GoToScreen3_1From3Join()
-    {
-        joinScreen.SetActive(true);
-        hostScreen.SetActive(false);
-        StartCoroutine(MoveToScreenCoroutine(screen3Position, screen3_1Position));
-    }
-    //Screen Host/Join Menu -> Multiplayer Menu
-    public void GoToScreen3From3_1() => StartCoroutine(MoveToScreenCoroutine(screen3_1Position, screen3Position));
+    public void GoToScreen5From3() => StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
+    
+    //Screen Join Menu -> Multiplayer Menu
+    public void GoToScreen3From5() => StartCoroutine(MoveToScreenCoroutine(screen5Position, screen3Position));
     IEnumerator MoveToScreenCoroutine(Vector3 fromPos, Vector3 toPos)
     {
         float elapsedTime = 0f;
@@ -112,42 +74,6 @@ public class MMenuBehaviour : MonoBehaviour
         yield return null;
     }
 
-    public void CopyIPToClipboard()
-    {
-        UniClipboard.SetText(hostIPText.text);
-        copiedToast.SetActive(false);
-        copiedToast.SetActive(true);
-    }
-
-    public void PasteIPFromClipboard()
-    {
-        string clipboardText = UniClipboard.GetText();
-        if (IPRegexCheck(clipboardText))
-        {
-            Debug.Log("IP IS VALID");
-            string[] ipParts = clipboardText.Split(ipDelimitators);
-            ipInput0Text.text = ipParts[0];
-            ipInput1Text.text = ipParts[1];
-            ipInput2Text.text = ipParts[2];
-            ipInput3Text.text = ipParts[3];
-            ipInputPortText.text = ipParts[4];
-
-            pastedToast.SetActive(false);
-            pastedToast.SetActive(true);
-        }
-        else
-        {
-            pastedInvalidToast.SetActive(false);
-            pastedInvalidToast.SetActive(true);
-            Debug.Log("IP IS NOT VALID");
-        }
-    }
-
-    private bool IPRegexCheck(string str)
-    {
-        return regex.IsMatch(str);
-    }
-
     public void HostBeginMatch()
     {
         transitionScript.LoadSceneByID(1);
@@ -155,25 +81,44 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void JoinSearch()
     {
-        string enteredIpAddress = ipInput0Text.text + '.' + ipInput1Text.text + '.' + ipInput2Text.text + '.' + ipInput3Text.text + ':' + ipInputPortText.text;
-        if (IPRegexCheck(enteredIpAddress))
-        {
-            Debug.Log("ENTERED IP VALID");
-            connectingText.SetActive(true);
-            //TODO: Wait for host's reply
-            JoinBeginMatch();
-        }
-        else
-        {
-            Debug.Log("ENTERED IP INVALID");
-            invalidToast.SetActive(false);
-            invalidToast.SetActive(true);
-        }
+        //TODO: Actual searching of the match
 
+        //Placeholders strings
+        string roomIPAddress = "888.888.888.888:888888";
+        //Set a max of 20 characters for the name in gameplay scene
+        string roomName = "Lorem Ipsum dolor sit";
+
+        createRoomButton(roomIPAddress, roomName);
+    }
+
+    public void createRoomButton(string roomIPAddress, string roomName)
+    {
+        GameObject roomButton = Instantiate(roomButtonPrefab) as GameObject;
+        roomButton.transform.SetParent(scrollViewContentGO.transform);
+        //TODO: This is a stupid fix, why these value changes from prefab???
+        roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
+        roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
+        roomButton.GetComponentInChildren<Text>().text = roomIPAddress + " - " + roomName;
     }
 
     public void JoinBeginMatch()
     {
+        //TODO: Pass variables to game scene
         transitionScript.LoadSceneByID(1);
     }
 }
+
+
+
+
+//TEST PLAYERPREFSEDITOR
+
+//ON WINDOWS PLAYERPREFS ARE STORED IN HKCU\Software\ExampleCompanyName\ExampleProductName registry key.
+//ON ANDROID PLAYERPREFS ARE STORED IN /data/data/pkg-name/shared_prefs/pkg-name.v2.playerprefs.xml
+
+//PlayerPrefsUtility.SetEncryptedInt("test", 50);
+//int loadedNumber = PlayerPrefsUtility.GetEncryptedInt("test");
+//Debug.Log(loadedNumber);
+//TO CHECK IF PLAYERPREFS HAS ALREADY BEEN SET
+//if (!PlayerPrefs.HasKey("example"))
+//TEST PLAYERPREFSEDITOR
