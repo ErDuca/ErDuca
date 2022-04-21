@@ -83,16 +83,27 @@ public class MMenuBehaviour : MonoBehaviour
     {
         //TODO: Actual searching of the match
 
+        //Placeholders strings
+        string roomIPAddress = "888.888.888.888:888888";
+        //Set a max of 20 characters for the name in gameplay scene
+        string roomName = "Lorem Ipsum dolor sit";
+
+        createRoomButton(roomIPAddress, roomName);
+    }
+
+    public void createRoomButton(string roomIPAddress, string roomName)
+    {
         GameObject roomButton = Instantiate(roomButtonPrefab) as GameObject;
-        roomButton.transform.parent = scrollViewContentGO.transform;
-        //TODO: Finish this
-
-
-
+        roomButton.transform.SetParent(scrollViewContentGO.transform);
+        //TODO: This is a stupid fix, why these value changes from prefab???
+        roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
+        roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
+        roomButton.GetComponentInChildren<Text>().text = roomIPAddress + " - " + roomName;
     }
 
     public void JoinBeginMatch()
     {
+        //TODO: Pass variables to game scene
         transitionScript.LoadSceneByID(1);
     }
 }
