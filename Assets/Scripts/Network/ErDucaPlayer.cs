@@ -13,8 +13,7 @@ public class ErDucaPlayer : NetworkBehaviour
     [SyncVar] public bool _isMyTurn = false;
     [SyncVar] public Color _myColor;
 
-    [SerializeField]
-    private GameObject piecePrefab1;
+    [SerializeField] private GameObject piecePrefab1;
 
     [Command]
     public void CmdSpawnPiece(Transform spawnTransform)
@@ -23,11 +22,13 @@ public class ErDucaPlayer : NetworkBehaviour
         GameObject piece = Instantiate(piecePrefab1, spawnTransform.position + new Vector3(0f, 30f, 0f), Quaternion.Euler(90,0,0));
         NetworkServer.Spawn(piece);
     }
+
     [Command]
     public void CmdSwitchTurn()
     {
         ErDucaNetworkManager.singleton.SwitchTurn();
     }
+
     [Command]
     public void CmdMovePiece(GameObject selectedPieceScript, Transform newTransform)
     {
