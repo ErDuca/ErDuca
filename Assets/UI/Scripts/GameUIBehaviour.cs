@@ -35,29 +35,31 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Transitions related")]
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
+    [SerializeField] private Image blackPanelImage;
     
     private void Start()
     {
+        blackPanelImage.color = new Color(0f, 0f, 0f, 0.8f);
         transitionAnimator.SetTrigger("sceneStart");
         timeRemaining = turnTime;
         eventSystem.SetActive(false);
         changingTurn = true;
-        //pauseMenu.SetActive(false);
-        infoBlock.SetActive(false);
+        infoBlock.SetActive(false);        
         StartCoroutine(GameStartAnimationCoroutine());
+        blackPanelImage.color = new Color(0f, 0f, 0f, 0f);
     }
 
     private IEnumerator GameStartAnimationCoroutine()
     {
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
-        if (FirstSelectScript.startingPlayer == 0)
+        if (gameAnimator.GetInteger("startingPlayer") == 0)
         {
             PlayersTurnStart();
         }
-        else if (FirstSelectScript.startingPlayer == 1)
+        else if (gameAnimator.GetInteger("startingPlayer") == 1)
         {
             OpponentsTurnStart();
-        }
+        }        
     }
 
     private void Update()
