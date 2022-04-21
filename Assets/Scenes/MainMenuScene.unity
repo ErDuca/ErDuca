@@ -3250,7 +3250,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'TODO: Implement first time screen'
+  m_Text: 'TODO: Implement first time screen
+
+    TODO: Move room name insertion
+    here instead that '
 --- !u!222 &1411478659
 CanvasRenderer:
   m_ObjectHideFlags: 0
