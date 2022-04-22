@@ -40,15 +40,14 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
 
-    //Get this from the main menu or via networking in some way
-    public static bool isHost;
+    [Header("Debug")]
+    [SerializeField] private bool isHost;
 
     private void Start()
     {
         transitionAnimator.SetTrigger("sceneStart");
 
         //HOST TESTING
-        isHost = true;
         if(isHost)
         {
             gameAnimator.SetBool("hostScreen", true);
