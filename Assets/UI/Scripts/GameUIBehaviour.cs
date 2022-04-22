@@ -48,7 +48,7 @@ public class GameUIBehaviour : MonoBehaviour
         transitionAnimator.SetTrigger("sceneStart");
 
         //HOST TESTING
-        isHost = false;
+        isHost = true;
         if(isHost)
         {
             gameAnimator.SetBool("hostScreen", true);
@@ -56,10 +56,18 @@ public class GameUIBehaviour : MonoBehaviour
         }
         else
         {
-            hostMenuGO.SetActive(false);
             gameAnimator.SetBool("hostScreen", false);
             GameStart();
         }
+    }
+
+    public void CloseHostMenu() => StartCoroutine(CloseHostMenuCoroutine());
+    private IEnumerator CloseHostMenuCoroutine()
+    {
+        gameAnimator.SetBool("hostScreen", false);
+        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("DefaultState"));
+        hostMenuGO.SetActive(false);
+        GameStart();
     }
 
     private void GameStart()
@@ -212,11 +220,5 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
-    }
-
-    //TODO: Remove and implement a "giving up" system if you want to go back to main menu and automatically lose
-    public void ToMM()
-    {
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }
