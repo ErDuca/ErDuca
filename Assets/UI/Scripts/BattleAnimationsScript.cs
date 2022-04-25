@@ -108,8 +108,8 @@ public class BattleAnimationsScript : MonoBehaviour
         {
             //Player attacks
             case (int)AnimID.PLAYER_ATTACK:
-                AssignPlayerSpriteLibrary(playerId);
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 //Makes it so player's sprite is in front when it wins and behind when it loses (puts the dead body always in the back).
                 opponentSpriteRenderer.sortingOrder = 0;
                 playerSpriteRenderer.sortingOrder = 1;
@@ -117,8 +117,8 @@ public class BattleAnimationsScript : MonoBehaviour
                 break;
             //Opponent attacks
             case (int)AnimID.OPPONENT_ATTACK:
-                AssignPlayerSpriteLibrary(playerId);
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 //Makes it so player's sprite is in front when it wins and behind when it loses (puts the dead body always in the back).
                 opponentSpriteRenderer.sortingOrder = 1;
                 playerSpriteRenderer.sortingOrder = 0;
@@ -126,52 +126,52 @@ public class BattleAnimationsScript : MonoBehaviour
                 break;
             //Player moves
             case (int)AnimID.PLAYER_MOVES:
-                AssignPlayerSpriteLibrary(playerId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.PLAYER_MOVES));
                 break;
             //Opponent moves
             case (int)AnimID.OPPONENT_MOVES:
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_MOVES));
                 break;
             //Player jumps
             case (int)AnimID.PLAYER_JUMPS:
-                AssignPlayerSpriteLibrary(playerId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.PLAYER_JUMPS));
                 break;
             //Opponent jumps
             case (int)AnimID.OPPONENT_JUMPS:
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_JUMPS));
                 break;
             //Player slides
             case (int)AnimID.PLAYER_SLIDES:
-                AssignPlayerSpriteLibrary(playerId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.PLAYER_SLIDES));
                 break;
             //Opponent slides
             case (int)AnimID.OPPONENT_SLIDES:
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_SLIDES));
                 break;
             //Player jumpslides
             case (int)AnimID.PLAYER_JUMPSLIDES:
-                AssignPlayerSpriteLibrary(playerId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.PLAYER_JUMPSLIDES));
                 break;
             //Opponent jumpslides
             case (int)AnimID.OPPONENT_JUMPSLIDES:
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_JUMPSLIDES));
                 break;
             //Player places
             case (int)AnimID.PLAYER_PLACES:
-                AssignPlayerSpriteLibrary(playerId);
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.PLAYER_PLACES));
                 break;
             //Opponent places
             case (int)AnimID.OPPONENT_PLACES:
-                AssignOpponentSpriteLibrary(opponentId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_PLACES));
                 break;
             default:
@@ -189,9 +189,9 @@ public class BattleAnimationsScript : MonoBehaviour
         eventSystem.SetActive(true);
     }
 
-    private void AssignPlayerSpriteLibrary(int _playerId)
+    public void AssignSpriteLibrary(SpriteLibrary spriteLibrary, int spriteId)
     {
-        playerSpriteLibrary.spriteLibraryAsset = _playerId switch
+        spriteLibrary.spriteLibraryAsset = spriteId switch
         {
             (int)SpriteID.PLAYER_DUKE => playerDuke,
             (int)SpriteID.PLAYER_ASSASSIN => playerAssassin,
@@ -207,14 +207,6 @@ public class BattleAnimationsScript : MonoBehaviour
             (int)SpriteID.PLAYER_PIKEMAN => playerPikeman,
             (int)SpriteID.PLAYER_PRIEST => playerPriest,
             (int)SpriteID.PLAYER_SEER => playerSeer,
-            _ => null,
-        };
-    }
-
-    private void AssignOpponentSpriteLibrary(int _opponentId)
-    {
-        opponentSpriteLibrary.spriteLibraryAsset = _opponentId switch
-        {
             (int)SpriteID.OPPONENT_DUKE => opponentDuke,
             (int)SpriteID.OPPONENT_ASSASSIN => opponentAssassin,
             (int)SpriteID.OPPONENT_BARBARIAN => opponentBarbarian,

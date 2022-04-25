@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using UnityEngine.Experimental.U2D.Animation;
 
 public class GameUIBehaviour : MonoBehaviour
 {
@@ -10,6 +10,10 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject infoImage;
     [SerializeField] private GameObject infoBlock;
     [SerializeField] private Animator infoAnimator;
+    [SerializeField] private BattleAnimationsScript battleAnimScript;
+    [SerializeField] private SpriteRenderer infoSpriteRenderer;
+    [SerializeField] private SpriteLibrary infoSpriteLibrary;
+    [SerializeField] private int pieceInfo;
 
     [Header("Turns related")]
     [SerializeField] private GameObject thinkingIcon;
@@ -133,9 +137,21 @@ public class GameUIBehaviour : MonoBehaviour
     }
 
     //TODO: Replace int with proper GameObject type
-    public void ShowPieceInfo(int piece)
+    //TODO: TEMP for the temp UI button, remove later
+    public void ButtonShowInfo() => ShowPieceInfo(pieceInfo);
+    private void ShowPieceInfo(int piece)
     {
         infoBlock.SetActive(true);
+        if (piece % 2 == 0)
+        {
+            infoSpriteRenderer.flipX = false;
+            battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, piece);
+        }
+        else
+        {
+            infoSpriteRenderer.flipX = true;
+            battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, piece);
+        }        
     }
     public void HidePieceInfo() => StartCoroutine(HidePieceInfoCoroutine());
     private IEnumerator HidePieceInfoCoroutine()
@@ -144,6 +160,7 @@ public class GameUIBehaviour : MonoBehaviour
         yield return new WaitUntil(() => infoAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"));
         infoBlock.SetActive(false);
     }
+
 
     //TODO: Replace int with proper GameObject type
     //PieceInfoTurning
@@ -188,7 +205,7 @@ public class GameUIBehaviour : MonoBehaviour
         timeSliderImageRight.SetActive(false);
         timeSliderImageLeft.SetActive(true);
         turnText.alignment = TextAnchor.MiddleLeft;
-        turnText.text = "PLAYER'S\nTURN";
+        turnText.text = "bLUE'S\nTURN";
         timeSlider.direction = Slider.Direction.LeftToRight;
         timeSliderFill.GetComponent<Image>().color = colorBlue;
 
@@ -210,7 +227,7 @@ public class GameUIBehaviour : MonoBehaviour
         timeSliderImageLeft.SetActive(false);
         timeSliderImageRight.SetActive(true);
         turnText.alignment = TextAnchor.MiddleRight;
-        turnText.text = "OPPONENT'S\nTURN";
+        turnText.text = "RED'S\nTURN";
         timeSlider.direction = Slider.Direction.RightToLeft;
         timeSliderFill.GetComponent<Image>().color = colorRed;
 
