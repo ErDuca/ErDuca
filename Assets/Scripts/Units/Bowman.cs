@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bowman : Piece
+public class Bowman : ErDucaPiece
 {
-    
+    /*
     void Start()
     {
         mPhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Move));
@@ -21,10 +21,5 @@ public class Bowman : Piece
         mPhaseOneMovementArray.Add(new Movement(-1, 1, Ptype.Strike));
         mPhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Strike));
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    */
 }

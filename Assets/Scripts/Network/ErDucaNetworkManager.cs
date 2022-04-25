@@ -10,8 +10,11 @@ using Mirror;
 
 public class ErDucaNetworkManager : NetworkManager
 {
-    private int boardSize = 480;
-    private int tileSize = 80;
+    private int _gridRowsNumber = 6;
+    private int _boardSize = 480;
+    private int _tileSize = 80;
+
+    private ErDucaTile[][] _tileMatrix = new ErDucaTile[6][];
 
     private GameObject _host;
     private GameObject _opponent;
@@ -25,6 +28,7 @@ public class ErDucaNetworkManager : NetworkManager
         _opponent._isMyTurn = var;
         */
     }
+
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
     public static new ErDucaNetworkManager singleton { get; private set; }
@@ -172,13 +176,17 @@ public class ErDucaNetworkManager : NetworkManager
         player.GetComponent<ErDucaPlayer>()._isMyTurn = true;
 
         //DEBUG
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < _gridRowsNumber; i++)
         {
-            for (int j = 0; j < 6; j++)
+            for (int j = 0; j < _gridRowsNumber; j++)
             {
-                Vector3 position = new Vector3(-(((boardSize / 2) - ((tileSize) / 2))) + (j * tileSize), -644, -(((boardSize / 2) - ((tileSize) / 2))) + (i * tileSize));
+                Vector3 position = new Vector3(-(((_boardSize / 2) - ((_tileSize) / 2))) 
+                    + (j * _tileSize), -644, -(((_boardSize / 2) - ((_tileSize) / 2))) 
+                    + (i * _tileSize));
+
                 GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
                 NetworkServer.Spawn(tile);
+                _tileMatrix[i][j] = tile.GetComponent<ErDucaTile>();
             }
         }
 
@@ -186,17 +194,6 @@ public class ErDucaNetworkManager : NetworkManager
         {
             _opponent = player;
             player.GetComponent<ErDucaPlayer>()._myColor = Color.red;
-            /*
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < 6; j++)
-                {
-                    Vector3 position = new Vector3(-(((boardSize/2)-((tileSize)/2))) + (j * tileSize), -644, -(((boardSize / 2) - ((tileSize) / 2))) + (i * tileSize));
-                    GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
-                    NetworkServer.Spawn(tile);
-                }
-            }
-            */
         }
         else
         {

@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Assassin : Piece
+public class Assassin : ErDucaPiece
 {
-    
     void Start()
     {/*
         mPhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Slide));
@@ -15,11 +14,5 @@ public class Assassin : Piece
         mPhaseTwoMovementArray.Add(new Movement(1, -1, Ptype.Slide));
         mPhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
         */
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -5,15 +5,5 @@ using Mirror;
 
 public class ErDucaTile : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SyncVar] private bool isOccupied = false;
 }

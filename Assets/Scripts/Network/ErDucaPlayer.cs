@@ -10,7 +10,7 @@ public class ErDucaPlayer : NetworkBehaviour
     private uint _myNetId;
 
     //Sync Variables
-    [SyncVar] public bool _isMyTurn = false;
+    [SyncVar] public bool _isMyTurn;
     [SyncVar] public Color _myColor;
 
     [SerializeField] private GameObject piecePrefab1;
@@ -69,12 +69,12 @@ public class ErDucaPlayer : NetworkBehaviour
                 CmdSwitchTurn();
                 _currentSelectedPiece = null;
             }
-            /*
+            
             else if (objectHit.CompareTag("Piece"))
             {
                 _currentSelectedPiece = objectHit.gameObject;
             }
-            */
+            
         }
     }
 
