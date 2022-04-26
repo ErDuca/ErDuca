@@ -5,15 +5,14 @@ using Mirror;
 
 public class ErDucaPiece : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SyncVar]private uint _myPlayerNetId;
 
-    // Update is called once per frame
-    void Update()
+    public uint MyPlayerNetId
     {
-        
+        get => _myPlayerNetId;
+        set
+        {
+            _myPlayerNetId = value;
+        }
     }
 }

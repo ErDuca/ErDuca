@@ -3383,7 +3383,7 @@ MonoBehaviour:
   gameAnimator: {fileID: 917277564}
   blackPanelImage: {fileID: 212515840}
   hostMenuGO: {fileID: 1634342154}
-  isHost: 1
+  isHost: 0
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

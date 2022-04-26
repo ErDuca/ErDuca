@@ -14,7 +14,7 @@ public class ErDucaNetworkManager : NetworkManager
     private int _boardSize = 480;
     private int _tileSize = 80;
 
-    private ErDucaTile[][] _tileMatrix = new ErDucaTile[6][];
+    private ErDucaTile[,] _tileMatrix;
 
     private GameObject _host;
     private GameObject _opponent;
@@ -27,6 +27,16 @@ public class ErDucaNetworkManager : NetworkManager
         _host._isMyTurn = !var;
         _opponent._isMyTurn = var;
         */
+    }
+
+    public bool TileIsOccupiedByNetId(int i, int j, uint reqNetId)
+    {
+        return _tileMatrix[i,j].IsTileOccupiedByNetId(reqNetId);
+    }
+
+    public ErDucaTile getTile(int i, int j)
+    {
+        return _tileMatrix[i,j];
     }
 
     // Overrides the base singleton so we don't
@@ -170,25 +180,9 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         //base.OnServerAddPlayer(conn);
-
         GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         NetworkServer.AddPlayerForConnection(conn, player);
         player.GetComponent<ErDucaPlayer>()._isMyTurn = true;
-
-        //DEBUG
-        for (int i = 0; i < _gridRowsNumber; i++)
-        {
-            for (int j = 0; j < _gridRowsNumber; j++)
-            {
-                Vector3 position = new Vector3(-(((_boardSize / 2) - ((_tileSize) / 2))) 
-                    + (j * _tileSize), -644, -(((_boardSize / 2) - ((_tileSize) / 2))) 
-                    + (i * _tileSize));
-
-                GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
-                NetworkServer.Spawn(tile);
-                _tileMatrix[i][j] = tile.GetComponent<ErDucaTile>();
-            }
-        }
 
         if (numPlayers == 2)
         {
@@ -199,6 +193,27 @@ public class ErDucaNetworkManager : NetworkManager
         {
             _host = player;
             player.GetComponent<ErDucaPlayer>()._myColor = Color.blue;
+
+            _tileMatrix = new ErDucaTile[6, 6];
+
+            for (int i = 0; i < _gridRowsNumber; i++)
+            {
+                for (int j = 0; j < _gridRowsNumber; j++)
+                {
+                    Vector3 position = new Vector3(-(((_boardSize / 2) - ((_tileSize) / 2)))
+                        + (j * _tileSize), -644, -(((_boardSize / 2) - ((_tileSize) / 2)))
+                        + (i * _tileSize));
+
+                    GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
+                    tile.name = "Tile[" + i + "]" + "[" + j + "]";
+                    NetworkServer.Spawn(tile);
+
+                    tile.GetComponent<ErDucaTile>().I = i;
+                    tile.GetComponent<ErDucaTile>().J = j;
+
+                    _tileMatrix[i, j] = tile.GetComponent<ErDucaTile>();
+                }
+            }
         }
     }
 
