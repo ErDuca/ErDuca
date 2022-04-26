@@ -5,9 +5,6 @@ using Mirror;
 
 public class ErDucaTile : NetworkBehaviour
 {
-    [SerializeField]
-    [SyncVar] private ErDucaPiece _occupier;
-
     private BoxCollider _myCollider;
 
     [SerializeField]
@@ -31,31 +28,10 @@ public class ErDucaTile : NetworkBehaviour
             _j = value;
         }
     }
-    public ErDucaPiece Occupier
-    {
-        get => _occupier;
-        set
-        {
-            _occupier = value;
-        }
-    }
 
     private void Start()
     {
         _myCollider = GetComponent<BoxCollider>();
-    }
-
-    public bool IsTileOccupiedByNetId(uint netId)
-    {
-        if (_occupier)
-            return netId == _occupier.MyPlayerNetId;
-        else
-            return false;
-    }
-
-    public void setOccupier(ErDucaPiece piece)
-    {
-        _occupier = piece;
     }
 
     public void enableCollider()

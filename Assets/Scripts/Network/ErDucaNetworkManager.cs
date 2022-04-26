@@ -14,7 +14,7 @@ public class ErDucaNetworkManager : NetworkManager
     private int _boardSize = 480;
     private int _tileSize = 80;
 
-    private ErDucaTile[,] _tileMatrix;
+    public uint[,] _netIdMatrix;
 
     private GameObject _host;
     private GameObject _opponent;
@@ -28,7 +28,7 @@ public class ErDucaNetworkManager : NetworkManager
         _opponent._isMyTurn = var;
         */
     }
-
+    /*
     public bool TileIsOccupiedByNetId(int i, int j, uint reqNetId)
     {
         return _tileMatrix[i,j].IsTileOccupiedByNetId(reqNetId);
@@ -38,7 +38,7 @@ public class ErDucaNetworkManager : NetworkManager
     {
         return _tileMatrix[i,j];
     }
-
+    */
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
     public static new ErDucaNetworkManager singleton { get; private set; }
@@ -67,6 +67,7 @@ public class ErDucaNetworkManager : NetworkManager
     {
         singleton = this;
         base.Start();
+        _netIdMatrix = new uint[6,6];
     }
 
     /// <summary>
@@ -186,15 +187,11 @@ public class ErDucaNetworkManager : NetworkManager
 
         if (numPlayers == 2)
         {
-            _opponent = player;
             player.GetComponent<ErDucaPlayer>()._myColor = Color.red;
         }
         else
         {
-            _host = player;
             player.GetComponent<ErDucaPlayer>()._myColor = Color.blue;
-
-            _tileMatrix = new ErDucaTile[6, 6];
 
             for (int i = 0; i < _gridRowsNumber; i++)
             {
@@ -207,11 +204,6 @@ public class ErDucaNetworkManager : NetworkManager
                     GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
                     tile.name = "Tile[" + i + "]" + "[" + j + "]";
                     NetworkServer.Spawn(tile);
-
-                    tile.GetComponent<ErDucaTile>().I = i;
-                    tile.GetComponent<ErDucaTile>().J = j;
-
-                    _tileMatrix[i, j] = tile.GetComponent<ErDucaTile>();
                 }
             }
         }
@@ -246,6 +238,7 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
+        _netIdMatrix = new uint[6, 6];
     }
 
     /// <summary>

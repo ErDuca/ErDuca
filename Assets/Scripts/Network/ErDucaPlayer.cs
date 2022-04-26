@@ -22,7 +22,19 @@ public class ErDucaPlayer : NetworkBehaviour
         GameObject piece = Instantiate(piecePrefab1, spawnTransform.position + new Vector3(0f, 30f, 0f), Quaternion.Euler(90,0,0));
         NetworkServer.Spawn(piece);
         piece.GetComponent<ErDucaPiece>().MyPlayerNetId = _myNetId;
-        ErDucaNetworkManager.singleton.getTile(i, j).setOccupier(piece.GetComponent<ErDucaPiece>());
+        RpcUpdateLocalNetIdMatrix(i, j, _myNetId);
+    }
+
+    [ClientRpc]
+    void RpcUpdateLocalNetIdMatrix(int i, int j, uint _myNetId)
+    {
+        // MODIFICA IL PRIMO TILE DELLA MATRICE
+        // WHY???
+        // CONTROLLARE TIPOLOGIA STRUTTURA DATI
+        Debug.Log("Intra RPC");
+        ErDucaNetworkManager.singleton._netIdMatrix[i, j] = _myNetId;
+        
+        Debug.Log("Post RPC");
     }
 
     [Command]
@@ -64,6 +76,17 @@ public class ErDucaPlayer : NetworkBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
+
+            for (int ix = 0; ix < 6; ix++)
+            {
+                Debug.Log(ErDucaNetworkManager.singleton._netIdMatrix[ix, 0] + " "
+                + ErDucaNetworkManager.singleton._netIdMatrix[ix, 1] + " "
+                + ErDucaNetworkManager.singleton._netIdMatrix[ix, 2] + " "
+                + ErDucaNetworkManager.singleton._netIdMatrix[ix, 3] + " "
+                + ErDucaNetworkManager.singleton._netIdMatrix[ix, 4] + " "
+                + ErDucaNetworkManager.singleton._netIdMatrix[ix, 5]);
+            }
+
             Transform objectHit = hit.transform;
 
             if (_currentSelectedPiece == null && objectHit.CompareTag("Tile"))
@@ -71,20 +94,27 @@ public class ErDucaPlayer : NetworkBehaviour
                 int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                 int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
-                if (objectHit.gameObject.GetComponent<ErDucaTile>().Occupier)
+                if (!(ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == 0))
                 {
-                    if (objectHit.gameObject.GetComponent<ErDucaTile>().Occupier.MyPlayerNetId == _myNetId)
+                    Debug.Log("Ho cliccato su un tile NON-vuoto");
+                    if (ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == _myNetId)
                     {
-                        _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaTile>().Occupier;
+                        Debug.Log("Ho cliccato su un tile dove c'è una mia pedina");
+                        //SELEZIONE
                         /*
+                        //_currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaTile>().Occupier;
+                        
                         Fare recuperare le mosse al server, tramite il puntatore in tile
                         Abilito i tile su cui posso andare
-                        */
+                        
                         //objectHit.gameObject.GetComponent<ErDucaTile>().disableCollider();
+                        */
                     }
                 }
                 else
                 {
+                    Debug.Log("Ho cliccato su un tile vuoto");
+                    Debug.Log("Spawning..");
                     CmdSpawnPiece(objectHit.transform, tile_i_index, tile_j_index);
                 }
             }
@@ -100,6 +130,7 @@ public class ErDucaPlayer : NetworkBehaviour
     public override void OnStartClient()
     {
         GameObject player = gameObject;
+        Debug.Log("sto settando il netId!");
         _myNetId = player.GetComponent<NetworkIdentity>().netId;
     }
 }
