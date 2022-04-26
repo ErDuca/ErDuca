@@ -5,6 +5,7 @@ using Mirror;
 
 public class ErDucaPiece : NetworkBehaviour
 {
+    [SerializeField]
     [SyncVar]private uint _myPlayerNetId;
 
     public uint MyPlayerNetId

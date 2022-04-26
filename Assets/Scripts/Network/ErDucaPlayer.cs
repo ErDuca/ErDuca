@@ -10,8 +10,10 @@ public class ErDucaPlayer : NetworkBehaviour
 
     [SerializeField]
     private ErDucaPiece _currentSelectedPiece;
-    
+
+    [SerializeField]
     [SyncVar] public bool _isMyTurn;
+    [SerializeField]
     [SyncVar] public Color _myColor;
 
     [SerializeField] private GameObject piecePrefab1;
@@ -33,7 +35,6 @@ public class ErDucaPlayer : NetworkBehaviour
         // CONTROLLARE TIPOLOGIA STRUTTURA DATI
         Debug.Log("Intra RPC");
         ErDucaNetworkManager.singleton._netIdMatrix[i, j] = _myNetId;
-        
         Debug.Log("Post RPC");
     }
 
@@ -94,27 +95,25 @@ public class ErDucaPlayer : NetworkBehaviour
                 int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                 int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
+                Debug.Log("CONFRONTO:");
+                Debug.Log("Indici selezionati: " + tile_i_index + " " + tile_j_index);
+                Debug.Log("Valore in matrice = " + ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index]);
+                Debug.Log("Valore myNetId = " + _myNetId);
+
                 if (!(ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == 0))
                 {
-                    Debug.Log("Ho cliccato su un tile NON-vuoto");
                     if (ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == _myNetId)
                     {
-                        Debug.Log("Ho cliccato su un tile dove c'è una mia pedina");
-                        //SELEZIONE
-                        /*
-                        //_currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaTile>().Occupier;
-                        
-                        Fare recuperare le mosse al server, tramite il puntatore in tile
-                        Abilito i tile su cui posso andare
-                        
-                        //objectHit.gameObject.GetComponent<ErDucaTile>().disableCollider();
-                        */
+                        Debug.Log("Ho cliccato su un TILE NON-VUOTO dove c'è una MIA pedina");
+                    }
+                    else
+                    {
+                        Debug.Log("Ho cliccato su un TILE NON-VUOTO dove c'è una pedina NEMICA");
                     }
                 }
                 else
                 {
-                    Debug.Log("Ho cliccato su un tile vuoto");
-                    Debug.Log("Spawning..");
+                    Debug.Log("Ho cliccato su un TILE VUOTO");
                     CmdSpawnPiece(objectHit.transform, tile_i_index, tile_j_index);
                 }
             }

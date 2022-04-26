@@ -5,12 +5,10 @@ using Mirror;
 
 public class ErDucaTile : NetworkBehaviour
 {
-    private BoxCollider _myCollider;
-
     [SerializeField]
-    private int _i;
+    [SyncVar]private int _i;
     [SerializeField]
-    private int _j;
+    [SyncVar] private int _j;
 
     public int I
     {
@@ -28,6 +26,8 @@ public class ErDucaTile : NetworkBehaviour
             _j = value;
         }
     }
+
+    private BoxCollider _myCollider;
 
     private void Start()
     {

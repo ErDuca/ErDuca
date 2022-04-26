@@ -14,12 +14,11 @@ public class ErDucaNetworkManager : NetworkManager
     private int _boardSize = 480;
     private int _tileSize = 80;
 
-    public uint[,] _netIdMatrix;
+    public uint[,] _netIdMatrix = new uint[6, 6];
 
     private GameObject _host;
     private GameObject _opponent;
 
-    //My Methods
     public void SwitchTurn()
     {
         /*
@@ -28,17 +27,7 @@ public class ErDucaNetworkManager : NetworkManager
         _opponent._isMyTurn = var;
         */
     }
-    /*
-    public bool TileIsOccupiedByNetId(int i, int j, uint reqNetId)
-    {
-        return _tileMatrix[i,j].IsTileOccupiedByNetId(reqNetId);
-    }
 
-    public ErDucaTile getTile(int i, int j)
-    {
-        return _tileMatrix[i,j];
-    }
-    */
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
     public static new ErDucaNetworkManager singleton { get; private set; }
@@ -67,7 +56,6 @@ public class ErDucaNetworkManager : NetworkManager
     {
         singleton = this;
         base.Start();
-        _netIdMatrix = new uint[6,6];
     }
 
     /// <summary>
@@ -203,7 +191,11 @@ public class ErDucaNetworkManager : NetworkManager
 
                     GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
                     tile.name = "Tile[" + i + "]" + "[" + j + "]";
+
+                    tile.GetComponent<ErDucaTile>().I = i;
+                    tile.GetComponent<ErDucaTile>().J = j;
                     NetworkServer.Spawn(tile);
+                    
                 }
             }
         }
@@ -238,7 +230,7 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
-        _netIdMatrix = new uint[6, 6];
+        //_netIdMatrix = new uint[6, 6];
     }
 
     /// <summary>
