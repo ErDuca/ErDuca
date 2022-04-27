@@ -3549,7 +3549,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896262033}
   m_HandleRect: {fileID: 896262032}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4160,7 +4160,7 @@ MonoBehaviour:
   onlineScene: Assets/Scenes/GameplayScene.unity
   transport: {fileID: 1769651076}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 2
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 6425948880399284538, guid: 6668aa51a1ead9e41ad21fef0fc537e3, type: 3}
   autoCreatePlayer: 1
@@ -4818,7 +4818,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2140131313}
   m_HandleRect: {fileID: 2140131312}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

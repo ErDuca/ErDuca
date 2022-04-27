@@ -3,11 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 
-/*
-	Documentation: https://mirror-networking.gitbook.io/docs/components/network-manager
-	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkManager.html
-*/
-
 public class ErDucaNetworkManager : NetworkManager
 {
     private int _gridRowsNumber = 6;
@@ -18,15 +13,6 @@ public class ErDucaNetworkManager : NetworkManager
 
     private GameObject _host;
     private GameObject _opponent;
-
-    public void SwitchTurn()
-    {
-        /*
-        bool var = _host._isMyTurn;
-        _host._isMyTurn = !var;
-        _opponent._isMyTurn = var;
-        */
-    }
 
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
@@ -195,7 +181,6 @@ public class ErDucaNetworkManager : NetworkManager
                     tile.GetComponent<ErDucaTile>().I = i;
                     tile.GetComponent<ErDucaTile>().J = j;
                     NetworkServer.Spawn(tile);
-                    
                 }
             }
         }
@@ -230,7 +215,6 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
-        //_netIdMatrix = new uint[6, 6];
     }
 
     /// <summary>

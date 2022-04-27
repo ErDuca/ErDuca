@@ -30,19 +30,9 @@ public class ErDucaPlayer : NetworkBehaviour
     [ClientRpc]
     void RpcUpdateLocalNetIdMatrix(int i, int j, uint _myNetId)
     {
-        // MODIFICA IL PRIMO TILE DELLA MATRICE
-        // WHY???
-        // CONTROLLARE TIPOLOGIA STRUTTURA DATI
-        Debug.Log("Intra RPC");
         ErDucaNetworkManager.singleton._netIdMatrix[i, j] = _myNetId;
-        Debug.Log("Post RPC");
     }
 
-    [Command]
-    public void CmdSwitchTurn()
-    {
-        ErDucaNetworkManager.singleton.SwitchTurn();
-    }
     /*
     [Command]
     public void CmdMovePiece(GameObject selectedPieceScript, Transform newTransform)
@@ -77,7 +67,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-
+            /*
             for (int ix = 0; ix < 6; ix++)
             {
                 Debug.Log(ErDucaNetworkManager.singleton._netIdMatrix[ix, 0] + " "
@@ -87,6 +77,7 @@ public class ErDucaPlayer : NetworkBehaviour
                 + ErDucaNetworkManager.singleton._netIdMatrix[ix, 4] + " "
                 + ErDucaNetworkManager.singleton._netIdMatrix[ix, 5]);
             }
+            */
 
             Transform objectHit = hit.transform;
 
@@ -95,16 +86,18 @@ public class ErDucaPlayer : NetworkBehaviour
                 int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                 int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
-                Debug.Log("CONFRONTO:");
+                Debug.Log("///CONFRONTO///");
                 Debug.Log("Indici selezionati: " + tile_i_index + " " + tile_j_index);
                 Debug.Log("Valore in matrice = " + ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index]);
                 Debug.Log("Valore myNetId = " + _myNetId);
+                Debug.Log("///////////////");
 
                 if (!(ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == 0))
                 {
                     if (ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == _myNetId)
                     {
                         Debug.Log("Ho cliccato su un TILE NON-VUOTO dove c'è una MIA pedina");
+                        //Mostra Mosse Disponibili
                     }
                     else
                     {

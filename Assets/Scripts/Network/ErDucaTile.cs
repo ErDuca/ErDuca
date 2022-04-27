@@ -8,7 +8,7 @@ public class ErDucaTile : NetworkBehaviour
     [SerializeField]
     [SyncVar]private int _i;
     [SerializeField]
-    [SyncVar] private int _j;
+    [SyncVar]private int _j;
 
     public int I
     {
