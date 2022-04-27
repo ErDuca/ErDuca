@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Seer : Piece
+public class Seer : ErDucaPiece
 {
     void Start()
     {
+        /*
         mPhaseOneMovementArray.Add(new Movement(-1, -1, Ptype.Move));
         mPhaseOneMovementArray.Add(new Movement(-1, 1, Ptype.Move));
         mPhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Move));
@@ -23,11 +24,6 @@ public class Seer : Piece
         mPhaseTwoMovementArray.Add(new Movement(2, -2, Ptype.Jump));
         mPhaseTwoMovementArray.Add(new Movement(2, 2, Ptype.Jump));
         mPhaseTwoMovementArray.Add(new Movement(-2, 2, Ptype.Jump));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        */
     }
 }
