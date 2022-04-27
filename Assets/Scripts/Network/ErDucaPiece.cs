@@ -4,33 +4,33 @@ using UnityEngine;
 using Mirror;
 public enum Ptype
 {
+    
     Move,
-    Jump,
+    Jump
+    ,/*
     Slide,
     Fly,
     Strike,
     Command
+    */
 }
 
 public struct Movement
 {
-    public int mOffsetX;
-    public int mOffsetY;
+    public int _OffsetX;
+    public int _OffsetY;
     public Ptype mType;
 
     public Movement(int x, int y, Ptype type)
     {
-        mOffsetX = x;
-        mOffsetY = y;
+        _OffsetX = x;
+        _OffsetY = y;
         mType = type;
     }
 }
 
 public class ErDucaPiece : NetworkBehaviour
 {
-    private string _UnitName;
-    private Sprite _UnitSprite;
-
     public List<Movement> _PhaseOneMovementArray;
     public List<Movement> _PhaseTwoMovementArray;
 
