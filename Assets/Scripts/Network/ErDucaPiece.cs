@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+
 public enum Ptype
 {
     
@@ -47,7 +48,6 @@ public class ErDucaPiece : NetworkBehaviour
             _myPlayerNetId = value;
         }
     }
-
     public bool IsPhaseOne
     {
         get => _isPhaseOne;

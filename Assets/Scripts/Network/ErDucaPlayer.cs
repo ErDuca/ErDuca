@@ -123,7 +123,7 @@ public class ErDucaPlayer : NetworkBehaviour
     public override void OnStartClient()
     {
         GameObject player = gameObject;
-        Debug.Log("sto settando il netId!");
+        //Debug.Log("sto settando il netId!");
         _myNetId = player.GetComponent<NetworkIdentity>().netId;
     }
 }

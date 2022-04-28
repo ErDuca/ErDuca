@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2236925843793184956}
   - component: {fileID: 2236925843793184957}
   - component: {fileID: 2236925843793184947}
+  - component: {fileID: 394230783080419260}
   m_Layer: 0
   m_Name: PieceGameObject
-  m_TagString: Untagged
+  m_TagString: Piece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,3 +151,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _myPlayerNetId: 0
+  _isPhaseOne: 1
+--- !u!65 &394230783080419260
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2236925843793184952}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.12, y: 5.12, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
