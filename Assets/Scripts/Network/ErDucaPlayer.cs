@@ -92,7 +92,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 Debug.Log("Valore myNetId = " + _myNetId);
                 Debug.Log("///////////////");
 
-                
                 if (!(ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == 0))
                 {
                     if (ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == _myNetId)
@@ -123,7 +122,7 @@ public class ErDucaPlayer : NetworkBehaviour
     public override void OnStartClient()
     {
         GameObject player = gameObject;
-        //Debug.Log("sto settando il netId!");
+
         _myNetId = player.GetComponent<NetworkIdentity>().netId;
     }
 }
