@@ -8,8 +8,17 @@ public class ErDucaNetworkManager : NetworkManager
     private int _gridRowsNumber = 6;
     private int _boardSize = 480;
     private int _tileSize = 80;
+    private uint[,] _netIdMatrix = new uint[6, 6];
 
-    public uint[,] _netIdMatrix = new uint[6, 6];
+    public uint getMatrixIdAt(int i, int j)
+    {
+        return _netIdMatrix[i,j];
+    }
+
+    public void setMatrixIdAt(uint value, int i, int j)
+    {
+        _netIdMatrix[i, j] = value;
+    }
 
     private GameObject _host;
     private GameObject _opponent;
@@ -177,7 +186,6 @@ public class ErDucaNetworkManager : NetworkManager
 
                     GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
                     tile.name = "Tile[" + i + "]" + "[" + j + "]";
-
                     tile.GetComponent<ErDucaTile>().I = i;
                     tile.GetComponent<ErDucaTile>().J = j;
                     NetworkServer.Spawn(tile);

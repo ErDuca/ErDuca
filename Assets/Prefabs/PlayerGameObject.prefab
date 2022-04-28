@@ -63,6 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _currentSelectedPiece: {fileID: 0}
   _isMyTurn: 0
   _myColor: {r: 0, g: 0, b: 0, a: 0}
-  piecePrefab1: {fileID: 2236925843793184952, guid: 9ecffcdf958b8f54cb9e4cdf4bbbc74e, type: 3}
+  piecePrefab1: {fileID: 2236925843793184952, guid: 1a011aa36190fa7499fa54828d181ec2, type: 3}

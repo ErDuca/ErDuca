@@ -4059,6 +4059,7 @@ GameObject:
   - component: {fileID: 1769651075}
   - component: {fileID: 1769651074}
   - component: {fileID: 1769651077}
+  - component: {fileID: 1769651079}
   m_Layer: 0
   m_Name: NetworkManagerGameObject
   m_TagString: Untagged
@@ -4167,7 +4168,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 4139634051971890689, guid: 119b1d4e107d3a7498a70c6974b96411, type: 3}
-  - {fileID: 2236925843793184952, guid: 9ecffcdf958b8f54cb9e4cdf4bbbc74e, type: 3}
+  - {fileID: 2236925843793184952, guid: 1a011aa36190fa7499fa54828d181ec2, type: 3}
 --- !u!4 &1769651078
 Transform:
   m_ObjectHideFlags: 0
@@ -4182,6 +4183,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1769651079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769651073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5e5919980f2e2468c1b42bfbf5511a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1894893960
 GameObject:
   m_ObjectHideFlags: 0

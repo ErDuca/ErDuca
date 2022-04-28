@@ -11,7 +11,8 @@ public class Duke : ErDucaPiece
         mPhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
 
         mPhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
-        mPhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
+        mPhaseTwoMovementArray.Add(new Movement(0, -1, Ptype.Slide));
         */
     }
 }
+

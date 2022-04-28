@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class ErDucaPlayer : NetworkBehaviour
 
     [SerializeField]
     private ErDucaPiece _currentSelectedPiece;
+    [SerializeField]
+    private List<Tuple<int, int>> _currentAvailableMoves = new List<Tuple<int, int>>();
 
     [SerializeField]
     [SyncVar] public bool _isMyTurn;
@@ -24,28 +27,27 @@ public class ErDucaPlayer : NetworkBehaviour
         GameObject piece = Instantiate(piecePrefab1, spawnTransform.position + new Vector3(0f, 30f, 0f), Quaternion.Euler(90,0,0));
         NetworkServer.Spawn(piece);
         piece.GetComponent<ErDucaPiece>().MyPlayerNetId = _myNetId;
+
+        piece.GetComponent<ErDucaPiece>().I = i;
+        piece.GetComponent<ErDucaPiece>().J = j;
+        RpcUpdateLocalNetIdMatrix(i, j, _myNetId);
+    }
+
+    [Command]
+    public void CmdMovePiece(GameObject selectedPieceScript, Transform newTransform, int i, int j)
+    {
+        RpcUpdateLocalNetIdMatrix(selectedPieceScript.GetComponent<ErDucaPiece>().I, selectedPieceScript.GetComponent<ErDucaPiece>().J, 0);
+        selectedPieceScript.transform.position = newTransform.position + new Vector3(0f, 30f, 0f);
+        selectedPieceScript.GetComponent<ErDucaPiece>().I = i;
+        selectedPieceScript.GetComponent<ErDucaPiece>().J = j;
         RpcUpdateLocalNetIdMatrix(i, j, _myNetId);
     }
 
     [ClientRpc]
     void RpcUpdateLocalNetIdMatrix(int i, int j, uint _myNetId)
     {
-        ErDucaNetworkManager.singleton._netIdMatrix[i, j] = _myNetId;
+        ErDucaNetworkManager.singleton.setMatrixIdAt(_myNetId, i, j);
     }
-
-    /*
-    [Command]
-    public void CmdMovePiece(GameObject selectedPieceScript, Transform newTransform)
-    {
-        selectedPieceScript.transform.position = newTransform.position + new Vector3(0f, 1f, 0f);
-    }
-
-    [Command]
-    public void CmdIsOccupiedByMe(int i, int j, uint myNetId)
-    {
-        return ErDucaNetworkManager.singleton.TileIsOccupiedByNetId(i, j, myNetId);
-    }
-    */
 
     public void Start()
     {
@@ -77,45 +79,89 @@ public class ErDucaPlayer : NetworkBehaviour
                 + ErDucaNetworkManager.singleton._netIdMatrix[ix, 4] + " "
                 + ErDucaNetworkManager.singleton._netIdMatrix[ix, 5]);
             }
+            
+            Debug.Log("///CONFRONTO///");
+            Debug.Log("Indici selezionati: " + tile_i_index + " " + tile_j_index);
+            Debug.Log("Valore in matrice = " + ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index]);
+            Debug.Log("Valore myNetId = " + _myNetId);
+            Debug.Log("///////////////");
+
             */
 
             Transform objectHit = hit.transform;
 
-            if (_currentSelectedPiece == null && objectHit.CompareTag("Tile"))
+            //CASO NON HO SELEZIONATO NULLA, E CLICCO SU PEDINA
+            if (_currentSelectedPiece == null && objectHit.CompareTag("Piece"))
             {
-                int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
-                int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
-
-                Debug.Log("///CONFRONTO///");
-                Debug.Log("Indici selezionati: " + tile_i_index + " " + tile_j_index);
-                Debug.Log("Valore in matrice = " + ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index]);
-                Debug.Log("Valore myNetId = " + _myNetId);
-                Debug.Log("///////////////");
-
-                if (!(ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == 0))
+                if (objectHit.gameObject.GetComponent<ErDucaPiece>().MyPlayerNetId == _myNetId)
                 {
-                    if (ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index] == _myNetId)
+                    _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
+                    int piece_i_index = _currentSelectedPiece.I;
+                    int piece_j_index = _currentSelectedPiece.J;
+
+                    //Aggionare la UI
+                    //Placeholder
+                   
+                    if (_currentSelectedPiece.IsPhaseOne)
                     {
-                        Debug.Log("Ho cliccato su un TILE NON-VUOTO dove c'è una MIA pedina");
-                        //Mostra Mosse Disponibili
+                        //PRENDERE REFERENCE!
+                        _currentAvailableMoves = ErDucaNetworkManager.singleton.
+                            GetComponent<ErDucaMoveManager>().
+                            GetAvailableMoves(_myNetId, piece_i_index, piece_j_index, _currentSelectedPiece.P1MOVARR);
                     }
                     else
                     {
-                        Debug.Log("Ho cliccato su un TILE NON-VUOTO dove c'è una pedina NEMICA");
+                        _currentAvailableMoves = ErDucaNetworkManager.singleton.
+                            GetComponent<ErDucaMoveManager>().
+                            GetAvailableMoves(_myNetId, piece_i_index, piece_j_index, _currentSelectedPiece.P1MOVARR);
                     }
-                }
-                else
-                {
-                    Debug.Log("Ho cliccato su un TILE VUOTO");
-                    CmdSpawnPiece(objectHit.transform, tile_i_index, tile_j_index);
+
+                    //Mostrare le mosse disponibili
                 }
             }
-            
-            else if(_currentSelectedPiece != null && objectHit.CompareTag("Tile"))
+
+            //CASO HO SELEZIONATO UNA PEDINA ( HO LE SUE MOSSE ) E SELEZIONO UN TILE
+            else if (_currentSelectedPiece != null && objectHit.CompareTag("Tile"))
+            {
+                
+                int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
+                int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
+                Debug.Log("Voglio andà in: " + tile_i_index + tile_j_index);
+
+                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                {
+                    Debug.Log("Possibile Mossa: " + tuple.Item1 + tuple.Item2);
+
+                    if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
+                    {
+                        Debug.Log("Sto per muovere il piece");
+                        CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
+                    }
+                }
+
+                _currentSelectedPiece = null;
+                _currentAvailableMoves.Clear();
+            }
+
+            //CASO TILE VUOTO -> SPAWNING
+            else if (_currentSelectedPiece == null && objectHit.CompareTag("Tile"))
             {
                 int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                 int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
+                CmdSpawnPiece(objectHit.transform, tile_i_index, tile_j_index);
             }
+
+            else
+            {
+                _currentSelectedPiece = null;
+                _currentAvailableMoves.Clear();
+            }
+
+        }
+        else
+        {
+            _currentSelectedPiece = null;
+            _currentAvailableMoves.Clear();
         }
     }
 
