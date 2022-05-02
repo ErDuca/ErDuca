@@ -172,10 +172,13 @@ public class ErDucaNetworkManager : NetworkManager
 
         if (numPlayers == 2)
         {
+            player.GetComponent<ErDucaPlayer>()._myNetId = player.GetComponent<NetworkIdentity>().netId;
             player.GetComponent<ErDucaPlayer>()._myColor = Color.red;
+            Camera.main.transform.Rotate(0f, 0f, 180f);
         }
         else
         {
+            player.GetComponent<ErDucaPlayer>()._myNetId = player.GetComponent<NetworkIdentity>().netId;
             player.GetComponent<ErDucaPlayer>()._myColor = Color.blue;
 
             for (int i = 0; i < _gridRowsNumber; i++)

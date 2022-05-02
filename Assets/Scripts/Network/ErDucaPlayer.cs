@@ -11,7 +11,7 @@ public class ErDucaPlayer : NetworkBehaviour
     private ErDucaMoveManager _erDucaMoveManager;
 
     [SerializeField]
-    private uint _myNetId;
+    [SyncVar]public uint _myNetId;
 
     //FRONT
     //BACK
@@ -58,11 +58,9 @@ public class ErDucaPlayer : NetworkBehaviour
     public void Start()
     {
         _camera = Camera.main;
-
-        
-
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
+        //Pigliarsi anche le altre reference
     }
 
     public void Update()
@@ -80,18 +78,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            
-            
-
-            /*
-            Debug.Log("///CONFRONTO///");
-            Debug.Log("Indici selezionati: " + tile_i_index + " " + tile_j_index);
-            Debug.Log("Valore in matrice = " + ErDucaNetworkManager.singleton._netIdMatrix[tile_i_index, tile_j_index]);
-            Debug.Log("Valore myNetId = " + _myNetId);
-            Debug.Log("///////////////");
-
-            */
-
             Transform objectHit = hit.transform;
 
             //CASO NON HO SELEZIONATO NULLA, E CLICCO SU UNA PEDINA
@@ -105,6 +91,8 @@ public class ErDucaPlayer : NetworkBehaviour
 
                     //Aggionare la UI
                     //Placeholder
+
+                    //UiManager.singleton.MakeInfoAppear(int PedinaInfoboxIndex);
                    
                     if (_currentSelectedPiece.IsPhaseOne)
                     {
@@ -176,18 +164,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        _myNetId = gameObject.GetComponent<NetworkIdentity>().netId;
 
-        //Porcheria!!
-        /*
-        if (netId == 1)
-        {
-
-        }
-        else
-        {
-            _camera.transform.Rotate(0f, 0f, 180f);
-        }
-        */
     }
 }
