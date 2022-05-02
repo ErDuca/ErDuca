@@ -5,23 +5,25 @@ using Mirror;
 
 public class ErDucaNetworkManager : NetworkManager
 {
+    //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
     private int _boardSize = 480;
     private int _tileSize = 80;
+
+    //Contains a grid with all the pieces'player netId in the relative positions, used to perform the moves algorithms
     private uint[,] _netIdMatrix = new uint[6, 6];
 
     public uint getMatrixIdAt(int i, int j)
     {
         return _netIdMatrix[i,j];
     }
-
     public void setMatrixIdAt(uint value, int i, int j)
     {
         _netIdMatrix[i, j] = value;
     }
 
-    private GameObject _host;
-    private GameObject _opponent;
+    private ErDucaPlayer _host;
+    private ErDucaPlayer _opponent;
 
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.

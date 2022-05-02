@@ -33,7 +33,6 @@ public class ErDucaTile : NetworkBehaviour
     {
         _myCollider = GetComponent<BoxCollider>();
     }
-
     public void enableCollider()
     {
         _myCollider.enabled = true;

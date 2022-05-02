@@ -5,10 +5,9 @@ using Mirror;
 
 public enum Ptype
 {
-    
-    Walk,
-    Jump
+    Walk
     /*
+    Jump
     Slide,
     Fly,
     Strike,
@@ -86,5 +85,4 @@ public class ErDucaPiece : NetworkBehaviour
     {
         get => _PhaseTwoMovementArray;
     }
-
 }
