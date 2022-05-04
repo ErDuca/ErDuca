@@ -5,6 +5,9 @@ using Mirror;
 
 public class ErDucaTile : NetworkBehaviour
 {
+    private Material material;
+    private Color originalColor;
+
     [SerializeField]
     [SyncVar]private int _i;
     [SerializeField]
@@ -24,5 +27,20 @@ public class ErDucaTile : NetworkBehaviour
         {
             _j = value;
         }
+    }
+
+    private void Start()
+    {
+        material = GetComponent<MeshRenderer>().material;
+        originalColor = material.color;
+    }
+    public void SetMaterialColor(Color color)
+    {
+        material.color = color;
+    }
+
+    public void SetOriginalColor()
+    {
+        material.color = originalColor;
     }
 }

@@ -14,12 +14,11 @@ public class ErDucaMoveManager : MonoBehaviour
 
     public List<Tuple<int, int>> GetAvailableMoves(uint netId, int i, int j, List<Movement> pieceRelativeMoves)
     {
-        if(netId == 1)
+        if (netId == 1)
         {
             invertIndex = true;
         }
 
-        Debug.Log("Elaboro possibili mosse...");
         List<Tuple<int, int>> availableMoves = new List<Tuple<int, int>>();
         Tuple<int, int> temp;
 
@@ -39,24 +38,18 @@ public class ErDucaMoveManager : MonoBehaviour
                         availableMoves.Add(temp);
                     break;
 
-                case Ptype.Slide: //0,1
+                case Ptype.Slide:
                     int isl = i; 
                     int jsl = j;
                     bool foundEnemyPiece = false;
-                    Debug.Log("Valuto possibili slide...");
                     do
                     {
                         temp = GetSlideMoves(netId, isl, jsl, m._offsetX, m._offsetY, ref foundEnemyPiece, ref isl, ref jsl);
 
                         if (temp != null)
                             availableMoves.Add(temp);
-                        /*
-                        isl += m._offsetX;
-                        jsl += m._offsetY;
-                        */
                     }
                     while (temp != null && !foundEnemyPiece);
-
                     break;
 
                 default:
@@ -80,7 +73,7 @@ public class ErDucaMoveManager : MonoBehaviour
             return null;
 
         //Controllare se c'è una mia pedina nel posto dove devo andare
-        if (ErDucaNetworkManager.singleton.getMatrixIdAt(i + xOffset, j + yOffset) == netId)
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
         Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
@@ -101,7 +94,7 @@ public class ErDucaMoveManager : MonoBehaviour
             return null;
 
         //Controllare se c'è una mia pedina nel posto dove devo andare
-        if (ErDucaNetworkManager.singleton.getMatrixIdAt(i + xOffset, j + yOffset) == netId)
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
         Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
@@ -123,12 +116,12 @@ public class ErDucaMoveManager : MonoBehaviour
             return null;
 
         //Controllare se c'è una mia pedina nel posto dove devo andare
-        if (ErDucaNetworkManager.singleton.getMatrixIdAt(i + xOffset, j + yOffset) == netId)
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
         //Ho trovato una pedina avversaria - Come lo dico allo switch sopra?
-        if (ErDucaNetworkManager.singleton.getMatrixIdAt(i + xOffset, j + yOffset) != netId &&
-            ErDucaNetworkManager.singleton.getMatrixIdAt(i + xOffset, j + yOffset) != 0)
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != netId &&
+            ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != 0)
         {
             hasFoundEnemy = true;
         }

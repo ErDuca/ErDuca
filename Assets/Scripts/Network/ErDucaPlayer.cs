@@ -55,6 +55,16 @@ public class ErDucaPlayer : NetworkBehaviour
         } 
     }
 
+    //{BROKEN!!!!!!}
+    //Da mettere come TargetRPC!
+    /*
+    [ClientRpc]
+    public void RpcOnMovesDisplayed(List<Tuple<int, int>> currentAvailableMoves)
+    {
+        //ErDucaNetworkManager.singleton.HighlightsTiles(currentAvailableMoves);
+    }
+    */
+
     [Command]
     public void CmdMovePiece(GameObject selectedPieceScript, Transform newTransform, int i, int j)
     {
@@ -89,7 +99,7 @@ public class ErDucaPlayer : NetworkBehaviour
     [ClientRpc]
     void RpcUpdateLocalNetIdMatrix(int i, int j, uint _myNetId)
     {
-        ErDucaNetworkManager.singleton.setMatrixIdAt(_myNetId, i, j);
+        ErDucaNetworkManager.singleton.SetMatrixIdAt(_myNetId, i, j);
     }
 
     public void Start()
@@ -148,6 +158,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     }
 
                     //Mostrare le mosse disponibili
+                    //RpcOnMovesDisplayed(_currentAvailableMoves);
                 }
             }
 
@@ -207,55 +218,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 _currentSelectedPiece = null;
                 _currentAvailableMoves.Clear();
             }
-            /*
-            Debug.Log(
-                ErDucaNetworkManager.singleton.getMatrixIdAt(0, 0) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(0, 1) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(0, 2) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(0, 3) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(0, 4) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(0, 5));
-
-            Debug.Log(
-                ErDucaNetworkManager.singleton.getMatrixIdAt(1, 0) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(1, 1) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(1, 2) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(1, 3) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(1, 4) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(1, 5));
-
-            Debug.Log(
-                ErDucaNetworkManager.singleton.getMatrixIdAt(2, 0) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(2, 1) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(2, 2) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(2, 3) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(2, 4) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(2, 5));
-
-            Debug.Log(
-                ErDucaNetworkManager.singleton.getMatrixIdAt(3, 0) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(3, 1) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(3, 2) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(3, 3) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(3, 4) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(3, 5));
-
-            Debug.Log(
-                ErDucaNetworkManager.singleton.getMatrixIdAt(4, 0) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(4, 1) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(4, 2) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(4, 3) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(4, 4) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(4, 5));
-
-            Debug.Log(
-                ErDucaNetworkManager.singleton.getMatrixIdAt(5, 0) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(5, 1) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(5, 2) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(5, 3) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(5, 4) + " " +
-                ErDucaNetworkManager.singleton.getMatrixIdAt(5, 5));
-            */
         }
 
         else
