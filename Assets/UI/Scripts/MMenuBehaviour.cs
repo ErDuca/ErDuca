@@ -14,6 +14,7 @@ public class MMenuBehaviour : MonoBehaviour
     private Vector3 screen3Position;
     private Vector3 screen4Position;
     private Vector3 screen5Position;
+    private Vector3 screen6Position;
     [SerializeField] private GameObject hostScreen;
     [SerializeField] private GameObject joinScreen;
 
@@ -27,11 +28,24 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private Text roomNameTextGO;
     private string roomName;
 
+    [Header("Extras screen related")]
+    [SerializeField] private GameObject rulesScreenGO;
+    [SerializeField] private GameObject unitsGuideScreenGO;
+    [SerializeField] private GameObject creditsScreenGO;
+    private int currentScreen6Page;
+    private enum Screen6IDs
+    {
+        RULES,       //0
+        UNITSGUIDE,  //1
+        CREDITS      //2
+    }    
+
     //Screen 1 = Main Menu
     //Screen 2 = Options Menu
     //Screen 3 = Multiplayer Match Settings Menu
-    //Screen 4 = TODO Stats? Deck builder?
+    //Screen 4 = Extras Menu
     //Screen 5 = Join Menu
+    //Screen 6 = Extras Pages (Rules, Unit guide, Credits)
 
     private void Start()
     {
@@ -40,6 +54,7 @@ public class MMenuBehaviour : MonoBehaviour
         screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
         screen4Position = new Vector3(mMenuGO.transform.position.x - Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
         screen5Position = new Vector3(screen3Position.x + Screen.width, screen3Position.y, screen3Position.z);
+        screen6Position = new Vector3(screen4Position.x - Screen.width, screen4Position.y, screen4Position.z);
 
         transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
     }
@@ -58,9 +73,41 @@ public class MMenuBehaviour : MonoBehaviour
     public void GoToScreen1From4() => StartCoroutine(MoveToScreenCoroutine(screen4Position, screen1Position));
     //Screen Multiplayer Menu -> Join Menu
     public void GoToScreen5From3() => StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
-    
     //Screen Join Menu -> Multiplayer Menu
     public void GoToScreen3From5() => StartCoroutine(MoveToScreenCoroutine(screen5Position, screen3Position));
+    //Screen Guide -> Screen Extras
+    public void GoToScreen4From6() => StartCoroutine(MoveToScreenCoroutine(screen6Position, screen4Position));
+    //Screen Extras -> Screen Guide
+    public void GoToScreen6From4(int screenId)
+    {
+        switch (screenId)
+        {
+            case (int)Screen6IDs.RULES:
+                rulesScreenGO.SetActive(true);
+                unitsGuideScreenGO.SetActive(false);
+                creditsScreenGO.SetActive(false);
+                currentScreen6Page = 0;
+                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
+                break;
+            case (int)Screen6IDs.UNITSGUIDE:
+                rulesScreenGO.SetActive(false);
+                unitsGuideScreenGO.SetActive(true);
+                creditsScreenGO.SetActive(false);
+                currentScreen6Page = 0;
+                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
+                break;
+            case (int)Screen6IDs.CREDITS:
+                rulesScreenGO.SetActive(false);
+                unitsGuideScreenGO.SetActive(false);
+                creditsScreenGO.SetActive(true);
+                currentScreen6Page = 0;
+                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
+                break;
+            default:
+                break;
+        };
+    }
+
     IEnumerator MoveToScreenCoroutine(Vector3 fromPos, Vector3 toPos)
     {
         float elapsedTime = 0f;
