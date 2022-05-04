@@ -5,13 +5,10 @@ using Mirror;
 
 public class ErDucaTile : NetworkBehaviour
 {
-    private BoxCollider _myCollider;
-
     [SerializeField]
     [SyncVar]private int _i;
     [SerializeField]
     [SyncVar]private int _j;
-
     public int I
     {
         get => _i;
@@ -27,18 +24,5 @@ public class ErDucaTile : NetworkBehaviour
         {
             _j = value;
         }
-    }
-
-    private void Start()
-    {
-        _myCollider = GetComponent<BoxCollider>();
-    }
-    public void enableCollider()
-    {
-        _myCollider.enabled = true;
-    }
-    public void disableCollider()
-    {
-        _myCollider.enabled = false;
     }
 }

@@ -5,10 +5,10 @@ using Mirror;
 
 public enum Ptype
 {
-    Walk
+    Walk,
+    Jump,
+    Slide
     /*
-    Jump
-    Slide,
     Fly,
     Strike,
     Command
@@ -17,14 +17,14 @@ public enum Ptype
 
 public struct Movement
 {
-    public int _OffsetX;
-    public int _OffsetY;
+    public int _offsetX;
+    public int _offsetY;
     public Ptype _mType;
 
     public Movement(int x, int y, Ptype type)
     {
-        _OffsetX = x;
-        _OffsetY = y;
+        _offsetX = x;
+        _offsetY = y;
         _mType = type;
     }
 }
@@ -35,15 +35,22 @@ public class ErDucaPiece : NetworkBehaviour
     protected List<Movement> _PhaseTwoMovementArray = new List<Movement>();
 
     [SerializeField]
-    [SyncVar]private uint _myPlayerNetId;
-    [SerializeField]
-    [SyncVar]private bool _isPhaseOne = true;
-
-    [SerializeField]
     [SyncVar] private int _i;
     [SerializeField]
     [SyncVar] private int _j;
+    [SerializeField]
+    [SyncVar] private uint _myPlayerNetId;
+    [SerializeField]
+    [SyncVar] private bool _isPhaseOne = true;
 
+    public List<Movement> P1MOVARR
+    {
+        get => _PhaseOneMovementArray;
+    }
+    public List<Movement> P2MOVARR
+    {
+        get => _PhaseTwoMovementArray;
+    }
     public int I
     {
         get => _i;
@@ -77,12 +84,21 @@ public class ErDucaPiece : NetworkBehaviour
         }
     }
 
-    public List<Movement> P1MOVARR
+    public void StartMoveTo(Vector3 target)
     {
-        get => _PhaseOneMovementArray;
+        StartCoroutine(MoveTo(target));
     }
-    public List<Movement> P2MOVARR
+
+    public IEnumerator MoveTo(Vector3 targetPos)
     {
-        get => _PhaseTwoMovementArray;
+        Vector3 startPos = transform.position;
+        float fraction = 0f;
+
+        while(transform.position != targetPos)
+        {
+            transform.position = Vector3.Lerp(startPos, targetPos, fraction);
+            fraction += 0.05f;
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 }

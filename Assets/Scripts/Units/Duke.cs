@@ -7,11 +7,19 @@ public class Duke : ErDucaPiece
     void Start()
     {
         /*
-        mPhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Slide));
-        mPhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Walk));
+        _PhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Walk));
+        _PhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Walk));
+        _PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Walk));
+        */
 
-        mPhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
-        mPhaseTwoMovementArray.Add(new Movement(0, -1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(-1, -1, Ptype.Slide));
+
+        /*
+        _PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Slide));
         */
     }
 }

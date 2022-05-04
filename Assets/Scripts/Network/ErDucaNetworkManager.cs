@@ -9,8 +9,10 @@ public class ErDucaNetworkManager : NetworkManager
     private int _gridRowsNumber = 6;
     private int _boardSize = 480;
     private int _tileSize = 80;
+    private int _tileSpawningHeight = -644;
 
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the moves algorithms
+    //Serializzare! in qualche maniera
     private uint[,] _netIdMatrix = new uint[6, 6];
 
     public uint getMatrixIdAt(int i, int j)
@@ -21,9 +23,6 @@ public class ErDucaNetworkManager : NetworkManager
     {
         _netIdMatrix[i, j] = value;
     }
-
-    private ErDucaPlayer _host;
-    private ErDucaPlayer _opponent;
 
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
@@ -166,36 +165,39 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         //base.OnServerAddPlayer(conn);
+
         GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         NetworkServer.AddPlayerForConnection(conn, player);
-        player.GetComponent<ErDucaPlayer>()._isMyTurn = true;
+        ErDucaPlayer erDucaPlayer = player.GetComponent<ErDucaPlayer>();
+        erDucaPlayer._isMyTurn = true;
 
         if (numPlayers == 2)
         {
-            player.GetComponent<ErDucaPlayer>()._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            player.GetComponent<ErDucaPlayer>()._myColor = Color.red;
-            Camera.main.transform.Rotate(0f, 0f, 180f);
-        }
-        else
-        {
-            player.GetComponent<ErDucaPlayer>()._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            player.GetComponent<ErDucaPlayer>()._myColor = Color.blue;
-
+            erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer._myColor = Color.red;
+            erDucaPlayer._isPlayerOne = false;
+            
             for (int i = 0; i < _gridRowsNumber; i++)
             {
                 for (int j = 0; j < _gridRowsNumber; j++)
                 {
                     Vector3 position = new Vector3(-(((_boardSize / 2) - ((_tileSize) / 2)))
-                        + (j * _tileSize), -644, -(((_boardSize / 2) - ((_tileSize) / 2)))
+                        + (j * _tileSize), _tileSpawningHeight, -(((_boardSize / 2) - ((_tileSize) / 2)))
                         + (i * _tileSize));
 
                     GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
-                    tile.name = "Tile[" + i + "]" + "[" + j + "]";
                     tile.GetComponent<ErDucaTile>().I = i;
                     tile.GetComponent<ErDucaTile>().J = j;
                     NetworkServer.Spawn(tile);
                 }
             }
+        }
+
+        else
+        {
+            erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer._myColor = Color.blue;
+            erDucaPlayer._isPlayerOne = true;
         }
     }
 
