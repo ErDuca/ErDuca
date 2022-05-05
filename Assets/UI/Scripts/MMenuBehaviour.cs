@@ -106,12 +106,10 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void HostBeginMatch()
     {
+        //TODO: This is limited to 20 characters, look for the reason and increase it to 40
         roomName = roomNameTextGO.text;
-        if (roomName.Equals(""))
-        {
-            roomName = "GameRoom"; 
-        }
-
+        if (string.IsNullOrEmpty(roomName))
+            roomName = "GameRoom";
         transitionScript.LoadSceneByID(1);
     }
 
@@ -120,13 +118,12 @@ public class MMenuBehaviour : MonoBehaviour
         //TODO: Actual searching of the match
 
         //Placeholders string
-        //TODO: Set a max of 40 characters for the name
         string roomName = "Lorem Ipsum dolor sit";
 
         CreateRoomButton(roomName);
     }
 
-    public void CreateRoomButton(string roomName)
+    private void CreateRoomButton(string roomName)
     {
         GameObject roomButton = Instantiate(roomButtonPrefab);
         roomButton.transform.SetParent(scrollViewContentGO.transform);
@@ -181,7 +178,7 @@ public class MMenuBehaviour : MonoBehaviour
             default:
                 break;
         };
-        pageNumberText.text = currentScreen6Page + 1 + " / " + currentPagesArray.Length;
+        pageNumberText.text = "Page " + (currentScreen6Page + 1) + " / " + currentPagesArray.Length;
     }
 
     public void ChangePage(int offset)
@@ -190,13 +187,11 @@ public class MMenuBehaviour : MonoBehaviour
         {
             currentPagesArray[currentScreen6Page].SetActive(false);
             currentPagesArray[currentScreen6Page += offset].SetActive(true);
-            pageNumberText.text = currentScreen6Page + 1 + " / " + currentPagesArray.Length;
+            pageNumberText.text = "Page " + (currentScreen6Page + 1) + " / " + currentPagesArray.Length;
         }
         
     }
 }
-
-
 
 
 //TEST PLAYERPREFSEDITOR
