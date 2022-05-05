@@ -6,17 +6,15 @@ public class Footman : ErDucaPiece
 {
     void Start()
     {
-        /*
-        mPhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Move));
-        mPhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Move));
-        mPhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Move));
-        mPhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Move));
+        _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Walk));
+        _PhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Walk));
+        _PhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Walk));
+        _PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Walk));
 
-        mPhaseTwoMovementArray.Add(new Movement(-1, -1, Ptype.Move));
-        mPhaseTwoMovementArray.Add(new Movement(-1, 1, Ptype.Move));
-        mPhaseTwoMovementArray.Add(new Movement(1, 1, Ptype.Move));
-        mPhaseTwoMovementArray.Add(new Movement(1, -1, Ptype.Move));
-        mPhaseTwoMovementArray.Add(new Movement(0, -2, Ptype.Move));
-        */
+        _PhaseTwoMovementArray.Add(new Movement(-1, -1, Ptype.Walk));
+        _PhaseTwoMovementArray.Add(new Movement(-1, 1, Ptype.Walk));
+        _PhaseTwoMovementArray.Add(new Movement(1, 1, Ptype.Walk));
+        _PhaseTwoMovementArray.Add(new Movement(1, -1, Ptype.Walk));
+        _PhaseTwoMovementArray.Add(new Movement(0, -2, Ptype.Walk));
     }
 }

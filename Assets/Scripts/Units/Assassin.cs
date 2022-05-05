@@ -6,14 +6,12 @@ public class Assassin : ErDucaPiece
 {
     void Start()
     {
-        /*
-        mPhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Slide));
-        mPhaseOneMovementArray.Add(new Movement(-1, 1, Ptype.Slide));
-        mPhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(-1, 1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Slide));
 
-        mPhaseTwoMovementArray.Add(new Movement(-1, -1, Ptype.Slide));
-        mPhaseTwoMovementArray.Add(new Movement(1, -1, Ptype.Slide));
-        mPhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
-        */
+        _PhaseTwoMovementArray.Add(new Movement(-1, -1, Ptype.Slide));
+        _PhaseTwoMovementArray.Add(new Movement(1, -1, Ptype.Slide));
+        _PhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
     }
 }

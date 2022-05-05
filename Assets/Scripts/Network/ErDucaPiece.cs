@@ -85,7 +85,6 @@ public class ErDucaPiece : NetworkBehaviour
     {
         StartCoroutine(MoveTo(target));
     }
-
     public IEnumerator MoveTo(Vector3 targetPos)
     {
         Vector3 startPos = transform.position;
