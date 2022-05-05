@@ -38,7 +38,6 @@ public class ErDucaTile : NetworkBehaviour
     {
         material.color = color;
     }
-
     public void SetOriginalColor()
     {
         material.color = originalColor;

@@ -10,8 +10,7 @@ public enum Ptype
     Slide
     /*
     Fly,
-    Strike,
-    Command
+    Strike
     */
 }
 
