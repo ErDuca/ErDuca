@@ -32,7 +32,14 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject rulesScreenGO;
     [SerializeField] private GameObject unitsGuideScreenGO;
     [SerializeField] private GameObject creditsScreenGO;
+    private int currentScreen6Menu;
     private int currentScreen6Page;
+    [SerializeField] private GameObject[] rulesPages;
+    [SerializeField] private GameObject[] unitGuidePages;
+    [SerializeField] private GameObject[] creditsPages;
+    private GameObject[] currentPagesArray;
+    [SerializeField] private Text pageNumberText;
+
     private enum Screen6IDs
     {
         RULES,       //0
@@ -57,6 +64,8 @@ public class MMenuBehaviour : MonoBehaviour
         screen6Position = new Vector3(screen4Position.x - Screen.width, screen4Position.y, screen4Position.z);
 
         transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
+
+
     }
 
     //Main Menu -> Options Menu
@@ -78,35 +87,7 @@ public class MMenuBehaviour : MonoBehaviour
     //Screen Guide -> Screen Extras
     public void GoToScreen4From6() => StartCoroutine(MoveToScreenCoroutine(screen6Position, screen4Position));
     //Screen Extras -> Screen Guide
-    public void GoToScreen6From4(int screenId)
-    {
-        switch (screenId)
-        {
-            case (int)Screen6IDs.RULES:
-                rulesScreenGO.SetActive(true);
-                unitsGuideScreenGO.SetActive(false);
-                creditsScreenGO.SetActive(false);
-                currentScreen6Page = 0;
-                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
-                break;
-            case (int)Screen6IDs.UNITSGUIDE:
-                rulesScreenGO.SetActive(false);
-                unitsGuideScreenGO.SetActive(true);
-                creditsScreenGO.SetActive(false);
-                currentScreen6Page = 0;
-                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
-                break;
-            case (int)Screen6IDs.CREDITS:
-                rulesScreenGO.SetActive(false);
-                unitsGuideScreenGO.SetActive(false);
-                creditsScreenGO.SetActive(true);
-                currentScreen6Page = 0;
-                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
-                break;
-            default:
-                break;
-        };
-    }
+    public void GoToScreen6From4(int screenId) => SwitchExtraScreen(screenId);
 
     IEnumerator MoveToScreenCoroutine(Vector3 fromPos, Vector3 toPos)
     {
@@ -159,6 +140,59 @@ public class MMenuBehaviour : MonoBehaviour
     {
         //TODO: Pass variables to game scene
         transitionScript.LoadSceneByID(1);
+    }
+
+    private void SwitchExtraScreen(int screenId)
+    {
+        currentScreen6Menu = screenId;
+        currentScreen6Page = 0;
+        switch (screenId)
+        {
+            case (int)Screen6IDs.RULES:
+                currentPagesArray = rulesPages;
+                foreach(GameObject page in currentPagesArray)
+                    page.SetActive(false);
+                rulesScreenGO.SetActive(true);
+                unitsGuideScreenGO.SetActive(false);
+                creditsScreenGO.SetActive(false);
+                currentPagesArray[currentScreen6Page].SetActive(true);
+                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
+                break;
+            case (int)Screen6IDs.UNITSGUIDE:
+                currentPagesArray = unitGuidePages;
+                foreach (GameObject page in currentPagesArray)
+                    page.SetActive(false);
+                rulesScreenGO.SetActive(false);
+                unitsGuideScreenGO.SetActive(true);
+                creditsScreenGO.SetActive(false);
+                currentPagesArray[currentScreen6Page].SetActive(true);
+                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
+                break;
+            case (int)Screen6IDs.CREDITS:
+                currentPagesArray = creditsPages;
+                foreach (GameObject page in currentPagesArray)
+                    page.SetActive(false);
+                rulesScreenGO.SetActive(false);
+                unitsGuideScreenGO.SetActive(false);
+                creditsScreenGO.SetActive(true);
+                currentPagesArray[currentScreen6Page].SetActive(true);
+                StartCoroutine(MoveToScreenCoroutine(screen4Position, screen6Position));
+                break;
+            default:
+                break;
+        };
+        pageNumberText.text = currentScreen6Page + 1 + " / " + currentPagesArray.Length;
+    }
+
+    public void ChangePage(int offset)
+    {
+        if(currentScreen6Page + offset >= 0 && currentScreen6Page + offset < currentPagesArray.Length)
+        {
+            currentPagesArray[currentScreen6Page].SetActive(false);
+            currentPagesArray[currentScreen6Page += offset].SetActive(true);
+            pageNumberText.text = currentScreen6Page + 1 + " / " + currentPagesArray.Length;
+        }
+        
     }
 }
 
