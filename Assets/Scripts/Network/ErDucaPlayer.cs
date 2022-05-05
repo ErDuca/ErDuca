@@ -45,14 +45,18 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if(netId != 1)
         {
-            edp.GetComponent<SpriteRenderer>().flipX = true;
-            edp.GetComponent<SpriteRenderer>().color = Color.red;
+            edp.GetComponent<SpriteRenderer>().color = _myColor;
         }
         else
         {
-            edp.GetComponent<SpriteRenderer>().flipY = true;
-            edp.GetComponent<SpriteRenderer>().color = Color.blue;
-        } 
+            edp.GetComponent<SpriteRenderer>().color = _myColor;
+        }
+
+        if (isServer)
+        {
+            edp.GetComponentsInChildren<SpriteRenderer>()[1].flipY = true;
+            edp.GetComponentsInChildren<SpriteRenderer>()[1].flipX = true;
+        }
     }
 
     //{BROKEN!!!!!!}
@@ -108,6 +112,7 @@ public class ErDucaPlayer : NetworkBehaviour
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
         //Pigliarsi anche le altre reference
+
         if (_myNetId > 1)
         {
             Camera.main.transform.Rotate(0f, 0f, 180f);

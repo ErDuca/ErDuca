@@ -7,11 +7,9 @@ public enum Ptype
 {
     Walk,
     Jump,
-    Slide
-    /*
+    Slide,
     Fly,
     Strike
-    */
 }
 
 public struct Movement

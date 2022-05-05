@@ -52,6 +52,12 @@ public class ErDucaMoveManager : MonoBehaviour
                     while (temp != null && !foundEnemyPiece);
                     break;
 
+                case Ptype.Fly:
+                    break;
+
+                case Ptype.Strike:
+                    break;
+
                 default:
                     return null;
             }

@@ -8,7 +8,8 @@ public class ErDucaNetworkManager : NetworkManager
 {
     [SerializeField]
     private Dictionary<Tuple<int, int>, ErDucaTile> _indexesTileMap = new Dictionary<Tuple<int, int>, ErDucaTile>();
-    
+
+
     //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
     private int _boardSize = 480;
@@ -18,6 +19,9 @@ public class ErDucaNetworkManager : NetworkManager
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the moves algorithms
     //da Serializzare! (occorre verisone custom)
     private uint[,] _netIdMatrix = new uint[6, 6];
+
+    private int _dukeI;
+    private int _dukeJ;
 
     public uint GetMatrixIdAt(int i, int j)
     {
@@ -205,7 +209,7 @@ public class ErDucaNetworkManager : NetworkManager
         if (numPlayers == 2)
         {
             erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            erDucaPlayer._myColor = Color.red;
+            erDucaPlayer._myColor = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
             erDucaPlayer._isPlayerOne = false;
 
             for (int i = 0; i < _gridRowsNumber; i++)
@@ -231,7 +235,7 @@ public class ErDucaNetworkManager : NetworkManager
         else
         {
             erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            erDucaPlayer._myColor = Color.blue;
+            erDucaPlayer._myColor = new Color(172 / 255f, 50 / 255f, 50 / 255f, 1f);
             erDucaPlayer._isPlayerOne = true;
         }
     }
