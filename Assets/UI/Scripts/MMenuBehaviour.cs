@@ -117,9 +117,12 @@ public class MMenuBehaviour : MonoBehaviour
     {
         //TODO: Actual searching of the match
 
-        //Placeholders string
-        string roomName = "Lorem Ipsum dolor sit";
+    }
 
+    //TODO: PLACEHOLDER METHOD (spawns an entry in the rooms list)
+    public void JoinSpawn()
+    {
+        string roomName = "Lorem Ipsum dolor sit";
         CreateRoomButton(roomName);
     }
 
@@ -131,6 +134,7 @@ public class MMenuBehaviour : MonoBehaviour
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
         roomButton.GetComponentInChildren<Text>().text = roomName;
+        roomButton.GetComponent<Button>().onClick.AddListener(delegate { JoinBeginMatch(); });
     }
 
     public void JoinBeginMatch()
