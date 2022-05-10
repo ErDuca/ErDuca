@@ -11,7 +11,7 @@ namespace Sabresaurus.PlayerPrefsExtensions
 	{
 		// IMPORTANT: Make sure to change this key for each project you use this encryption in to help secure your
 		// encrypted values. This key must be exactly 32 characters long (256 bit).
-		private static string key = ":{j%6j?E:t#}G10mM%9hp5S=%}2,Y26C";
+		private static string key = ":{p%6m?E:t#}G40nA%9ni2S=%]2,Y26C";
 
 		// Cache the encryption provider
 		private static RijndaelManaged provider = null;

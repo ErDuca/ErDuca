@@ -1,7 +1,7 @@
-using System.Text.RegularExpressions;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MMenuBehaviour : MonoBehaviour
 {
@@ -29,16 +29,22 @@ public class MMenuBehaviour : MonoBehaviour
     private string roomName;
 
     [Header("Extras screen related")]
+    [SerializeField] private Text recordsText;
+    private int gamesPlayed;
+    private int wins;
+    private int losses;
     [SerializeField] private GameObject rulesScreenGO;
     [SerializeField] private GameObject unitsGuideScreenGO;
     [SerializeField] private GameObject creditsScreenGO;
-    private int currentScreen6Menu;
     private int currentScreen6Page;
     [SerializeField] private GameObject[] rulesPages;
     [SerializeField] private GameObject[] unitGuidePages;
     [SerializeField] private GameObject[] creditsPages;
     private GameObject[] currentPagesArray;
     [SerializeField] private Text pageNumberText;
+
+    [Header("First time page related")]
+    [SerializeField] private GameObject firstTimeScreenGO;
 
     private enum Screen6IDs
     {
@@ -56,16 +62,37 @@ public class MMenuBehaviour : MonoBehaviour
 
     private void Start()
     {
-        screen1Position = mMenuGO.transform.position;
-        screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
-        screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
-        screen4Position = new Vector3(mMenuGO.transform.position.x - Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
-        screen5Position = new Vector3(screen3Position.x + Screen.width, screen3Position.y, screen3Position.z);
-        screen6Position = new Vector3(screen4Position.x - Screen.width, screen4Position.y, screen4Position.z);
+        if(PlayerPrefs.GetInt("FirstTimePlayer") == 0)
+        {
+            firstTimeScreenGO.SetActive(true);
+        }
+        else
+        {
+            firstTimeScreenGO.SetActive(false);
 
-        transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
+            screen1Position = mMenuGO.transform.position;
+            screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
+            screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
+            screen4Position = new Vector3(mMenuGO.transform.position.x - Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
+            screen5Position = new Vector3(screen3Position.x + Screen.width, screen3Position.y, screen3Position.z);
+            screen6Position = new Vector3(screen4Position.x - Screen.width, screen4Position.y, screen4Position.z);
 
+            transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
+            wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
+            losses = PlayerPrefsUtility.GetEncryptedInt("Losses");
+            gamesPlayed = wins + losses;
+            if(gamesPlayed != 0)
+            {
+                recordsText.text = "GAMES PLAYED: " + gamesPlayed + "\n\nWINS: " + wins + " (" + ((float)wins / (float)gamesPlayed * 100f).ToString("N1")
+                + "%)      LOSSES: " + losses + " (" + ((float)losses / (float)gamesPlayed * 100f).ToString("N1") + "%)";
+            }
+            else
+            {
+                recordsText.text = "NO GAMES PLAYED YET!";
+            }
+            
+        }
     }
 
     //Main Menu -> Options Menu
@@ -102,6 +129,12 @@ public class MMenuBehaviour : MonoBehaviour
         mMenuGO.transform.position = toPos;
         eventSystem.SetActive(true);
         yield return null;
+    }
+
+    public void ReloadSceneFirstTimeScreen()
+    {
+        PlayerPrefs.SetInt("FirstTimePlayer", 1);
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     public void HostBeginMatch()
@@ -145,7 +178,6 @@ public class MMenuBehaviour : MonoBehaviour
 
     private void SwitchExtraScreen(int screenId)
     {
-        currentScreen6Menu = screenId;
         currentScreen6Page = 0;
         switch (screenId)
         {

@@ -63,7 +63,9 @@ public class BattleAnimationsScript : MonoBehaviour
         PLAYER_JUMPSLIDES,   //9
         OPPONENT_JUMPSLIDES, //10
         PLAYER_PLACES,       //11
-        OPPONENT_PLACES      //12
+        OPPONENT_PLACES,     //12
+        PLAYER_ATTACK_RANGED,  //13
+        OPPONENT_ATTACK_RANGED //14
     }
 
     private enum SpriteID
@@ -173,6 +175,18 @@ public class BattleAnimationsScript : MonoBehaviour
             case (int)AnimID.OPPONENT_PLACES:
                 AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
                 StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_PLACES));
+                break;
+            //Player attacks (ranged)
+            case (int)AnimID.PLAYER_ATTACK_RANGED:
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
+                StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.PLAYER_ATTACK_RANGED));
+                break;
+            //Opponent attacks (ranged)
+            case (int)AnimID.OPPONENT_ATTACK_RANGED:
+                AssignSpriteLibrary(playerSpriteLibrary, playerId);
+                AssignSpriteLibrary(opponentSpriteLibrary, opponentId);
+                StartCoroutine(ExecuteAnimationCoroutine((int)AnimID.OPPONENT_ATTACK_RANGED));
                 break;
             default:
                 eventSystem.SetActive(true);
