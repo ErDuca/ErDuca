@@ -46,6 +46,10 @@ public class MMenuBehaviour : MonoBehaviour
     [Header("First time page related")]
     [SerializeField] private GameObject firstTimeScreenGO;
 
+    [Header("Settings page related")]
+    [SerializeField] private Slider musicSliderGO;
+    [SerializeField] private Slider sfxSliderGO;
+
     private enum Screen6IDs
     {
         RULES,       //0
@@ -79,19 +83,19 @@ public class MMenuBehaviour : MonoBehaviour
 
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
+            //Extra menu stats
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
             losses = PlayerPrefsUtility.GetEncryptedInt("Losses");
             gamesPlayed = wins + losses;
             if(gamesPlayed != 0)
-            {
                 recordsText.text = "GAMES PLAYED: " + gamesPlayed + "\n\nWINS: " + wins + " (" + ((float)wins / (float)gamesPlayed * 100f).ToString("N1")
                 + "%)      LOSSES: " + losses + " (" + ((float)losses / (float)gamesPlayed * 100f).ToString("N1") + "%)";
-            }
             else
-            {
                 recordsText.text = "NO GAMES PLAYED YET!";
-            }
-            
+
+            //Setting sliders
+            musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
+            sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
         }
     }
 
@@ -226,6 +230,16 @@ public class MMenuBehaviour : MonoBehaviour
             pageNumberText.text = "Page " + (currentScreen6Page + 1) + " / " + currentPagesArray.Length;
         }
         
+    }
+
+    public void UpdateMusicVolume(float value)
+    {
+        PlayerPrefs.SetFloat("MusicVolume", value);
+    }
+
+    public void UpdateSFXVolume(float value)
+    {
+        PlayerPrefs.SetFloat("SFXVolume", value);
     }
 }
 
