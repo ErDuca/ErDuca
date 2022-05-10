@@ -3,17 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Given a list of different moves, the position of a piece and the current board values,
+//return a list of indexes (where the piece will be able to move)
 public class ErDucaMoveManager : MonoBehaviour
 {
-    //Presa una lista di mosse, la posizione della pedina e la situazione attuale della board
-    //(direttamente da ErDucaNetworkManager), restituisce una lista 
-    //di coppie di indici (quelli sui quali la pedina potrà muoversi)
-
-    //Settarla allo start (se sono host)
     private bool invertIndex = false;
 
     public List<Tuple<int, int>> GetAvailableMoves(uint netId, int i, int j, List<Movement> pieceRelativeMoves)
     {
+        //"Host situation" (the board is seen upside down)
         if (netId == 1)
         {
             invertIndex = true;
@@ -26,6 +24,7 @@ public class ErDucaMoveManager : MonoBehaviour
         {
             switch (m._mType)
             {
+                //DA MODIFICARE; IO VADO LI SE POSSO ANDARCI
                 case Ptype.Walk:
                     temp = GetWalkMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
@@ -78,7 +77,7 @@ public class ErDucaMoveManager : MonoBehaviour
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Controllare se c'è una mia pedina nel posto dove devo andare
+        //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
@@ -99,7 +98,7 @@ public class ErDucaMoveManager : MonoBehaviour
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Controllare se c'è una mia pedina nel posto dove devo andare
+        //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
@@ -121,11 +120,11 @@ public class ErDucaMoveManager : MonoBehaviour
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Controllare se c'è una mia pedina nel posto dove devo andare
+        //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
-        //Ho trovato una pedina avversaria - Come lo dico allo switch sopra?
+        //Found an enemy piece
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != netId &&
             ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != 0)
         {
@@ -136,8 +135,6 @@ public class ErDucaMoveManager : MonoBehaviour
         jsl += yOffset;
         
         Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
-        Debug.Log("Mossa disponibile = " + tupleToRet.Item1 + tupleToRet.Item2);
-        Debug.Log("C'era un nemico? : " + hasFoundEnemy);
 
         return tupleToRet;
     }

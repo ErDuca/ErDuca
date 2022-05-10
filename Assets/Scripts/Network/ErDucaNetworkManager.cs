@@ -7,8 +7,7 @@ using Mirror;
 public class ErDucaNetworkManager : NetworkManager
 {
     [SerializeField]
-    private Dictionary<Tuple<int, int>, ErDucaTile> _indexesTileMap = new Dictionary<Tuple<int, int>, ErDucaTile>();
-
+    public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
 
     //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
@@ -16,12 +15,12 @@ public class ErDucaNetworkManager : NetworkManager
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
 
-    //Contains a grid with all the pieces'player netId in the relative positions, used to perform the moves algorithms
-    //da Serializzare! (occorre verisone custom)
-    private uint[,] _netIdMatrix = new uint[6, 6];
+    //Players Parameters
+    private Color p1Color = new Color(172 / 255f, 50 / 255f, 50 / 255f, 1f);
+    private Color p2Color = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
 
-    private int _dukeI;
-    private int _dukeJ;
+    //Contains a grid with all the pieces'player netId in the relative positions, used to perform the move-algorithms
+    private uint[,] _netIdMatrix = new uint[6, 6];
 
     public uint GetMatrixIdAt(int i, int j)
     {
@@ -41,24 +40,6 @@ public class ErDucaNetworkManager : NetworkManager
         }
     }
     
-    /*
-    public void HighlightsTiles(List<Tuple<int,int>> tilesToHighlight)
-    {
-        foreach(Tuple<int,int> t in tilesToHighlight)
-        {
-            _indexesTileMap[t].SetMaterialColor(Color.white);
-        }
-    }
-
-    public void DehilightAll()
-    {
-        foreach (ErDucaTile e in _indexesTileMap.Values)
-        {
-            e.Dehighlight();
-        }
-    }
-    */
-
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
     public static new ErDucaNetworkManager singleton { get; private set; }
@@ -209,7 +190,7 @@ public class ErDucaNetworkManager : NetworkManager
         if (numPlayers == 2)
         {
             erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            erDucaPlayer._myColor = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
+            erDucaPlayer._myColor = p2Color;
             erDucaPlayer._isPlayerOne = false;
 
             for (int i = 0; i < _gridRowsNumber; i++)
@@ -225,17 +206,15 @@ public class ErDucaNetworkManager : NetworkManager
                     tile.GetComponent<ErDucaTile>().J = j;
                     NetworkServer.Spawn(tile);
 
-                    /*
-                    _indexesTileMap.Add(new Tuple<int,int>(i, j), tile.GetComponent<ErDucaTile>());
-                    */
+                    Tuple<int, int> tileIndexes = new Tuple<int, int>(i, j);
+                    _tiles.Add(tileIndexes, tile.GetComponent<ErDucaTile>());
                 }
             }
         }
-
         else
         {
             erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            erDucaPlayer._myColor = new Color(172 / 255f, 50 / 255f, 50 / 255f, 1f);
+            erDucaPlayer._myColor = p1Color;
             erDucaPlayer._isPlayerOne = true;
         }
     }

@@ -11,7 +11,6 @@ public enum Ptype
     Fly,
     Strike
 }
-
 public struct Movement
 {
     public int _offsetX;
@@ -25,7 +24,6 @@ public struct Movement
         _mType = type;
     }
 }
-
 public class ErDucaPiece : NetworkBehaviour
 {
     protected List<Movement> _PhaseOneMovementArray = new List<Movement>();
@@ -81,6 +79,12 @@ public class ErDucaPiece : NetworkBehaviour
         }
     }
 
+    //Mettere metodo virtuale per ritornare indice poi nelle sottoclassi
+
+    public void SwitchPhase()
+    {
+        _isPhaseOne = !_isPhaseOne;
+    }
     public void StartMoveTo(Vector3 target)
     {
         StartCoroutine(MoveTo(target));
