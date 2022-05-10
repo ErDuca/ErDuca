@@ -184,6 +184,8 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
+        //Begin Turn();
+        //Va fatto un gameTurnManager
         if (isLocalPlayer && _isMyTurn && Input.GetMouseButtonDown(0))
         {
             HandleInput();
@@ -197,7 +199,7 @@ public class ErDucaPlayer : NetworkBehaviour
             RaycastHit hit;
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-            //CASO HITTO QUALCOSA DI CRISTIANO
+            //CASO HITTO QUALCOSA 
             if (Physics.Raycast(ray, out hit))
             {
                 Transform objectHit = hit.transform;
@@ -322,21 +324,18 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         //!!!!!
         //Ottimizzare - Se la lista è vuota non c'è il tasto
-        if (_cards.Count > 0)
-        {
-            int toBeRemovedIndex = UnityEngine.Random.Range(0, _cards.Count);
-            int toBeReturnedElement = _cards[toBeRemovedIndex];
-            _cards.RemoveAt(toBeRemovedIndex);
-            return toBeReturnedElement;
-        }
-        else
-            return 42;
+        int toBeRemovedIndex = UnityEngine.Random.Range(0, _cards.Count);
+        int toBeReturnedElement = _cards[toBeRemovedIndex];
+        _cards.RemoveAt(toBeRemovedIndex);
+        return toBeReturnedElement;
     }
 
     public void DrawCard()
     {
         _hasDrawn = true;
         int drawnCard = GetDrawnCard();
-        //_GameUIBehaviour dovrebbe attivare il DrawBox
+        //_GameUIBehaviour dovrebbe attivare trigger per mostrare l'icona
+        //Illumina le caselle dove posso spawnare
+
     }
 }
