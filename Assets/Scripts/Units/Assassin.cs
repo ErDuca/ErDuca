@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Assassin : ErDucaPiece
 {
-   //private static int spriteIndex = 1;
+    [SerializeField]
+    private static int unitIndex = 1;
+    public override int UnitIndex()
+    {
+        return unitIndex;
+    }
 
     void Start()
     {

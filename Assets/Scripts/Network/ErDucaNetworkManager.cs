@@ -185,12 +185,12 @@ public class ErDucaNetworkManager : NetworkManager
         GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         NetworkServer.AddPlayerForConnection(conn, player);
         ErDucaPlayer erDucaPlayer = player.GetComponent<ErDucaPlayer>();
-        erDucaPlayer._isMyTurn = true;
-
+        
         if (numPlayers == 2)
         {
             erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
             erDucaPlayer._myColor = p2Color;
+            erDucaPlayer._isMyTurn = true;
             erDucaPlayer._isPlayerOne = false;
 
             for (int i = 0; i < _gridRowsNumber; i++)
@@ -215,6 +215,7 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
             erDucaPlayer._myColor = p1Color;
+            erDucaPlayer._isMyTurn = true;
             erDucaPlayer._isPlayerOne = true;
         }
     }

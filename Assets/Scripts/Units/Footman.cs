@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Footman : ErDucaPiece
 {
+    [SerializeField]
+    private static int unitIndex = 7;
+    public override int UnitIndex()
+    {
+        return unitIndex;
+    }
     void Start()
     {
         _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Walk));

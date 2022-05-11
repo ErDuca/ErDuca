@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Bowman : ErDucaPiece
 {
+    [SerializeField]
+    private static int unitIndex = 3;
+    public override int UnitIndex()
+    {
+        return unitIndex;
+    }
     void Start()
     {
         _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Walk));

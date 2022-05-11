@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Priest : ErDucaPiece
 {
-    
+    [SerializeField]
+    private static int unitIndex = 12;
+    public override int UnitIndex()
+    {
+        return unitIndex;
+    }
     void Start()
     {
         _PhaseOneMovementArray.Add(new Movement(-1, -1, Ptype.Slide));

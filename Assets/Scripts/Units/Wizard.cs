@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Wizard : ErDucaPiece
 {
+    [SerializeField]
+    private static int unitIndex = 10;
+    public override int UnitIndex()
+    {
+        return unitIndex;
+    }
     void Start()
     {
         _PhaseOneMovementArray.Add(new Movement(-1, -1, Ptype.Walk));

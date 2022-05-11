@@ -7,20 +7,19 @@ using Mirror;
 
 public class ErDucaPlayer : NetworkBehaviour
 {
+    //References
     private Camera _camera;
     private ErDucaNetworkManager _erDucaNetworkManager;
     private ErDucaMoveManager _erDucaMoveManager;
     private GameUIBehaviour _GameUIBehaviour;
-    private bool _hasDrawn = false;
 
-    private static int _numberOfUnits = 13;
+    private static int _numberOfUnits = 14;
     private List<int> _cards = new List<int>();
 
     [SerializeField]
     private int _dukeI;
     [SerializeField]
     private int _dukeJ;
-
 
     [SerializeField]
     private ErDucaPiece _currentSelectedPiece;
@@ -35,6 +34,8 @@ public class ErDucaPlayer : NetworkBehaviour
     [SyncVar] public bool _isPlayerOne;
     [SerializeField]
     [SyncVar] public Color _myColor;
+    [SerializeField]
+    [SyncVar] public bool _hasDrawn = false;
 
     [SerializeField] private GameObject piecePrefab1;
 
@@ -168,14 +169,18 @@ public class ErDucaPlayer : NetworkBehaviour
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
         _GameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
 
+        /*
         GameObject drawButtonGameObject = GameObject.FindGameObjectWithTag("DrawButton");
         drawButtonGameObject.GetComponent<Button>().onClick.AddListener(() => { DrawCard(); });
+        */
 
+        //Rotate the Opponent's camera
         if (_myNetId > 1)
         {
             Camera.main.transform.Rotate(0f, 0f, 180f);
         }
 
+        //Initialize Deck
         for(int i = 0; i < _numberOfUnits; i++)
         {
             _cards.Add(i);
@@ -184,7 +189,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
-        //Begin Turn();
+        //Begin Turn() etc.etc.
         //Va fatto un gameTurnManager
         if (isLocalPlayer && _isMyTurn && Input.GetMouseButtonDown(0))
         {
@@ -262,6 +267,35 @@ public class ErDucaPlayer : NetworkBehaviour
                         _currentSelectedPiece = null;
                         _currentAvailableMoves.Clear();
                     }
+
+                    else if(enemyPiece.MyPlayerNetId == _myNetId)
+                    {
+                        Debug.Log("Ho selezionato una mia pedina");
+                        _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
+                        int piece_i_index = _currentSelectedPiece.I;
+                        int piece_j_index = _currentSelectedPiece.J;
+
+                        //Aggionare la UI
+                        //Placeholder
+                        //UIManager.singleton.MakeInfoAppear(int PedinaInfoboxIndex);
+
+                        if (_currentSelectedPiece.IsPhaseOne)
+                        {
+                            _currentAvailableMoves = _erDucaMoveManager.
+                                GetAvailableMoves(_myNetId, piece_i_index, piece_j_index, _currentSelectedPiece.P1MOVARR);
+                        }
+                        else
+                        {
+                            _currentAvailableMoves = _erDucaMoveManager.
+                                GetAvailableMoves(_myNetId, piece_i_index, piece_j_index, _currentSelectedPiece.P2MOVARR);
+                        }
+
+                        //Mostrare le mosse disponibili
+                        foreach (Tuple<int, int> t in _currentAvailableMoves)
+                        {
+                            CmdHighlightTile(t.Item1, t.Item2, this.connectionToClient);
+                        }
+                    }
                 }
 
                 //CASO HO SELEZIONATO UNA PEDINA E SELEZIONO UN TILE
@@ -314,16 +348,11 @@ public class ErDucaPlayer : NetworkBehaviour
                 _currentAvailableMoves.Clear();
             }
         }
-        else
-        {
-            //Posizionare la carta
-        }
     }
 
     public int GetDrawnCard()
     {
-        //!!!!!
-        //Ottimizzare - Se la lista è vuota non c'è il tasto
+        //Se la lista è vuota non c'è il tasto
         int toBeRemovedIndex = UnityEngine.Random.Range(0, _cards.Count);
         int toBeReturnedElement = _cards[toBeRemovedIndex];
         _cards.RemoveAt(toBeRemovedIndex);

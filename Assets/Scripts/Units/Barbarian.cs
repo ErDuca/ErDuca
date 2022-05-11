@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class General : ErDucaPiece
+public class Barbarian : ErDucaPiece
 {
+    [SerializeField]
+    private static int unitIndex = 2;
+    public override int UnitIndex()
+    {
+        return unitIndex;
+    }
     void Start()
     {
         //Command not implementable -> Generale is about to be deprecated!

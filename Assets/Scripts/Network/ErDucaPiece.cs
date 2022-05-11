@@ -24,7 +24,7 @@ public struct Movement
         _mType = type;
     }
 }
-public class ErDucaPiece : NetworkBehaviour
+public abstract class ErDucaPiece : NetworkBehaviour
 {
     protected List<Movement> _PhaseOneMovementArray = new List<Movement>();
     protected List<Movement> _PhaseTwoMovementArray = new List<Movement>();
@@ -79,8 +79,7 @@ public class ErDucaPiece : NetworkBehaviour
         }
     }
 
-    //Mettere metodo virtuale per ritornare indice poi nelle sottoclassi
-
+    public abstract int UnitIndex();
     public void SwitchPhase()
     {
         _isPhaseOne = !_isPhaseOne;
