@@ -35,6 +35,9 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject eventSystem;
+    [SerializeField] private Slider musicSliderGO;
+    [SerializeField] private Slider sfxSliderGO;
+
 
     [Header("Transitions related")]
     [SerializeField] private Animator transitionAnimator;
@@ -43,6 +46,10 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
+
+    [Header("Draw Box Related")]
+    [SerializeField] private GameObject drawBoxGO;
+    [SerializeField] private Animator drawBoxAnimator;
 
     [Header("Debug")]
     [SerializeField] private bool isHost;
@@ -62,6 +69,9 @@ public class GameUIBehaviour : MonoBehaviour
             gameAnimator.SetBool("hostScreen", false);
             GameStart();
         }
+
+        musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
+        sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
     }
 
     public void CloseHostMenu() => StartCoroutine(CloseHostMenuCoroutine());
@@ -134,6 +144,16 @@ public class GameUIBehaviour : MonoBehaviour
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
         pauseMenu.SetActive(false);
         eventSystem.SetActive(true);
+    }
+
+    public void UpdateMusicVolume(float value)
+    {
+        PlayerPrefs.SetFloat("MusicVolume", value);
+    }
+
+    public void UpdateSFXVolume(float value)
+    {
+        PlayerPrefs.SetFloat("SFXVolume", value);
     }
 
     //TODO: Replace int with proper GameObject type
@@ -236,5 +256,34 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
+    }
+
+    public void ShowDrawBox()
+    {
+        drawBoxGO.SetActive(true);
+    }
+
+    public void HideDrawBox() => StartCoroutine(HideDrawBoxCoroutine());
+    private IEnumerator HideDrawBoxCoroutine()
+    {
+        drawBoxAnimator.SetTrigger("drawOut");
+        yield return new WaitUntil(() => drawBoxAnimator.GetCurrentAnimatorStateInfo(0).IsName("drawBoxHidden"));
+        drawBoxGO.SetActive(false);
+    }
+
+    public void DrawUnit()
+    {
+        drawBoxAnimator.SetTrigger("unitDrawn");
+        //Pass in some way the unit to display
+        ShowPieceInfo(0);
+    }
+
+    public void DrawnUnitPlaced() => StartCoroutine(DrawnUnitPlacedCoroutine());
+    private IEnumerator DrawnUnitPlacedCoroutine()
+    {
+        drawBoxAnimator.SetTrigger("unitPlaced");
+        HidePieceInfo();
+        yield return new WaitUntil(() => drawBoxAnimator.GetCurrentAnimatorStateInfo(0).IsName("drawBoxHidden"));
+        drawBoxGO.SetActive(false);           
     }
 }
