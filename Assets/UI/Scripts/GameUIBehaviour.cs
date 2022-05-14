@@ -37,12 +37,13 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject eventSystem;
     [SerializeField] private Slider musicSliderGO;
     [SerializeField] private Slider sfxSliderGO;
-
+    [SerializeField] private GameObject confirmationWindowGO;
 
     [Header("Transitions related")]
+    [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
-    [SerializeField] private Image blackPanelImage;
+    //[SerializeField] private Image blackPanelImage;
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
@@ -50,6 +51,11 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Draw Box Related")]
     [SerializeField] private GameObject drawBoxGO;
     [SerializeField] private Animator drawBoxAnimator;
+
+    [Header("Game Over Screen Related")]
+    [SerializeField] private GameObject gameOverScreenGO;
+    [SerializeField] private GameObject blueWinsScreenGO;
+    [SerializeField] private GameObject redWinsScreenGO;
 
     [Header("Debug")]
     [SerializeField] private bool isHost;
@@ -74,6 +80,29 @@ public class GameUIBehaviour : MonoBehaviour
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
     }
 
+    private void Update()
+    {
+        if (timeRemaining > 0)
+        {
+            if (!changingTurn)
+            {
+                timeRemaining -= Time.deltaTime;
+                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
+                timeToDisplay = timeRemaining + 1;
+                //Sets time text to minutes:seconds, both always displayed as 2 digits
+                timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
+                timeSlider.value = timeRemaining / turnTime;
+            }
+        }
+        else
+        {
+            //TODO: add real action for when time runs out
+            //Debug.Log("TIME'S UP");
+        }
+    }
+
+    #region host menu
+
     public void CloseHostMenu() => StartCoroutine(CloseHostMenuCoroutine());
     private IEnumerator CloseHostMenuCoroutine()
     {
@@ -83,6 +112,9 @@ public class GameUIBehaviour : MonoBehaviour
         GameStart();
     }
 
+    #endregion
+
+    #region game start
     private void GameStart()
     {
         timeRemaining = turnTime;
@@ -105,31 +137,16 @@ public class GameUIBehaviour : MonoBehaviour
         }        
     }
 
-    private void Update()
-    {
-        if (timeRemaining > 0)
-        {
-            if (!changingTurn)
-            {
-                timeRemaining -= Time.deltaTime;
-                //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
-                timeToDisplay = timeRemaining + 1;
-                //Sets time text to minutes:seconds, both always displayed as 2 digits
-                timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
-                timeSlider.value = timeRemaining / turnTime;
-            }
-        }
-        else
-        {
-            //TODO: add real action for when time runs out
-            Debug.Log("TIME'S UP");
-        }
-    }
+    #endregion
+
+    #region pause menu
 
     public void PauseGame() => StartCoroutine(PauseGameCoroutine());
     private IEnumerator PauseGameCoroutine()
     {
         eventSystem.SetActive(false);
+        if(infoBlock.activeSelf)
+            HidePieceInfo();
         pauseMenu.SetActive(true);
         gameAnimator.SetBool("paused", true);
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("paused"));
@@ -155,6 +172,27 @@ public class GameUIBehaviour : MonoBehaviour
     {
         PlayerPrefs.SetFloat("SFXVolume", value);
     }
+
+    public void OpenConfirmationWindow()
+    {
+        confirmationWindowGO.SetActive(true);
+    }
+
+    public void CloseConfirmationWindow()
+    {
+        confirmationWindowGO.SetActive(false);
+    }
+
+    public void GiveUpMatch()
+    {
+        PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+        transitionManagerGO.GetComponent<TransitionScript>().LoadSceneByID(0);
+    }
+
+    #endregion
+
+    #region info box
 
     //TODO: Replace int with proper GameObject type
     //TODO: TEMP for the temp UI button, remove later
@@ -210,6 +248,10 @@ public class GameUIBehaviour : MonoBehaviour
         yield return null;
     }
 
+    #endregion
+
+    #region turn management
+
     public void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()
     {
@@ -232,6 +274,8 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
+
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
     }
 
     public void OpponentsTurnStart() => StartCoroutine(OpponentsTurnStartCoroutine());
@@ -256,7 +300,13 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
+
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
     }
+
+    #endregion
+
+    #region draw box
 
     public void ShowDrawBox()
     {
@@ -286,4 +336,48 @@ public class GameUIBehaviour : MonoBehaviour
         yield return new WaitUntil(() => drawBoxAnimator.GetCurrentAnimatorStateInfo(0).IsName("drawBoxHidden"));
         drawBoxGO.SetActive(false);           
     }
+
+    #endregion
+
+    #region game over screen
+
+    public void ShowGameOverScreen(int winner)
+    {
+        gameOverScreenGO.SetActive(true);
+        if(winner == 0)
+        {
+            blueWinsScreenGO.SetActive(true);
+            if (gameAnimator.GetInteger("startingPlayer") == 0)
+            {
+                PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
+            }
+            else if(gameAnimator.GetInteger("startingPlayer") == 1)
+            {
+                PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+            }
+        }
+        else if(winner == 1)
+        {
+            redWinsScreenGO.SetActive(true);
+            if (gameAnimator.GetInteger("startingPlayer") == 0)
+            {
+                PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+            }
+            else if (gameAnimator.GetInteger("startingPlayer") == 1)
+            {
+                PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
+            }
+        }
+        else
+        {
+            //Just a default, it doesn't add wins or losses (but it shows blue as the winner)
+            blueWinsScreenGO.SetActive(true);
+        }
+        //This is an "anti-ragequit": if the player doesn't finish the match, this is not set to 0 and the next time
+        //the main menu is open the player gets a loss
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+        gameAnimator.SetTrigger("gameOver");
+    }
+
+    #endregion
 }
