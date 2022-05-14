@@ -319,10 +319,7 @@ MonoBehaviour:
     ANIMATION
 
 
-    BUG: UNIT SPRITE IS OVER EVERYTHING
-
-
-    TODO: GAME OVER SCREEN'
+    BUG: UNIT SPRITE IS OVER EVERYTHING'
 --- !u!222 &28441904
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2117,7 +2114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &575674660
 RectTransform:
   m_ObjectHideFlags: 0

@@ -6244,11 +6244,15 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "TODO: Update first time screen's content\n\nTODO: Settings page logic
-    (Waiting for audio)\n\nTODO: The solution for spawning the join buttons with
-    the right dimensions is hardcoded and stupid\n\nTODO: Start game's buttons real
-    behavior \n\nTODO: Update wins/losses values at the end of a match (or if one
-    of the players surrenders)"
+  m_Text: 'TODO: Update first time screen''s content
+
+
+    TODO: The solution for
+    spawning the join buttons with the right dimensions is hardcoded and stupid
+
+
+    TODO:
+    Start game''s buttons real behavior '
 --- !u!222 &1411478659
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6339,7 +6343,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896262033}
   m_HandleRect: {fileID: 896262032}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -8275,7 +8279,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2140131313}
   m_HandleRect: {fileID: 2140131312}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
