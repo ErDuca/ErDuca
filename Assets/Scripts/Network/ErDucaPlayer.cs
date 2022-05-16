@@ -169,8 +169,10 @@ public class ErDucaPlayer : NetworkBehaviour
         ErDucaNetworkManager.singleton.SetMatrixIdAt(_myNetId, i, j);
     }
 
-    private void Start()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
@@ -191,6 +193,11 @@ public class ErDucaPlayer : NetworkBehaviour
         {
             _cards.Add(i);
         }
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void Update()
@@ -450,7 +457,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                 {
                                     _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
                                     Debug.Log("Posso spawnare in " + (iSpawnPos) + " " + (jSpawnPos));
-                                    //VEDERE QUI
                                     CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
                                 }
                             }

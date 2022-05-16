@@ -9142,6 +9142,10 @@ PrefabInstance:
       value: -59.5
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9291,7 +9295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098730, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_TagString
-      value: DrawButton
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
