@@ -6343,7 +6343,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896262033}
   m_HandleRect: {fileID: 896262032}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -7230,6 +7230,19 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 4139634051971890689, guid: 119b1d4e107d3a7498a70c6974b96411, type: 3}
   - {fileID: 2236925843793184952, guid: d7ab5b1f1936c454495c1a51abfa22aa, type: 3}
+  - {fileID: 2236925843793184952, guid: b7b015f851b5755429678f3704330478, type: 3}
+  - {fileID: 2236925843793184952, guid: 8a08d4c39ff01754cbf77f24532708b0, type: 3}
+  - {fileID: 2236925843793184952, guid: 7936723680a7d614abff81ffe3947d2c, type: 3}
+  - {fileID: 2236925843793184952, guid: a44044e12e3f2284fab46931aeae73bf, type: 3}
+  - {fileID: 2236925843793184952, guid: 0d39381f03fa95440955ec840cde975b, type: 3}
+  - {fileID: 2236925843793184952, guid: b254d2b1f3773b7418bda2bb25c18d75, type: 3}
+  - {fileID: 2236925843793184952, guid: b9b4bb13a0f8f6e49aba215a573ebc08, type: 3}
+  - {fileID: 2236925843793184952, guid: 48d6367050f133d45b66707e67a42845, type: 3}
+  - {fileID: 2236925843793184952, guid: b90572785ca5ab544a66d0f942930acd, type: 3}
+  - {fileID: 2236925843793184952, guid: 7ab48975f578ff24abfcd75dbd50305c, type: 3}
+  - {fileID: 2236925843793184952, guid: 2c7508eebcf873c4197358da220c4505, type: 3}
+  - {fileID: 2236925843793184952, guid: be1bd554b21f88a4998fc7fdabdc580b, type: 3}
+  - {fileID: 2236925843793184952, guid: 7223d6a165d3bdd4d88b9d26f551b280, type: 3}
 --- !u!4 &1769651078
 Transform:
   m_ObjectHideFlags: 0

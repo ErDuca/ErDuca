@@ -24,9 +24,16 @@ public class ErDucaMoveManager : MonoBehaviour
         {
             switch (m._mType)
             {
-                //DA MODIFICARE; IO VADO LI SE POSSO ANDARCI
+                //BROKEN! DA MODIFICARE; IO VADO Lì SE POSSO ANDARCI!
+                //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Walk:
+                    /*
                     temp = GetWalkMoves(netId, i, j, m._offsetX, m._offsetY);
+                    if (temp != null)
+                        availableMoves.Add(temp);
+                    break;
+                    */
+                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
                         availableMoves.Add(temp);
                     break;
@@ -51,10 +58,18 @@ public class ErDucaMoveManager : MonoBehaviour
                     while (temp != null && !foundEnemyPiece);
                     break;
 
+                //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Fly:
+                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
+                    if (temp != null)
+                        availableMoves.Add(temp);
                     break;
 
+                //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Strike:
+                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
+                    if (temp != null)
+                        availableMoves.Add(temp);
                     break;
 
                 default:
@@ -65,6 +80,7 @@ public class ErDucaMoveManager : MonoBehaviour
         return availableMoves;
     }
 
+    //BROKEN
     private Tuple<int, int> GetWalkMoves(uint netId, int i, int j, int xOffset, int yOffset)
     {
         if (invertIndex)
