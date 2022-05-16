@@ -21,7 +21,9 @@ public class ErDucaNetworkManager : NetworkManager
     }
 
     //Players Parameters
+    [SerializeField]
     private Color p1Color = new Color(172 / 255f, 50 / 255f, 50 / 255f, 1f);
+    [SerializeField]
     private Color p2Color = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
 
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the move-algorithms
