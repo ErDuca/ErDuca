@@ -6343,7 +6343,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896262033}
   m_HandleRect: {fileID: 896262032}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -7243,6 +7243,10 @@ MonoBehaviour:
   - {fileID: 2236925843793184952, guid: 2c7508eebcf873c4197358da220c4505, type: 3}
   - {fileID: 2236925843793184952, guid: be1bd554b21f88a4998fc7fdabdc580b, type: 3}
   - {fileID: 2236925843793184952, guid: 7223d6a165d3bdd4d88b9d26f551b280, type: 3}
+  - {fileID: 4712704864833571637, guid: 39418062fffba3547b94b2aa8a74488a, type: 3}
+  p1Color: {r: 0.6745098, g: 0.19607843, b: 0.19607843, a: 1}
+  p2Color: {r: 0.24705882, g: 0.31764707, b: 0.70980394, a: 1}
+  _gameManagerPrefab: {fileID: 4712704864833571637, guid: 39418062fffba3547b94b2aa8a74488a, type: 3}
 --- !u!4 &1769651078
 Transform:
   m_ObjectHideFlags: 0
@@ -8292,7 +8296,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2140131313}
   m_HandleRect: {fileID: 2140131312}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

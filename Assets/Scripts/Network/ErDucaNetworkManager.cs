@@ -4,10 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 
+
 public class ErDucaNetworkManager : NetworkManager
 {
+    //Server-side stuff
     [SerializeField]
     public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
+
+    //Draft (Coinflip stuff)
+    private NetworkConnectionToClient[] connections = new NetworkConnectionToClient[2];
 
     //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
@@ -25,7 +30,7 @@ public class ErDucaNetworkManager : NetworkManager
     private Color p1Color = new Color(172 / 255f, 50 / 255f, 50 / 255f, 1f);
     [SerializeField]
     private Color p2Color = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
-
+    
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the move-algorithms
     private uint[,] _netIdMatrix = new uint[6, 6];
 
@@ -66,7 +71,6 @@ public class ErDucaNetworkManager : NetworkManager
             }
         }
     }
-
     
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
@@ -216,17 +220,28 @@ public class ErDucaNetworkManager : NetworkManager
         
         if (numPlayers == 2)
         {
-            erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            erDucaPlayer._myColor = p2Color;
-            erDucaPlayer._isMyTurn = true;
+            connections[1] = conn;
+
+            erDucaPlayer.gameObject.name = "OpponentPlayer";
+            erDucaPlayer.MyNetId = 2;// player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer.MyColor = p2Color;
+            erDucaPlayer.IsMyTurn = false;
 
             InitializeTilesGrid();
+
+            ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
+            //int coinFlip = UnityEngine.Random.Range(0, 1);
+            //TargetRPC
+            gameManager.RpcSetTurn();
         }
         else
         {
-            erDucaPlayer._myNetId = player.GetComponent<NetworkIdentity>().netId;
-            erDucaPlayer._myColor = p1Color;
-            erDucaPlayer._isMyTurn = true;
+            connections[0] = conn;
+
+            erDucaPlayer.gameObject.name = "HostPlayer";
+            erDucaPlayer.MyNetId = 1;//player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer.MyColor = p1Color;
+            erDucaPlayer.IsMyTurn = false;
         }
     }
 
