@@ -1416,7 +1416,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2130124325101797102, guid: dfe459bfad82a1f4cbfe9049c20e4f10, type: 3}
+  m_Sprite: {fileID: -5876003832306389875, guid: 96ff4d5a5fcb9d7439047b92bc39e271, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2534,6 +2534,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634593983}
   m_CullTransparentMesh: 1
+--- !u!1 &638709434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 638709436}
+  - component: {fileID: 638709435}
+  - component: {fileID: 638709437}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &638709435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638709434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898d71ec9d34c0045be6d012927f77a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &638709436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638709434}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.759784, y: 149.82341, z: -253.95177}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &638709437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638709434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5784a8df6f521d4489d2f124a929da72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundAudioClipArray:
+  - sound: 0
+    audioClip: {fileID: 8300000, guid: ca2d4abd545c0794883607f089338fa3, type: 3}
+  - sound: 1
+    audioClip: {fileID: 8300000, guid: 2baeb837f342c014f9bc87f8ca0751ac, type: 3}
 --- !u!1 &639626428 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1261190226786751665, guid: ce6d88a33f82d7145a3f332c413fd830, type: 3}
@@ -4287,7 +4348,8 @@ MonoBehaviour:
   gameOverScreenGO: {fileID: 1157615294}
   blueWinsScreenGO: {fileID: 1026012410}
   redWinsScreenGO: {fileID: 500987302}
-  isHost: 0
+  soundManager: {fileID: 638709434}
+  isHost: 1
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

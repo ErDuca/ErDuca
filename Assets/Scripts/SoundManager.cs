@@ -2,52 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class SoundManager
+public enum Sound
 {
-    public enum Sound {
+    attack,
+    death
+}
 
-    }
+[System.Serializable]
+public struct SoundAudioClip
+{
+    public Sound sound;
+    public AudioClip audioClip;
+}
 
-    private static Dictionary<Sound, float> soundTimerDictionary;
+public class SoundManager : MonoBehaviour
+{
+    public SoundAudioClip[] soundAudioClipArray;
 
-    public static void Initialize() {
-        soundTimerDictionary = new Dictionary<Sound, float>();
-        // Set all the sounds
-    }
-
-    public static void PlaySound(Sound sound) {
+    //Mettere volume da playerprefs
+    public void PlaySound(Sound sound) {
         if (CanPlaySound(sound)) {
+            //Valutare se utilizzare uno o multipli audiosource
             GameObject soundGameObject = new GameObject("Sound");
             AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
             audioSource.PlayOneShot(GetAudioClip(sound));
         }
     }
 
-    private static bool CanPlaySound(Sound sound) {
+    private bool CanPlaySound(Sound sound) {
         switch (sound) {
+            //Da fare
             default:
                 return true;
-
-            /* time-sensitive case
-             *  if (soundTimerDictionary.ContainsKey(sound)) {
-             *      float lastTimePlayed = soundTimerDictionary[sound];
-             *      float timerMax = [insert max];
-             *      
-             *      if (lastTimePLayed + timerMax < Time.time) {
-             *          soundTimerDictionary[sound] = Time.time;
-             *          return true
-             *      }
-             *      else {
-             *          return false
-             *      }
-             *  }
-             *  break;
-            */
         }
     }
 
-    private static AudioClip GetAudioClip(Sound sound) {
-        foreach (SoundAssets.SoundAudioClip soundAudioClip in SoundAssets.i.soundAudioClipArray) {
+    private AudioClip GetAudioClip(Sound sound) {
+        foreach (SoundAudioClip soundAudioClip in soundAudioClipArray) {
             if (soundAudioClip.sound == sound) {
                 return soundAudioClip.audioClip;
             }

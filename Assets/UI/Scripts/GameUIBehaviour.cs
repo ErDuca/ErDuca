@@ -57,6 +57,10 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject blueWinsScreenGO;
     [SerializeField] private GameObject redWinsScreenGO;
 
+    [Header("Sound related")]
+    [SerializeField] private GameObject soundManager;
+    private SoundManager soundManagerScript;
+
     [Header("Debug")]
     [SerializeField] private bool isHost;
 
@@ -78,6 +82,8 @@ public class GameUIBehaviour : MonoBehaviour
 
         musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
+
+        soundManagerScript = soundManager.GetComponent<SoundManager>();
     }
 
     private void Update()
@@ -380,4 +386,15 @@ public class GameUIBehaviour : MonoBehaviour
     }
 
     #endregion
+
+
+    public void CallSoundManager(Sound element)
+    {
+        soundManagerScript.PlaySound(element);
+    }
+
+    public void CallSoundManagerAttacks()
+    {
+
+    }
 }
