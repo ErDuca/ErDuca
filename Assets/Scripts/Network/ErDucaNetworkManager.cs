@@ -11,14 +11,14 @@ public class ErDucaNetworkManager : NetworkManager
     [SerializeField]
     public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
 
-    //Draft (Coinflip stuff)
-    private NetworkConnectionToClient[] connections = new NetworkConnectionToClient[2];
-
     //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
     private int _boardSize = 480;
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
+
+    private NetworkConnectionToClient[] playersConnections = new NetworkConnectionToClient[2];
+
 
     public int GridRowsNumber
     {
@@ -220,28 +220,26 @@ public class ErDucaNetworkManager : NetworkManager
         
         if (numPlayers == 2)
         {
-            connections[1] = conn;
-
             erDucaPlayer.gameObject.name = "OpponentPlayer";
             erDucaPlayer.MyNetId = 2;// player.GetComponent<NetworkIdentity>().netId;
             erDucaPlayer.MyColor = p2Color;
-            erDucaPlayer.IsMyTurn = false;
+
+            playersConnections[1] = conn;
 
             InitializeTilesGrid();
 
+            //Starting Match
+            int coinFlip = UnityEngine.Random.Range(0, 1);
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
-            //int coinFlip = UnityEngine.Random.Range(0, 1);
-            //TargetRPC
-            gameManager.RpcSetTurn();
+            gameManager.RpcBeginMatch(playersConnections[coinFlip]);
         }
         else
         {
-            connections[0] = conn;
-
             erDucaPlayer.gameObject.name = "HostPlayer";
             erDucaPlayer.MyNetId = 1;//player.GetComponent<NetworkIdentity>().netId;
             erDucaPlayer.MyColor = p1Color;
-            erDucaPlayer.IsMyTurn = false;
+
+            playersConnections[0] = conn;
         }
     }
 

@@ -28,6 +28,7 @@ public class ErDucaPlayer : NetworkBehaviour
     private int _dukeJ;
 
     private static int _numberOfUnits = 14;
+    private int _numberOfStartingPikeman = 2;
     private int _gridSize;
     private List<int> _cards = new List<int>();
 
@@ -45,8 +46,6 @@ public class ErDucaPlayer : NetworkBehaviour
     [SerializeField]
     [SyncVar] private uint _myNetId;
     [SerializeField]
-    [SyncVar] private bool _isMyTurn;
-    [SerializeField]
     [SyncVar] private Color _myColor;
     [SerializeField]
     [SyncVar] private bool _hasDrawn = false;
@@ -58,14 +57,6 @@ public class ErDucaPlayer : NetworkBehaviour
         set
         {
             _hasDrawn = value;
-        }
-    }
-    public bool IsMyTurn
-    {
-        get => _isMyTurn;
-        set
-        {
-            _isMyTurn = value;
         }
     }
     public uint MyNetId
@@ -239,17 +230,13 @@ public class ErDucaPlayer : NetworkBehaviour
     private void Start()
     {
         _erDucaGameManager = GameObject.FindObjectOfType<ErDucaGameManager>();
-        if(isLocalPlayer && MyNetId == 1)
-        {
-            _erDucaGameManager.isOurTurn = true;
-        }
     }
 
     private void Update()
     {
-        if (isLocalPlayer && _erDucaGameManager.isOurTurn && Input.GetMouseButtonDown(0))
+        if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0))
         {
-            HandleInput(_erDucaGameManager.currentState);
+            HandleInput(_erDucaGameManager.CurrentState);
         }
     }
     #endregion
@@ -279,12 +266,55 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                Debug.Log("Duka spawnato!");
                                 CmdSpawnPiece(0, objectHit.transform, tile_i_index, tile_j_index);
+                                
+                                _dukeI = tile_i_index;
+                                _dukeJ = tile_j_index;
 
                                 _currentDrawnCard = 0;
                                 _currentAvailableSpawnPositions.Clear();
                                 CmdStartNewTurn();
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case BattleState.PPikemen:
+                RaycastHit hitPikemen;
+                Ray rayPikemen = _camera.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(rayPikemen, out hitPikemen))
+                {
+                    Transform objectHit = hitPikemen.transform;
+                    if (objectHit.CompareTag("Tile"))
+                    {
+                        Debug.Log("Ho selezionato un tile e ce voglio spawnare il pikemen");
+                        int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
+                        int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
+
+                        CmdDeHighlightAllTiles(this.connectionToClient);
+
+                        foreach (Tuple<int, int> tuple in _currentAvailableSpawnPositions)
+                        {
+                            if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
+                            {
+                                CmdSpawnPiece(7, objectHit.transform, tile_i_index, tile_j_index);
+
+                                _numberOfStartingPikeman--;
+                                
+                                if (_numberOfStartingPikeman == 0)
+                                {
+                                    _currentDrawnCard = 0;
+                                    _currentAvailableSpawnPositions.Clear();
+                                    CmdStartNewTurn();
+                                }
+                                else
+                                {
+                                    SpawnPikemen();
+                                }
+                                
                                 break;
                             }
                         }
@@ -496,7 +526,6 @@ public class ErDucaPlayer : NetworkBehaviour
         return toBeReturnedElement;
     }
 
-
     public void DrawCard()
     {
         if (isLocalPlayer)
@@ -576,7 +605,7 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if (isServer)
         {
-            for (int i = 0; i < _gridSize; i++)
+            for (int i = 1; i < _gridSize - 1; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(5, i));
                 CmdHighlightTile(5, i, this.connectionToClient);
@@ -584,7 +613,7 @@ public class ErDucaPlayer : NetworkBehaviour
         }
         else
         {
-            for (int i = 0; i < _gridSize; i++)
+            for (int i = 1; i < _gridSize - 1; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(0, i));
                 CmdHighlightTile(0, i, this.connectionToClient);
@@ -596,5 +625,35 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         HighlightBoardBaseline();
     }
+
+    public void SpawnPikemen()
+    {
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = -1; j < 2; j++)
+            {
+                int iSpawnPos = _dukeI + i;
+                int jSpawnPos = _dukeJ + j;
+
+                //Bounds Checking
+                if (iSpawnPos <= 5 && jSpawnPos + j <= 5 && iSpawnPos + i >= 0 && jSpawnPos + j >= 0)
+                {
+                    //Checking i am not in the duke's position
+                    if (!(i == 0 && j == 0))
+                    {
+                        Debug.Log("Controllo se posso spawnare in " + iSpawnPos + ":" + jSpawnPos + " ...");
+
+                        if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
+                        {
+                            _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
+                            Debug.Log("Posso spawnare in " + (iSpawnPos) + " " + (jSpawnPos));
+                            CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     #endregion
 }

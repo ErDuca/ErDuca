@@ -7,6 +7,7 @@ public enum BattleState
 {
     CoinFlip,
     PDuke,
+    PPikemen,
     PTurn,
     PWin
 }
@@ -14,9 +15,17 @@ public enum BattleState
 public class ErDucaGameManager : NetworkBehaviour
 {
     [SerializeField]
-    public bool isOurTurn = false;
+    private bool isOurTurn = false;
     [SerializeField]
-    public BattleState currentState = BattleState.CoinFlip;
+    private BattleState currentState = BattleState.CoinFlip;
+    public BattleState CurrentState
+    {
+        get => currentState;
+    }
+    public bool IsOurTurn
+    {
+        get => isOurTurn;
+    }
 
     [ClientRpc]
     public void RpcSetTurn()
@@ -27,15 +36,38 @@ public class ErDucaGameManager : NetworkBehaviour
         // If isOurTurn (after updating the bool above)
         if (isOurTurn)
         {
-            if (currentState == BattleState.CoinFlip)
+            switch (currentState)
             {
-                currentState = BattleState.PDuke;
-                ErDucaPlayer._localPlayer.SpawnDuke();
-            }
+                case BattleState.CoinFlip:
+                    currentState = BattleState.PDuke;
+                    ErDucaPlayer._localPlayer.SpawnDuke();
+                    break;
 
-            else if (currentState == BattleState.PDuke)
+                case BattleState.PDuke:
+                    currentState = BattleState.PPikemen;
+                    ErDucaPlayer._localPlayer.SpawnPikemen();
+                    break;
+
+                case BattleState.PPikemen:
+                    currentState = BattleState.PTurn;
+                    break;
+            }
+        }
+    }
+
+    [TargetRpc]
+    public void RpcBeginMatch(NetworkConnection target)
+    {
+        isOurTurn = !isOurTurn;
+
+        if (isOurTurn)
+        {
+            switch (currentState)
             {
-                currentState = BattleState.PTurn;
+                case BattleState.CoinFlip:
+                    currentState = BattleState.PDuke;
+                    ErDucaPlayer._localPlayer.SpawnDuke();
+                    break;
             }
         }
     }
