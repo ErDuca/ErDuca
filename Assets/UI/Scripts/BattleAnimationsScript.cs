@@ -191,7 +191,6 @@ public class BattleAnimationsScript : MonoBehaviour
             default:
                 eventSystem.SetActive(true);
                 break;
-
         }        
     }
         
