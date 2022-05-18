@@ -106,17 +106,17 @@ public class ErDucaPlayer : NetworkBehaviour
     [Command]
     public void CmdDeHighlightAllTiles(NetworkConnectionToClient conn)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < _gridSize; i++)
         {
-            for (int j = 0; j < 6; j++)
+            for (int j = 0; j < _gridSize; j++)
             {
-                ErDucaTile tileTodeHighlight;
+                ErDucaTile tileToDeHighlight;
                 Tuple<int, int> t = new Tuple<int, int>(i, j);
 
                 if (ErDucaNetworkManager.singleton._tiles.ContainsKey(t))
                 {
-                    ErDucaNetworkManager.singleton._tiles.TryGetValue(new Tuple<int, int>(t.Item1, t.Item2), out tileTodeHighlight);
-                    RpcDeHighlightLocalTile(conn, tileTodeHighlight);
+                    ErDucaNetworkManager.singleton._tiles.TryGetValue(new Tuple<int, int>(t.Item1, t.Item2), out tileToDeHighlight);
+                    RpcDeHighlightLocalTile(conn, tileToDeHighlight);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class ErDucaPlayer : NetworkBehaviour
     [Command]
     public void CmdSpawnPiece(int spawningPieceIndex, Transform spawnTransform, int i, int j)
     {
-        //+1 since units prefabs start from the second element of the array, the first one is the Tile Prefab
+        // +1 since units prefabs start from the second element of the array, the first one is the Tile Prefab
         GameObject piece = Instantiate(_erDucaNetworkManager.spawnPrefabs[spawningPieceIndex + 1],
             spawnTransform.position + new Vector3(0f, 30f, 0f), Quaternion.Euler(90, 0, 0));
         NetworkServer.Spawn(piece);
@@ -212,12 +212,12 @@ public class ErDucaPlayer : NetworkBehaviour
         _drawButton.onClick.AddListener(DrawCard);
 
         //Rotate the Opponent's camera
-        if (_myNetId > 1)
+        if(_myNetId > 1)
         {
             Camera.main.transform.Rotate(0f, 0f, 180f);
         }
 
-        //Initialize Deck (without the Duke!)
+        //Initialize Deck (without the Duke!!)
         for (int i = 1; i < _numberOfUnits - 1; i++)
         {
             _cards.Add(i);
@@ -262,7 +262,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     Transform objectHit = hitDuke.transform;
                     if (objectHit.CompareTag("Tile"))
                     {
-                        Debug.Log("Ho selezionato un tile e ce voglio spawnare il duka");
+                        Debug.Log("Ho selezionato un tile e ci voglio spawnare sopra il Duca");
                         int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                         int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -272,7 +272,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                CmdSpawnPiece(0, objectHit.transform, tile_i_index, tile_j_index);
+                                CmdSpawnPiece(0 /*duke unit index*/, objectHit.transform, tile_i_index, tile_j_index);
                                 
                                 _dukeI = tile_i_index;
                                 _dukeJ = tile_j_index;
@@ -296,7 +296,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     Transform objectHit = hitPikemen.transform;
                     if (objectHit.CompareTag("Tile"))
                     {
-                        Debug.Log("Ho selezionato un tile e ce voglio spawnare il pikemen");
+                        Debug.Log("Ho selezionato un tile e ci voglio spawnare il Footman");
                         int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                         int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -306,7 +306,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                CmdSpawnPiece(7, objectHit.transform, tile_i_index, tile_j_index);
+                                CmdSpawnPiece(7 /*Footman unit index*/, objectHit.transform, tile_i_index, tile_j_index);
 
                                 _numberOfStartingPikeman--;
                                 
@@ -452,11 +452,14 @@ public class ErDucaPlayer : NetworkBehaviour
                                 if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                                 {
                                     CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
+
+                                    //Se muovo il duca aggiorno i suoi indici
                                     if (_currentSelectedPiece.UnitIndex() == 0)
                                     {
                                         _dukeI = tile_i_index;
                                         _dukeJ = tile_j_index;
                                     }
+
                                     CmdStartNewTurn();
                                 }
                             }
