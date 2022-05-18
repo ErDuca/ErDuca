@@ -52,6 +52,11 @@ public class ErDucaGameManager : NetworkBehaviour
                 case BattleState.PPikemen:
                     currentState = BattleState.PTurn;
                     break;
+
+                case BattleState.PTurn:
+                    //Turno normale
+                    //It's your turn
+                    break;
             }
         }
     }
