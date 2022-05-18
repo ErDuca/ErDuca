@@ -229,7 +229,7 @@ public class ErDucaNetworkManager : NetworkManager
             InitializeTilesGrid();
 
             //Starting Match
-            int coinFlip = UnityEngine.Random.Range(0, 1);
+            int coinFlip = UnityEngine.Random.Range(0, 2);
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
         }

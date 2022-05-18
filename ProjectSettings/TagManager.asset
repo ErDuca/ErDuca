@@ -8,6 +8,7 @@ TagManager:
   - Piece
   - DrawButton
   - MainCanvas
+  - GameAnims
   layers:
   - Default
   - TransparentFX

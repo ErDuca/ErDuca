@@ -8,17 +8,19 @@ using Mirror;
 public class ErDucaPlayer : NetworkBehaviour
 {
     #region Class stuff
-    //Game State References
+    //Game State static References
     [SerializeField]
-    public static ErDucaPlayer _localPlayer;
+    private static ErDucaPlayer _localPlayer;
     [SerializeField]
-    public static ErDucaGameManager _erDucaGameManager;
+    private static ErDucaGameManager _erDucaGameManager;
 
     //References
     private Camera _camera;
     private ErDucaNetworkManager _erDucaNetworkManager;
     private ErDucaMoveManager _erDucaMoveManager;
-    private GameUIBehaviour _GameUIBehaviour;
+    private GameUIBehaviour _gameUIBehaviour;
+    private BattleAnimationsScript _battleAnimationScript;
+    private Animator _canvasAnimator;
     private Button _drawButton;
 
     //Deck, Duke and Grid's info
@@ -75,15 +77,41 @@ public class ErDucaPlayer : NetworkBehaviour
             _myColor = value;
         }
     }
+    public GameUIBehaviour GameUIBehavior
+    {
+        get => _gameUIBehaviour;
+    }
+    public BattleAnimationsScript BattleAnimationScript
+    {
+        get => _battleAnimationScript;
+    }
+    public Animator CanvasAnimator
+    {
+        get => _canvasAnimator;
+    }
+    public static ErDucaGameManager ErDucaGameManager
+    {
+        get => _erDucaGameManager;
+    }
+    public static ErDucaPlayer LocalPlayer
+    {
+        get => _localPlayer;
+    }
     #endregion
 
     #region Commands and RPCs
-    //Commands and RPCs
     [Command]
     public void CmdWinMatch()
     {
         _erDucaGameManager.RpcWinMatch();
     }
+
+    [Command]
+    public void CmdPlayAnimation(int idAnim, int idBlue, int idRed)
+    {
+        _erDucaGameManager.RpcPlayAnimation(idAnim, idBlue, idRed);
+    }
+
     [Command]
     public void CmdStartNewTurn()
     {
@@ -205,7 +233,8 @@ public class ErDucaPlayer : NetworkBehaviour
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
-        _GameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+        _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
 
         _drawButton = GameObject.FindGameObjectWithTag("DrawButton").GetComponent<Button>();
@@ -228,6 +257,7 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
+        
     }
     #endregion
 
@@ -235,13 +265,15 @@ public class ErDucaPlayer : NetworkBehaviour
     private void Start()
     {
         _erDucaGameManager = GameObject.FindObjectOfType<ErDucaGameManager>();
+
+        //Non riesce a settarlo, perchè legge prima del set in NetworkManager!
+        //_GameUIBehaviour.SetPlayerInitialValues((int)_myNetId, 1);
+        //! FIX!
     }
 
     private void Update()
     {
-        Debug.Log(_erDucaGameManager.CurrentState);
-
-        if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0))
+        if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             HandleInput(_erDucaGameManager.CurrentState);
         }
@@ -277,7 +309,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                 _dukeI = tile_i_index;
                                 _dukeJ = tile_j_index;
 
-                                _currentDrawnCard = 0;
                                 _currentAvailableSpawnPositions.Clear();
                                 CmdStartNewTurn();
                                 break;
@@ -312,7 +343,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                 
                                 if (_numberOfStartingPikeman == 0)
                                 {
-                                    _currentDrawnCard = 0;
                                     _currentAvailableSpawnPositions.Clear();
                                     CmdStartNewTurn();
                                 }
@@ -340,7 +370,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     {
                         Transform objectHit = hit.transform;
 
-                        //No piece in cache, hit a piece
+                        //No piece in cache, hit a piece (AVAILABLE MOVES)
                         if (_currentSelectedPiece == null && objectHit.CompareTag("Piece"))
                         {
                             if (objectHit.gameObject.GetComponent<ErDucaPiece>().MyPlayerNetId == _myNetId)
@@ -369,7 +399,7 @@ public class ErDucaPlayer : NetworkBehaviour
                             }
                         }
 
-                        //Piece in cache, hit a piece
+                        //Piece in cache, hit a piece (KILLING ENEMY)
                         else if (_currentSelectedPiece != null && objectHit.CompareTag("Piece"))
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
@@ -388,8 +418,10 @@ public class ErDucaPlayer : NetworkBehaviour
                                 {
                                     if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
                                     {
+                                        //ANIMATION STUFF (TO DO !!!!!!!)
                                         CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, enemyPiece_i_index, enemyPiece_j_index);
-                                        
+                                        //ANIMATION STUFF (TO DO !!!!!!!)
+
                                         //Ho mangiato una pedina col duca, quindi aggiorno i suoi indici
                                         if (_currentSelectedPiece.UnitIndex() == 0)
                                         {
@@ -439,7 +471,7 @@ public class ErDucaPlayer : NetworkBehaviour
                             }
                         }
 
-                        //Piece in cache, hit a tile
+                        //Piece in cache, hit a tile (MOVING PIECE)
                         else if (_currentSelectedPiece != null && objectHit.CompareTag("Tile"))
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
@@ -540,6 +572,22 @@ public class ErDucaPlayer : NetworkBehaviour
         }
     }
 
+    //TEMPORARY ANIMATION STUFF
+    private IEnumerator battleAnimationCoroutine(int netId, int enemyPieceUnitIndex, int myPieceUnitIndex)
+    {
+        switch (netId)
+        {
+            case 1:
+                CmdPlayAnimation(2, (enemyPieceUnitIndex * 2), (myPieceUnitIndex * 2) + 1);
+                break;
+            case 2:
+                CmdPlayAnimation(1, (myPieceUnitIndex * 2), (enemyPieceUnitIndex * 2) + 1);
+                break;
+        }
+
+        yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
+    }
+
 
     public int GetDrawnCard()
     {
@@ -570,7 +618,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         int jSpawnPos = _dukeJ + j;
 
                         //Bounds Checking
-                        if (iSpawnPos <= 5 && jSpawnPos + j <= 5 && iSpawnPos + i >= 0 && jSpawnPos + j >= 0)
+                        if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                         {
                             //Checking i am not in the duke's position
                             if (!(i == 0 && j == 0))
@@ -603,7 +651,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     int jSpawnPos = _dukeJ + j;
 
                     //Bounds Checking
-                    if (iSpawnPos <= 5 && jSpawnPos + j <= 5 && iSpawnPos + i >= 0 && jSpawnPos + j >= 0)
+                    if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                     {
                         //Checking i am not in the duke's position
                         if (!(i == 0 && j == 0))
@@ -644,6 +692,8 @@ public class ErDucaPlayer : NetworkBehaviour
 
     public void SpawnPikemen()
     {
+        Debug.Log("Posizione del duca: " + _dukeI + " " + _dukeJ);
+
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
@@ -651,9 +701,13 @@ public class ErDucaPlayer : NetworkBehaviour
                 int iSpawnPos = _dukeI + i;
                 int jSpawnPos = _dukeJ + j;
 
+                Debug.Log("Controllo in: " + iSpawnPos + " " + jSpawnPos);
+
                 //Bounds Checking
-                if (iSpawnPos <= 5 && jSpawnPos + j <= 5 && iSpawnPos + i >= 0 && jSpawnPos + j >= 0)
+                if (iSpawnPos<= 5 && jSpawnPos<= 5 && iSpawnPos>= 0 && jSpawnPos >= 0)
                 {
+                    Debug.Log("Check bound superato");
+
                     //Checking i am not in the duke's position
                     if (!(i == 0 && j == 0))
                     {

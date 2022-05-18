@@ -4333,6 +4333,7 @@ MonoBehaviour:
   timeSliderFill: {fileID: 954885902}
   timeSliderImageLeft: {fileID: 889297408}
   timeSliderImageRight: {fileID: 2118326503}
+  changingTurn: 0
   turnTime: 65
   pauseMenu: {fileID: 1698679723}
   eventSystem: {fileID: 1915030113}
@@ -9518,7 +9519,7 @@ GameObject:
   - component: {fileID: 1828273053}
   m_Layer: 5
   m_Name: GameAnims
-  m_TagString: Untagged
+  m_TagString: GameAnims
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

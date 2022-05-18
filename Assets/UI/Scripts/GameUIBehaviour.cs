@@ -27,7 +27,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
-    private bool changingTurn; //TODO: this can be used to prevent ray casts during animations (alternatively make the black plane a ray cast target)
+    public bool changingTurn; //TODO: this can be used to prevent ray casts during animations (alternatively make the black plane a ray cast target)
     private float timeRemaining;
     private float timeToDisplay;
     [SerializeField] private float turnTime;
@@ -141,6 +141,12 @@ public class GameUIBehaviour : MonoBehaviour
         {
             OpponentsTurnStart();
         }        
+    }
+
+    public void SetPlayerInitialValues(int colorPlayerId, int startingPlayerId)
+    {
+        gameAnimator.SetInteger("playerColor", colorPlayerId);
+        gameAnimator.SetInteger("startingPlayer", startingPlayerId);
     }
 
     #endregion
@@ -257,6 +263,25 @@ public class GameUIBehaviour : MonoBehaviour
     #endregion
 
     #region turn management
+
+    public void TurnStart(int playerId)
+    {
+        switch (playerId)
+        {
+            //Host - Red
+            case 1:
+                OpponentsTurnStart();
+                break;
+
+            //Remote Client - Blue
+            case 2: PlayersTurnStart();
+                break;
+
+            default:
+                PlayersTurnStart();
+                break;
+        }
+    }
 
     public void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()

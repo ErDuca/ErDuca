@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-
 public enum BattleState
 {
     CoinFlip,
@@ -31,31 +30,59 @@ public class ErDucaGameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcSetTurn()
     {
+        int localPlayerId = (int)ErDucaPlayer.LocalPlayer.MyNetId;
+
         // If isOurTurn was true, set it false. If it was false, set it true.
         isOurTurn = !isOurTurn;
 
-        // If isOurTurn (after updating the bool above)
+        // Player who's about to start the turn - Logic
         if (isOurTurn)
         {
             switch (currentState)
             {
                 case BattleState.CoinFlip:
                     currentState = BattleState.PDuke;
-                    ErDucaPlayer._localPlayer.SpawnDuke();
+                    ErDucaPlayer.LocalPlayer.SpawnDuke();
                     break;
 
                 case BattleState.PDuke:
                     currentState = BattleState.PPikemen;
-                    ErDucaPlayer._localPlayer.SpawnPikemen();
+                    ErDucaPlayer.LocalPlayer.SpawnPikemen();
                     break;
 
                 case BattleState.PPikemen:
                     currentState = BattleState.PTurn;
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
                     break;
 
                 case BattleState.PTurn:
-                    //Turno normale
-                    //It's your turn
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
+                    break;
+            }
+        }
+        //Player who just finished its turn - Logic
+        else
+        {
+            int invertedIdForAnimation = localPlayerId;
+
+            if (invertedIdForAnimation == 1)
+            {
+                invertedIdForAnimation = 2;
+            }
+            else if (invertedIdForAnimation == 2)
+            {
+                invertedIdForAnimation = 1;
+            }
+
+            switch (currentState)
+            {
+                case BattleState.PPikemen:
+                    currentState = BattleState.PTurn;
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
+                    break;
+
+                case BattleState.PTurn:
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
                     break;
             }
         }
@@ -66,7 +93,7 @@ public class ErDucaGameManager : NetworkBehaviour
     {
         isOurTurn = !isOurTurn;
 
-        //The one who has the turn now, is the one who lost
+        //The one who has the turn now, is the one who lost (its duke has just been killed)
         if (isOurTurn)
         {
             currentState = BattleState.PLost;
@@ -77,11 +104,19 @@ public class ErDucaGameManager : NetworkBehaviour
         }
     }
 
+    //Sprites combat animation RPC
+    [ClientRpc]
+    public void RpcPlayAnimation(int animId, int idBlue, int idRed)
+    {
+        ErDucaPlayer.LocalPlayer.BattleAnimationScript.SpritesAnimation(animId, idBlue, idRed);
+    }
+
+    //First RPC to be called, to start the match
     [TargetRpc]
     public void RpcBeginMatch(NetworkConnection target)
     {
         isOurTurn = !isOurTurn;
         currentState = BattleState.PDuke;
-        ErDucaPlayer._localPlayer.SpawnDuke();
+        ErDucaPlayer.LocalPlayer.SpawnDuke();
     }
 }
