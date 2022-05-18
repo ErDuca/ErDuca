@@ -4,6 +4,12 @@ using UnityEngine;
 
 public enum Sound
 {
+    click,
+    enemyFound,
+    menuWhoosh,
+    titleEntrance,
+    pageLeft,
+    startingTurn,
     attack,
     death
 }

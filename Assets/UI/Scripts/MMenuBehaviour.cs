@@ -50,6 +50,8 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private Slider musicSliderGO;
     [SerializeField] private Slider sfxSliderGO;
 
+    public SoundManager soundManager;
+
     private enum Screen6IDs
     {
         RULES,       //0
@@ -66,6 +68,8 @@ public class MMenuBehaviour : MonoBehaviour
 
     private void Start()
     {
+        soundManager = GetComponent<SoundManager>();
+
         if(PlayerPrefs.GetInt("FirstTimePlayer") == 0)
         {
             firstTimeScreenGO.SetActive(true);
@@ -127,6 +131,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     IEnumerator MoveToScreenCoroutine(Vector3 fromPos, Vector3 toPos)
     {
+        soundManager.PlaySound(Sound.click);
         float elapsedTime = 0f;
         eventSystem.SetActive(false);
         while (elapsedTime < screenChangeWaitTime)
@@ -228,6 +233,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void ChangePage(int offset)
     {
+        soundManager.PlaySound(Sound.pageLeft);
         if(currentScreen6Page + offset >= 0 && currentScreen6Page + offset < currentPagesArray.Length)
         {
             currentPagesArray[currentScreen6Page].SetActive(false);
@@ -246,7 +252,13 @@ public class MMenuBehaviour : MonoBehaviour
     {
         PlayerPrefs.SetFloat("SFXVolume", value);
     }
+
+    public void CallSoundManager(Sound sound) {
+        soundManager.PlaySound(sound);
+    }
 }
+
+
 
 
 //TEST PLAYERPREFSEDITOR

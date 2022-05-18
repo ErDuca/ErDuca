@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.06134022, g: 0.065903984, b: 0.06602601, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3593,6 +3593,8 @@ GameObject:
   - component: {fileID: 808467522}
   - component: {fileID: 808467527}
   - component: {fileID: 808467526}
+  - component: {fileID: 808467528}
+  - component: {fileID: 808467529}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3721,6 +3723,7 @@ MonoBehaviour:
   firstTimeScreenGO: {fileID: 974389325}
   musicSliderGO: {fileID: 2094767032}
   sfxSliderGO: {fileID: 860584482}
+  soundManager: {fileID: 0}
 --- !u!95 &808467527
 Animator:
   serializedVersion: 3
@@ -3740,6 +3743,125 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &808467528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808467521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5784a8df6f521d4489d2f124a929da72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundAudioClipArray:
+  - sound: 0
+    audioClip: {fileID: 8300000, guid: 9d450e2a81b93be49a8f5c500a472b95, type: 3}
+  - sound: 1
+    audioClip: {fileID: 8300000, guid: 0572c35f058b8f1449af763d7d300ee1, type: 3}
+  - sound: 2
+    audioClip: {fileID: 8300000, guid: ca2d4abd545c0794883607f089338fa3, type: 3}
+  - sound: 4
+    audioClip: {fileID: 8300000, guid: f2eebfde03777b54990a3f2affc7e255, type: 3}
+  - sound: 3
+    audioClip: {fileID: 8300000, guid: d3b95faaa9a8ec7469171a95ccabeb68, type: 3}
+--- !u!82 &808467529
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808467521}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 7d31d1ecf17da8c4bbfbc2469ff0b96d, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &820769071
 GameObject:
   m_ObjectHideFlags: 0
@@ -7246,7 +7368,6 @@ MonoBehaviour:
   - {fileID: 4712704864833571637, guid: 39418062fffba3547b94b2aa8a74488a, type: 3}
   p1Color: {r: 0.6745098, g: 0.19607843, b: 0.19607843, a: 1}
   p2Color: {r: 0.24705882, g: 0.31764707, b: 0.70980394, a: 1}
-  _gameManagerPrefab: {fileID: 4712704864833571637, guid: 39418062fffba3547b94b2aa8a74488a, type: 3}
 --- !u!4 &1769651078
 Transform:
   m_ObjectHideFlags: 0
