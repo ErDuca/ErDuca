@@ -23,9 +23,9 @@ public class ErDucaPlayer : NetworkBehaviour
 
     //Deck, Duke and Grid's info
     [SerializeField]
-    private int _dukeI;
+    private int _dukeI = 0;
     [SerializeField]
-    private int _dukeJ;
+    private int _dukeJ = 0;
 
     private static int _numberOfUnits = 14;
     private int _numberOfStartingPikeman = 2;
@@ -79,6 +79,11 @@ public class ErDucaPlayer : NetworkBehaviour
 
     #region Commands and RPCs
     //Commands and RPCs
+    [Command]
+    public void CmdWinMatch()
+    {
+        _erDucaGameManager.RpcWinMatch();
+    }
     [Command]
     public void CmdStartNewTurn()
     {
@@ -234,6 +239,8 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
+        Debug.Log(_erDucaGameManager.CurrentState);
+
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0))
         {
             HandleInput(_erDucaGameManager.CurrentState);
@@ -246,7 +253,6 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         switch (currentBattleState)
         {
-            
             case BattleState.PDuke:
                 RaycastHit hitDuke;
                 Ray rayDuke = _camera.ScreenPointToRay(Input.mousePosition);
@@ -323,7 +329,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 break;
 
             case BattleState.PTurn:
-
                 //Handling moves
                 if (!_hasDrawn)
                 {
@@ -376,18 +381,31 @@ public class ErDucaPlayer : NetworkBehaviour
                                 Debug.Log("Ho selezionato una pedina nemica");
                                 int enemyPiece_i_index = enemyPiece.I;
                                 int enemyPiece_j_index = enemyPiece.J;
+                                int enemyPieceUnitIndex = enemyPiece.UnitIndex();
+                                Debug.Log("Indice pedina nemica: " + enemyPieceUnitIndex);
 
                                 foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 {
                                     if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
                                     {
                                         CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, enemyPiece_i_index, enemyPiece_j_index);
+                                        
+                                        //Ho mangiato una pedina col duca, quindi aggiorno i suoi indici
                                         if (_currentSelectedPiece.UnitIndex() == 0)
                                         {
                                             _dukeI = enemyPiece_i_index;
                                             _dukeJ = enemyPiece_j_index;
                                         }
-                                        CmdStartNewTurn();
+
+                                        //Ho mangiato il duca nemico!
+                                        if(enemyPieceUnitIndex == 0)
+                                        {
+                                            CmdWinMatch();
+                                        }
+                                        else
+                                        {
+                                            CmdStartNewTurn();
+                                        }
                                     }
                                 }
 
@@ -401,10 +419,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
-
-                                //Aggionare la UI
-                                //Placeholder
-                                //UIManager.singleton.MakeInfoAppear(int PedinaInfoboxIndex);
 
                                 if (_currentSelectedPiece.IsPhaseOne)
                                 {
@@ -470,7 +484,6 @@ public class ErDucaPlayer : NetworkBehaviour
                         _currentAvailableMoves.Clear();
                     }
                 }
-
                 //Drawn a card, player has to put it on the board
                 else
                 {
@@ -511,6 +524,14 @@ public class ErDucaPlayer : NetworkBehaviour
                 }
                 break;
 
+            case BattleState.PWin:
+                Debug.Log("Hai vinto");
+                break;
+
+            case BattleState.PLost:
+                Debug.Log("Hai perso");
+                break;
+
             default:
                 break;
         }
@@ -534,8 +555,6 @@ public class ErDucaPlayer : NetworkBehaviour
             {
                 _hasDrawn = true;
                 _currentDrawnCard = GetDrawnCard();
-                //_GameUIBehaviour dovrebbe attivare trigger per mostrare l'icona
-                //Illumina le caselle dove posso spawnare
 
                 Debug.Log("Posizione del duca: " + _dukeI + " " + _dukeJ);
                 Debug.Log("Indice carta pescata: " + _currentDrawnCard);
@@ -569,7 +588,6 @@ public class ErDucaPlayer : NetworkBehaviour
         }
     }
 
-    //TO DO
     public bool areDukeNearTilesFree()
     {
         if (isLocalPlayer)
@@ -601,7 +619,7 @@ public class ErDucaPlayer : NetworkBehaviour
         return false;
     }
 
-    public void HighlightBoardBaseline()
+    public void SpawnDuke()
     {
         if (isServer)
         {
@@ -619,11 +637,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 CmdHighlightTile(0, i, this.connectionToClient);
             }
         }
-    }
-
-    public void SpawnDuke()
-    {
-        HighlightBoardBaseline();
     }
 
     public void SpawnPikemen()

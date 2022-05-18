@@ -9,7 +9,8 @@ public enum BattleState
     PDuke,
     PPikemen,
     PTurn,
-    PWin
+    PWin,
+    PLost
 }
 
 public class ErDucaGameManager : NetworkBehaviour
@@ -55,20 +56,27 @@ public class ErDucaGameManager : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    public void RpcWinMatch()
+    {
+        isOurTurn = !isOurTurn;
+
+        //The one who has the turn now, is the one who lost
+        if (isOurTurn)
+        {
+            currentState = BattleState.PLost;
+        }
+        else
+        {
+            currentState = BattleState.PWin;
+        }
+    }
+
     [TargetRpc]
     public void RpcBeginMatch(NetworkConnection target)
     {
         isOurTurn = !isOurTurn;
-
-        if (isOurTurn)
-        {
-            switch (currentState)
-            {
-                case BattleState.CoinFlip:
-                    currentState = BattleState.PDuke;
-                    ErDucaPlayer._localPlayer.SpawnDuke();
-                    break;
-            }
-        }
+        currentState = BattleState.PDuke;
+        ErDucaPlayer._localPlayer.SpawnDuke();
     }
 }

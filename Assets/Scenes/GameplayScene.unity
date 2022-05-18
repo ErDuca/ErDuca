@@ -4349,7 +4349,7 @@ MonoBehaviour:
   blueWinsScreenGO: {fileID: 1026012410}
   redWinsScreenGO: {fileID: 500987302}
   soundManager: {fileID: 638709434}
-  isHost: 1
+  isHost: 0
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

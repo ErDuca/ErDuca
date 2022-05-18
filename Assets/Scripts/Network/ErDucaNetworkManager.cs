@@ -17,8 +17,8 @@ public class ErDucaNetworkManager : NetworkManager
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
 
+    //Players Connections
     private NetworkConnectionToClient[] playersConnections = new NetworkConnectionToClient[2];
-
 
     public int GridRowsNumber
     {
