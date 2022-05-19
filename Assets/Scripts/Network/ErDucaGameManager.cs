@@ -69,6 +69,7 @@ public class ErDucaGameManager : NetworkBehaviour
                         ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowDrawBox();
                     }
 
+                  
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
                     break;
             }
@@ -76,6 +77,9 @@ public class ErDucaGameManager : NetworkBehaviour
         //Player who just finished its turn - Logic
         else
         {
+            //Hides the draw button
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.HideDrawBox();
+
             int invertedIdForAnimation = localPlayerId;
 
             if (invertedIdForAnimation == 1)
@@ -89,6 +93,12 @@ public class ErDucaGameManager : NetworkBehaviour
 
             switch (currentState)
             {
+                /*
+                case BattleState.PDuke:
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
+                    break;
+                */
+
                 case BattleState.PPikemen:
                     //currentState = BattleState.PTurn;
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);

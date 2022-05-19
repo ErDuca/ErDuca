@@ -234,6 +234,9 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartClient();
 
+        _canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
+        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+       
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
@@ -259,8 +262,8 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
-        _canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
-        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+        //_canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
+        //_gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
 
     }
     #endregion
@@ -277,6 +280,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
+        Debug.Log("Sono in fase Duke" + isLocalPlayer + " "+ _erDucaGameManager.IsOurTurn + " "+ Input.GetMouseButtonDown(0)+ " " + _gameUIBehaviour.changingTurn);
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
@@ -432,11 +436,12 @@ public class ErDucaPlayer : NetworkBehaviour
 
                                         //ATTENZIONE CASO STRIKE!
 
-                                        //yield return new WaitForSeconds(2f);
                                         yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == xTarget &&
                                         _currentSelectedPiece.transform.position.z == zTarget);
 
                                         yield return StartCoroutine(BattleAnimationCoroutine((int)_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
+                                        //yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle")); 
+                                        //yield return new WaitForSeconds(.05f);
 
                                         //Ho mangiato una pedina col duca, quindi aggiorno i suoi indici
                                         if (_currentSelectedPiece.UnitIndex() == 0)
@@ -593,44 +598,50 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     //TEMPORARY ANIMATION STUFF
-    private IEnumerator BattleAnimationCoroutine(int netId, int enemyPieceUnitIndex, int myPieceUnitIndex)
+    private IEnumerator BattleAnimationCoroutine(int netId, int blueUnitIndex, int redUnitIndex)
     {
         switch (netId)
         {
             case 1:
-                switch (myPieceUnitIndex)
+                switch (redUnitIndex)
                 {
                     //Ranged Red attacks Blue
                     case 3: case 6: case 9: case 10: case 12:
-                        CmdPlayAnimation(14, (enemyPieceUnitIndex * 2), (myPieceUnitIndex * 2) + 1);
+                        CmdPlayAnimation(14, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
                         break;
 
                     //Melee Red attacks Blue
+                    case 0: case 1: case 2: case 4: case 5: case 7: case 8: case 11: case 13:
+                        CmdPlayAnimation(2, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
+                        break;
+
                     default:
-                        CmdPlayAnimation(2, (enemyPieceUnitIndex * 2), (myPieceUnitIndex * 2) + 1);
                         break;
                 }
                 break;
 
             case 2:
-                switch (enemyPieceUnitIndex)
+                switch (blueUnitIndex)
                 {
                     //Ranged Blue attacks Red
                     case 3: case 6: case 9: case 10: case 12:
-                        CmdPlayAnimation(13, (myPieceUnitIndex * 2), (enemyPieceUnitIndex * 2) + 1);
+                        CmdPlayAnimation(13, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
                         break;
 
                     //Melee Blue attacks Red
+                    case 0: case 1: case 2: case 4: case 5: case 7: case 8: case 11: case 13:
+                        CmdPlayAnimation(1, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
+                        break;
+
                     default:
-                        CmdPlayAnimation(1, (myPieceUnitIndex * 2), (enemyPieceUnitIndex * 2) + 1);
                         break;
                 }
                 break;
         }
     
 
-        //yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
-        yield return null;
+        yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
+        //yield return null;
     }
 
     public bool IsDeckEmpty()

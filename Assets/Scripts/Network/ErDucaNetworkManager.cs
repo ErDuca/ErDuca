@@ -234,7 +234,6 @@ public class ErDucaNetworkManager : NetworkManager
             //int coinFlip = UnityEngine.Random.Range(0, 2);
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1);
-
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
         }
         else
