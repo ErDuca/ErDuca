@@ -18,13 +18,13 @@ public class ErDucaGameManager : NetworkBehaviour
     private bool isOurTurn = false;
     [SerializeField]
     private BattleState currentState = BattleState.CoinFlip;
-    public BattleState CurrentState
-    {
-        get => currentState;
-    }
     public bool IsOurTurn
     {
         get => isOurTurn;
+    }
+    public BattleState CurrentState
+    {
+        get => currentState;
     }
 
     [ClientRpc]
@@ -52,10 +52,23 @@ public class ErDucaGameManager : NetworkBehaviour
 
                 case BattleState.PPikemen:
                     currentState = BattleState.PTurn;
+
+                    if (!ErDucaPlayer.LocalPlayer.IsDeckEmpty() && ErDucaPlayer.LocalPlayer.AreDukeNearTilesFree())
+                    {
+                        ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowDrawBox();
+                    }
+
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
                     break;
 
                 case BattleState.PTurn:
+
+                    //Se il mazzo non è vuoto / duca ha posti liberi
+                    if (!ErDucaPlayer.LocalPlayer.IsDeckEmpty() && ErDucaPlayer.LocalPlayer.AreDukeNearTilesFree())
+                    {
+                        ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowDrawBox();
+                    }
+
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
                     break;
             }
@@ -77,19 +90,22 @@ public class ErDucaGameManager : NetworkBehaviour
             switch (currentState)
             {
                 case BattleState.PPikemen:
-                    currentState = BattleState.PTurn;
+                    //currentState = BattleState.PTurn;
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
+                    //ErDucaPlayer.LocalPlayer.GameUIBehavior.IconaPensante
                     break;
-
+                    
                 case BattleState.PTurn:
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
+                    //ErDucaPlayer.LocalPlayer.GameUIBehavior.IconaPensante
                     break;
+                    
             }
         }
     }
 
     [ClientRpc]
-    public void RpcWinMatch()
+    public void RpcWinMatch(uint winnerId)
     {
         isOurTurn = !isOurTurn;
 
@@ -97,10 +113,12 @@ public class ErDucaGameManager : NetworkBehaviour
         if (isOurTurn)
         {
             currentState = BattleState.PLost;
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen((int)winnerId);
         }
         else
         {
             currentState = BattleState.PWin;
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen((int)winnerId);
         }
     }
 
@@ -115,8 +133,15 @@ public class ErDucaGameManager : NetworkBehaviour
     [TargetRpc]
     public void RpcBeginMatch(NetworkConnection target)
     {
+        Debug.Log("Sto beginnando match");
         isOurTurn = !isOurTurn;
         currentState = BattleState.PDuke;
         ErDucaPlayer.LocalPlayer.SpawnDuke();
+    }
+    [TargetRpc]
+    public void RpcSetAnimatorValues(NetworkConnection target, int playerColor, int coinFlipResult)
+    {
+        Debug.Log("Sto assegnando i valori");
+        ErDucaPlayer.LocalPlayer.GameUIBehavior.SetPlayerInitialValues(playerColor, coinFlipResult);
     }
 }

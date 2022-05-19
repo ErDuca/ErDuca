@@ -353,8 +353,11 @@ public class GameUIBehaviour : MonoBehaviour
     public void DrawUnit()
     {
         drawBoxAnimator.SetTrigger("unitDrawn");
+        int cardIndex = ErDucaPlayer.LocalPlayer.DrawCard();
+        Color playerColor = ErDucaPlayer.LocalPlayer.MyColor;
+
         //Pass in some way the unit to display
-        ShowPieceInfo(0);
+        ShowPieceInfo(cardIndex);
     }
 
     public void DrawnUnitPlaced() => StartCoroutine(DrawnUnitPlacedCoroutine());
@@ -373,10 +376,10 @@ public class GameUIBehaviour : MonoBehaviour
     public void ShowGameOverScreen(int winner)
     {
         gameOverScreenGO.SetActive(true);
-        if(winner == 0)
+        if(winner == 2)
         {
             blueWinsScreenGO.SetActive(true);
-            if (gameAnimator.GetInteger("startingPlayer") == 0)
+            if (gameAnimator.GetInteger("startingPlayer") == 2)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
             }
@@ -388,7 +391,7 @@ public class GameUIBehaviour : MonoBehaviour
         else if(winner == 1)
         {
             redWinsScreenGO.SetActive(true);
-            if (gameAnimator.GetInteger("startingPlayer") == 0)
+            if (gameAnimator.GetInteger("startingPlayer") == 2)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             }

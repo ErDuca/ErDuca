@@ -13,15 +13,19 @@ public class ErDucaPlayer : NetworkBehaviour
     private static ErDucaPlayer _localPlayer;
     [SerializeField]
     private static ErDucaGameManager _erDucaGameManager;
+    /// <summary>
+    /// ////////
+    /// </summary>
+    [SerializeField]
+    private static GameUIBehaviour _gameUIBehaviour;
 
     //References
     private Camera _camera;
     private ErDucaNetworkManager _erDucaNetworkManager;
     private ErDucaMoveManager _erDucaMoveManager;
-    private GameUIBehaviour _gameUIBehaviour;
+    //private GameUIBehaviour _gameUIBehaviour;
     private BattleAnimationsScript _battleAnimationScript;
     private Animator _canvasAnimator;
-    private Button _drawButton;
 
     //Deck, Duke and Grid's info
     [SerializeField]
@@ -101,9 +105,9 @@ public class ErDucaPlayer : NetworkBehaviour
 
     #region Commands and RPCs
     [Command]
-    public void CmdWinMatch()
+    public void CmdWinMatch(uint winnerId)
     {
-        _erDucaGameManager.RpcWinMatch();
+        _erDucaGameManager.RpcWinMatch(winnerId);
     }
 
     [Command]
@@ -233,12 +237,10 @@ public class ErDucaPlayer : NetworkBehaviour
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
-        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+        //_gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
         _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
-
-        _drawButton = GameObject.FindGameObjectWithTag("DrawButton").GetComponent<Button>();
-        _drawButton.onClick.AddListener(DrawCard);
+        
 
         //Rotate the Opponent's camera
         if(_myNetId > 1)
@@ -257,7 +259,9 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
-        
+        _canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
+        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+
     }
     #endregion
 
@@ -275,13 +279,13 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
-            HandleInput(_erDucaGameManager.CurrentState);
+            StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
         }
     }
     #endregion
 
     #region Class Functions
-    public void HandleInput(BattleState currentBattleState)
+    public IEnumerator HandleInput(BattleState currentBattleState)
     {
         switch (currentBattleState)
         {
@@ -412,15 +416,27 @@ public class ErDucaPlayer : NetworkBehaviour
                                 int enemyPiece_i_index = enemyPiece.I;
                                 int enemyPiece_j_index = enemyPiece.J;
                                 int enemyPieceUnitIndex = enemyPiece.UnitIndex();
+                                int currentPieceUnitIndex = _currentSelectedPiece.UnitIndex();
                                 Debug.Log("Indice pedina nemica: " + enemyPieceUnitIndex);
+
+                                //Prova
+                                float xTarget = objectHit.transform.position.x;
+                                float zTarget = objectHit.transform.position.z;
 
                                 foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 {
                                     if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
                                     {
-                                        //ANIMATION STUFF (TO DO !!!!!!!)
-                                        CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, enemyPiece_i_index, enemyPiece_j_index);
-                                        //ANIMATION STUFF (TO DO !!!!!!!)
+                                        CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, 
+                                        enemyPiece_i_index, enemyPiece_j_index);
+
+                                        //ATTENZIONE CASO STRIKE!
+
+                                        //yield return new WaitForSeconds(2f);
+                                        yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == xTarget &&
+                                        _currentSelectedPiece.transform.position.z == zTarget);
+
+                                        yield return StartCoroutine(BattleAnimationCoroutine((int)_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
 
                                         //Ho mangiato una pedina col duca, quindi aggiorno i suoi indici
                                         if (_currentSelectedPiece.UnitIndex() == 0)
@@ -432,7 +448,7 @@ public class ErDucaPlayer : NetworkBehaviour
                                         //Ho mangiato il duca nemico!
                                         if(enemyPieceUnitIndex == 0)
                                         {
-                                            CmdWinMatch();
+                                            CmdWinMatch(MyNetId);
                                         }
                                         else
                                         {
@@ -519,6 +535,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         _currentAvailableMoves.Clear();
                     }
                 }
+
                 //Drawn a card, player has to put it on the board
                 else
                 {
@@ -542,6 +559,8 @@ public class ErDucaPlayer : NetworkBehaviour
                                 if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                                 {
                                     Debug.Log("Pedina spawnata!");
+                                    _gameUIBehaviour.DrawnUnitPlaced();
+
                                     CmdSpawnPiece(_currentDrawnCard, objectHit.transform, tile_i_index, tile_j_index);
 
                                     _currentDrawnCard = 0;
@@ -570,24 +589,54 @@ public class ErDucaPlayer : NetworkBehaviour
             default:
                 break;
         }
+        yield return null;
     }
 
     //TEMPORARY ANIMATION STUFF
-    private IEnumerator battleAnimationCoroutine(int netId, int enemyPieceUnitIndex, int myPieceUnitIndex)
+    private IEnumerator BattleAnimationCoroutine(int netId, int enemyPieceUnitIndex, int myPieceUnitIndex)
     {
         switch (netId)
         {
             case 1:
-                CmdPlayAnimation(2, (enemyPieceUnitIndex * 2), (myPieceUnitIndex * 2) + 1);
+                switch (myPieceUnitIndex)
+                {
+                    //Ranged Red attacks Blue
+                    case 3: case 6: case 9: case 10: case 12:
+                        CmdPlayAnimation(14, (enemyPieceUnitIndex * 2), (myPieceUnitIndex * 2) + 1);
+                        break;
+
+                    //Melee Red attacks Blue
+                    default:
+                        CmdPlayAnimation(2, (enemyPieceUnitIndex * 2), (myPieceUnitIndex * 2) + 1);
+                        break;
+                }
                 break;
+
             case 2:
-                CmdPlayAnimation(1, (myPieceUnitIndex * 2), (enemyPieceUnitIndex * 2) + 1);
+                switch (enemyPieceUnitIndex)
+                {
+                    //Ranged Blue attacks Red
+                    case 3: case 6: case 9: case 10: case 12:
+                        CmdPlayAnimation(13, (myPieceUnitIndex * 2), (enemyPieceUnitIndex * 2) + 1);
+                        break;
+
+                    //Melee Blue attacks Red
+                    default:
+                        CmdPlayAnimation(1, (myPieceUnitIndex * 2), (enemyPieceUnitIndex * 2) + 1);
+                        break;
+                }
                 break;
         }
+    
 
-        yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
+        //yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
+        yield return null;
     }
 
+    public bool IsDeckEmpty()
+    {
+        return _cards.Count == 0;
+    }
 
     public int GetDrawnCard()
     {
@@ -598,48 +647,47 @@ public class ErDucaPlayer : NetworkBehaviour
         return toBeReturnedElement;
     }
 
-    public void DrawCard()
+    public int DrawCard()
     {
         if (isLocalPlayer)
         {
-            if (areDukeNearTilesFree())
+            _hasDrawn = true;
+            _currentDrawnCard = GetDrawnCard();
+
+            Debug.Log("Posizione del duca: " + _dukeI + " " + _dukeJ);
+            Debug.Log("Indice carta pescata: " + _currentDrawnCard);
+
+            for (int i = -1; i < 2; i++)
             {
-                _hasDrawn = true;
-                _currentDrawnCard = GetDrawnCard();
-
-                Debug.Log("Posizione del duca: " + _dukeI + " " + _dukeJ);
-                Debug.Log("Indice carta pescata: " + _currentDrawnCard);
-
-                for (int i = -1; i < 2; i++)
+                for (int j = -1; j < 2; j++)
                 {
-                    for (int j = -1; j < 2; j++)
+                    int iSpawnPos = _dukeI + i;
+                    int jSpawnPos = _dukeJ + j;
+
+                    //Bounds Checking
+                    if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                     {
-                        int iSpawnPos = _dukeI + i;
-                        int jSpawnPos = _dukeJ + j;
-
-                        //Bounds Checking
-                        if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
+                        //Checking i am not in the duke's position
+                        if (!(i == 0 && j == 0))
                         {
-                            //Checking i am not in the duke's position
-                            if (!(i == 0 && j == 0))
-                            {
-                                Debug.Log("Controllo se posso spawnare in " + iSpawnPos + ":" + jSpawnPos + " ...");
+                            Debug.Log("Controllo se posso spawnare in " + iSpawnPos + ":" + jSpawnPos + " ...");
 
-                                if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
-                                {
-                                    _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
-                                    Debug.Log("Posso spawnare in " + (iSpawnPos) + " " + (jSpawnPos));
-                                    CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
-                                }
+                            if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
+                            {
+                                _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
+                                Debug.Log("Posso spawnare in " + (iSpawnPos) + " " + (jSpawnPos));
+                                CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
                             }
                         }
                     }
                 }
             }
         }
+
+        return _currentDrawnCard;
     }
 
-    public bool areDukeNearTilesFree()
+    public bool AreDukeNearTilesFree()
     {
         if (isLocalPlayer)
         {

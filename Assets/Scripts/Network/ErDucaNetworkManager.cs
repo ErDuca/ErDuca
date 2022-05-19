@@ -17,6 +17,8 @@ public class ErDucaNetworkManager : NetworkManager
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
 
+    private int coinFlip;
+
     //Players Connections
     private NetworkConnectionToClient[] playersConnections = new NetworkConnectionToClient[2];
 
@@ -228,9 +230,11 @@ public class ErDucaNetworkManager : NetworkManager
 
             InitializeTilesGrid();
 
-            //Starting Match
-            int coinFlip = UnityEngine.Random.Range(0, 2);
+            //Starting Match - Coin Flip
+            //int coinFlip = UnityEngine.Random.Range(0, 2);
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
+            gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1);
+
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
         }
         else
@@ -240,6 +244,8 @@ public class ErDucaNetworkManager : NetworkManager
             erDucaPlayer.MyColor = p1Color;
 
             playersConnections[0] = conn;
+            ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
+            gameManager.RpcSetAnimatorValues(playersConnections[0], 1, coinFlip + 1);
         }
     }
 
@@ -313,7 +319,10 @@ public class ErDucaNetworkManager : NetworkManager
     /// This is invoked when a server is started - including when a host is started.
     /// <para>StartServer has multiple signatures, but they all cause this hook to be called.</para>
     /// </summary>
-    public override void OnStartServer() { }
+    public override void OnStartServer() 
+    {
+        coinFlip = UnityEngine.Random.Range(0, 2);
+    }
 
     /// <summary>
     /// This is invoked when the client is started.
