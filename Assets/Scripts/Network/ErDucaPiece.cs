@@ -27,7 +27,8 @@ public enum Ptype
     Jump,
     Slide,
     Fly,
-    Strike
+    Strike,
+    Spawn
 }
 public struct Movement
 {

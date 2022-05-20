@@ -41,8 +41,10 @@ public class ErDucaPlayer : NetworkBehaviour
     private List<Tuple<int, int>> _currentAvailableSpawnPositions = new List<Tuple<int, int>>();
     [SerializeField]
     private ErDucaPiece _currentSelectedPiece;
+    /*[SerializeField]
+    private List<Tuple<int, int>> _currentAvailableMoves = new List<Tuple<int, int>>();*/
     [SerializeField]
-    private List<Tuple<int, int>> _currentAvailableMoves = new List<Tuple<int, int>>();
+    private Dictionary<Tuple<int, int>, Ptype> _currentAvailableMoves = new Dictionary<Tuple<int, int>, Ptype>();
 
     //Sync var elements
     [SerializeField]
@@ -119,7 +121,7 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [Command]
-    public void CmdHighlightTile(int i, int j, NetworkConnectionToClient conn)
+    public void CmdHighlightTile(int i, int j, Ptype moveType, NetworkConnectionToClient conn)
     {
         ErDucaTile tileToHighlight;
         Tuple<int, int> t = new Tuple<int, int>(i, j);
@@ -127,7 +129,7 @@ public class ErDucaPlayer : NetworkBehaviour
         if (ErDucaNetworkManager.singleton._tiles.ContainsKey(t))
         {
             ErDucaNetworkManager.singleton._tiles.TryGetValue(new Tuple<int, int>(t.Item1, t.Item2), out tileToHighlight);
-            RpcHighlightLocalTile(conn, tileToHighlight);
+            RpcHighlightLocalTile(conn, tileToHighlight, moveType);
         }
     }
 
@@ -151,9 +153,38 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [TargetRpc]
-    public void RpcHighlightLocalTile(NetworkConnection target, ErDucaTile tile)
+    public void RpcHighlightLocalTile(NetworkConnection target, ErDucaTile tile, Ptype moveType)
     {
-        tile.SetMaterialColor(Color.white);
+        switch (moveType)
+        {
+            case Ptype.Walk:
+                tile.SetMaterialColor(Color.yellow);
+                break;
+
+            case Ptype.Jump:
+                tile.SetMaterialColor(Color.green);
+                break;
+
+            case Ptype.Slide:
+                tile.SetMaterialColor(Color.blue);
+                break;
+
+            case Ptype.Fly:
+                tile.SetMaterialColor(Color.white);
+                break;
+
+            case Ptype.Strike:
+                tile.SetMaterialColor(Color.cyan);
+                break;
+
+            case Ptype.Spawn:
+                tile.SetMaterialColor(Color.magenta);
+                break;
+
+            default:
+                tile.SetMaterialColor(Color.red);
+                break;
+        }
     }
 
     [TargetRpc]
@@ -391,9 +422,16 @@ public class ErDucaPlayer : NetworkBehaviour
                                 }
 
                                 //Mostrare le mosse disponibili
-                                foreach (Tuple<int, int> t in _currentAvailableMoves)
+                                /*
+                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 {
-                                    CmdHighlightTile(t.Item1, t.Item2, this.connectionToClient);
+                                    CmdHighlightTile(tuple.Item1, tuple.Item2, moveType, this.connectionToClient);
+                                }
+                                */
+
+                                foreach(var item in _currentAvailableMoves)
+                                {
+                                    CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
                                 }
                             }
                         }
@@ -418,9 +456,11 @@ public class ErDucaPlayer : NetworkBehaviour
                                 float xTarget = objectHit.transform.position.x;
                                 float zTarget = objectHit.transform.position.z;
 
-                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                                //foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                                foreach(var item in _currentAvailableMoves)
                                 {
-                                    if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
+                                    //if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
+                                    if(item.Key.Item1 == enemyPiece_i_index && item.Key.Item2 == enemyPiece_j_index)
                                     {
                                         CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, 
                                         enemyPiece_i_index, enemyPiece_j_index);
@@ -459,7 +499,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
                             else if (enemyPiece.MyPlayerNetId == _myNetId)
                             {
-                                //Debug.Log("Ho selezionato una mia pedina");
+                                //Debug.Log("Ho ri-selezionato una mia pedina");
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
@@ -476,9 +516,15 @@ public class ErDucaPlayer : NetworkBehaviour
                                 }
 
                                 //Show available moves
-                                foreach (Tuple<int, int> t in _currentAvailableMoves)
+                                /*
+                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 {
-                                    CmdHighlightTile(t.Item1, t.Item2, this.connectionToClient);
+                                    CmdHighlightTile(tuple.Item1, tuple.Item2, moveType, this.connectionToClient);
+                                }
+                                */
+                                foreach (var item in _currentAvailableMoves)
+                                {
+                                    CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
                                 }
                             }
                         }
@@ -491,9 +537,11 @@ public class ErDucaPlayer : NetworkBehaviour
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
-                            foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                            //foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                            foreach (var item in _currentAvailableMoves)
                             {
-                                if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
+                                //if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
+                                if (item.Key.Item1 == tile_i_index && item.Key.Item2 == tile_j_index)
                                 {
                                     CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
 
@@ -669,7 +717,7 @@ public class ErDucaPlayer : NetworkBehaviour
                             if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                             {
                                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
-                                CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
+                                CmdHighlightTile(iSpawnPos, jSpawnPos, Ptype.Spawn, this.connectionToClient);
                             }
                         }
                     }
@@ -715,7 +763,7 @@ public class ErDucaPlayer : NetworkBehaviour
             for (int i = 1; i < _gridSize - 1; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(5, i));
-                CmdHighlightTile(5, i, this.connectionToClient);
+                CmdHighlightTile(5, i, Ptype.Spawn, this.connectionToClient);
             }
         }
         else
@@ -723,7 +771,7 @@ public class ErDucaPlayer : NetworkBehaviour
             for (int i = 1; i < _gridSize - 1; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(0, i));
-                CmdHighlightTile(0, i, this.connectionToClient);
+                CmdHighlightTile(0, i, Ptype.Spawn, this.connectionToClient);
             }
         }
     }
@@ -744,7 +792,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                         {
                             _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
-                            CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
+                            CmdHighlightTile(iSpawnPos, jSpawnPos, Ptype.Spawn, this.connectionToClient);
                         }
                     }
                 }

@@ -9,7 +9,7 @@ public class ErDucaMoveManager : MonoBehaviour
 {
     private bool invertIndex = false;
 
-    public List<Tuple<int, int>> GetAvailableMoves(int netId, int i, int j, List<Movement> pieceRelativeMoves)
+    public Dictionary<Tuple<int, int>, Ptype> GetAvailableMoves(int netId, int i, int j, List<Movement> pieceRelativeMoves)
     {
         //"Host situation" (the board is seen upside down)
         if (netId == 1)
@@ -17,7 +17,7 @@ public class ErDucaMoveManager : MonoBehaviour
             invertIndex = true;
         }
 
-        List<Tuple<int, int>> availableMoves = new List<Tuple<int, int>>();
+        Dictionary<Tuple<int, int>, Ptype> availableMoves = new Dictionary<Tuple<int, int>, Ptype>();
         Tuple<int, int> temp;
 
         foreach (Movement m in pieceRelativeMoves)
@@ -35,13 +35,13 @@ public class ErDucaMoveManager : MonoBehaviour
                     */
                     temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
-                        availableMoves.Add(temp);
+                        availableMoves.Add(temp, Ptype.Walk);
                     break;
 
                 case Ptype.Jump:
                     temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
-                        availableMoves.Add(temp);
+                        availableMoves.Add(temp, Ptype.Jump);
                     break;
 
                 case Ptype.Slide:
@@ -53,7 +53,7 @@ public class ErDucaMoveManager : MonoBehaviour
                         temp = GetSlideMoves(netId, isl, jsl, m._offsetX, m._offsetY, ref foundEnemyPiece, ref isl, ref jsl);
 
                         if (temp != null)
-                            availableMoves.Add(temp);
+                            availableMoves.Add(temp, Ptype.Slide);
                     }
                     while (temp != null && !foundEnemyPiece);
                     break;
@@ -62,14 +62,14 @@ public class ErDucaMoveManager : MonoBehaviour
                 case Ptype.Fly:
                     temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
-                        availableMoves.Add(temp);
+                        availableMoves.Add(temp, Ptype.Fly);
                     break;
 
                 //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Strike:
                     temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
-                        availableMoves.Add(temp);
+                        availableMoves.Add(temp, Ptype.Strike);
                     break;
 
                 default:
