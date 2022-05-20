@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+
 public enum BattleState
 {
     CoinFlip,
@@ -30,7 +31,7 @@ public class ErDucaGameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcSetTurn()
     {
-        int localPlayerId = (int)ErDucaPlayer.LocalPlayer.MyNetId;
+        int localPlayerId = ErDucaPlayer.LocalPlayer.MyNetId;
 
         // If isOurTurn was true, set it false. If it was false, set it true.
         isOurTurn = !isOurTurn;
@@ -80,16 +81,7 @@ public class ErDucaGameManager : NetworkBehaviour
             //Hides the draw button
             ErDucaPlayer.LocalPlayer.GameUIBehavior.HideDrawBox();
 
-            int invertedIdForAnimation = localPlayerId;
-
-            if (invertedIdForAnimation == 1)
-            {
-                invertedIdForAnimation = 2;
-            }
-            else if (invertedIdForAnimation == 2)
-            {
-                invertedIdForAnimation = 1;
-            }
+            int invertedIdForAnimation = localPlayerId == 1 ? 2 : 1;
 
             switch (currentState)
             {

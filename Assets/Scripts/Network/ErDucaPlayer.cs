@@ -29,7 +29,8 @@ public class ErDucaPlayer : NetworkBehaviour
     private int _dukeJ = 0;
 
     private static int _numberOfUnits = 14;
-    private int _numberOfStartingPikeman = 2;
+    private int _numberOfStartingUnits = 2;
+    private Unit _startingUnitType = Unit.FOOTMAN;
     private int _gridSize;
     private List<int> _cards = new List<int>();
 
@@ -40,8 +41,10 @@ public class ErDucaPlayer : NetworkBehaviour
     private List<Tuple<int, int>> _currentAvailableSpawnPositions = new List<Tuple<int, int>>();
     [SerializeField]
     private ErDucaPiece _currentSelectedPiece;
+    /*[SerializeField]
+    private List<Tuple<int, int>> _currentAvailableMoves = new List<Tuple<int, int>>();*/
     [SerializeField]
-    private List<Tuple<int, int>> _currentAvailableMoves = new List<Tuple<int, int>>();
+    private Dictionary<Tuple<int, int>, Ptype> _currentAvailableMoves = new Dictionary<Tuple<int, int>, Ptype>();
 
     //Sync var elements
     [SerializeField]
@@ -118,7 +121,7 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [Command]
-    public void CmdHighlightTile(int i, int j, NetworkConnectionToClient conn)
+    public void CmdHighlightTile(int i, int j, Ptype moveType, NetworkConnectionToClient conn)
     {
         ErDucaTile tileToHighlight;
         Tuple<int, int> t = new Tuple<int, int>(i, j);
@@ -126,7 +129,7 @@ public class ErDucaPlayer : NetworkBehaviour
         if (ErDucaNetworkManager.singleton._tiles.ContainsKey(t))
         {
             ErDucaNetworkManager.singleton._tiles.TryGetValue(new Tuple<int, int>(t.Item1, t.Item2), out tileToHighlight);
-            RpcHighlightLocalTile(conn, tileToHighlight);
+            RpcHighlightLocalTile(conn, tileToHighlight, moveType);
         }
     }
 
@@ -150,9 +153,38 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [TargetRpc]
-    public void RpcHighlightLocalTile(NetworkConnection target, ErDucaTile tile)
+    public void RpcHighlightLocalTile(NetworkConnection target, ErDucaTile tile, Ptype moveType)
     {
-        tile.SetMaterialColor(Color.white);
+        switch (moveType)
+        {
+            case Ptype.Walk:
+                tile.SetMaterialColor(Color.yellow);
+                break;
+
+            case Ptype.Jump:
+                tile.SetMaterialColor(Color.green);
+                break;
+
+            case Ptype.Slide:
+                tile.SetMaterialColor(Color.blue);
+                break;
+
+            case Ptype.Fly:
+                tile.SetMaterialColor(Color.white);
+                break;
+
+            case Ptype.Strike:
+                tile.SetMaterialColor(Color.cyan);
+                break;
+
+            case Ptype.Spawn:
+                tile.SetMaterialColor(Color.magenta);
+                break;
+
+            default:
+                tile.SetMaterialColor(Color.red);
+                break;
+        }
     }
 
     [TargetRpc]
@@ -228,15 +260,15 @@ public class ErDucaPlayer : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-
+        
         _canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
-       
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
         _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
         _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
+        
 
         //Rotate the Opponent's camera
         if(_myNetId > 1)
@@ -255,7 +287,6 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
-
     }
     #endregion
 
@@ -271,7 +302,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
-        Debug.Log("Sono in fase Duke" + isLocalPlayer + " "+ _erDucaGameManager.IsOurTurn + " "+ Input.GetMouseButtonDown(0)+ " " + _gameUIBehaviour.changingTurn);
+        //Debug.Log("Sono in fase Duke" + isLocalPlayer + " "+ _erDucaGameManager.IsOurTurn + " "+ Input.GetMouseButtonDown(0)+ " " + _gameUIBehaviour.changingTurn);
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
@@ -293,7 +324,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     Transform objectHit = hitDuke.transform;
                     if (objectHit.CompareTag("Tile"))
                     {
-                        Debug.Log("Ho selezionato un tile e ci voglio spawnare sopra il Duca");
+                        //Debug.Log("Ho selezionato un tile e ci voglio spawnare sopra il Duca");
                         int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                         int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -303,7 +334,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                CmdSpawnPiece(0 /*duke unit index*/, objectHit.transform, tile_i_index, tile_j_index);
+                                CmdSpawnPiece((int)Unit.DUKE, objectHit.transform, tile_i_index, tile_j_index);
                                 
                                 _dukeI = tile_i_index;
                                 _dukeJ = tile_j_index;
@@ -326,7 +357,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     Transform objectHit = hitPikemen.transform;
                     if (objectHit.CompareTag("Tile"))
                     {
-                        Debug.Log("Ho selezionato un tile e ci voglio spawnare il Footman");
+                        //Debug.Log("Ho selezionato un tile e ci voglio spawnare il Footman");
                         int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                         int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -336,11 +367,11 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                CmdSpawnPiece(7 /*Footman unit index*/, objectHit.transform, tile_i_index, tile_j_index);
+                                CmdSpawnPiece((int)_startingUnitType, objectHit.transform, tile_i_index, tile_j_index);
 
-                                _numberOfStartingPikeman--;
+                                _numberOfStartingUnits--;
                                 
-                                if (_numberOfStartingPikeman == 0)
+                                if (_numberOfStartingUnits == 0)
                                 {
                                     _currentAvailableSpawnPositions.Clear();
                                     CmdStartNewTurn();
@@ -374,10 +405,12 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (objectHit.gameObject.GetComponent<ErDucaPiece>().MyPlayerNetId == _myNetId)
                             {
-                                Debug.Log("Ho selezionato una mia pedina");
+                                //Debug.Log("Ho selezionato una mia pedina");
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
+
+                                CmdHighlightTile(piece_i_index, piece_j_index, Ptype.Spawn, this.connectionToClient);
 
                                 if (_currentSelectedPiece.IsPhaseOne)
                                 {
@@ -391,9 +424,16 @@ public class ErDucaPlayer : NetworkBehaviour
                                 }
 
                                 //Mostrare le mosse disponibili
-                                foreach (Tuple<int, int> t in _currentAvailableMoves)
+                                /*
+                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 {
-                                    CmdHighlightTile(t.Item1, t.Item2, this.connectionToClient);
+                                    CmdHighlightTile(tuple.Item1, tuple.Item2, moveType, this.connectionToClient);
+                                }
+                                */
+
+                                foreach(var item in _currentAvailableMoves)
+                                {
+                                    CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
                                 }
                             }
                         }
@@ -407,20 +447,22 @@ public class ErDucaPlayer : NetworkBehaviour
 
                             if (enemyPiece.MyPlayerNetId != _myNetId)
                             {
-                                Debug.Log("Ho selezionato una pedina nemica");
+                                //Debug.Log("Ho selezionato una pedina nemica");
                                 int enemyPiece_i_index = enemyPiece.I;
                                 int enemyPiece_j_index = enemyPiece.J;
                                 int enemyPieceUnitIndex = enemyPiece.UnitIndex();
                                 int currentPieceUnitIndex = _currentSelectedPiece.UnitIndex();
-                                Debug.Log("Indice pedina nemica: " + enemyPieceUnitIndex);
+                                //Debug.Log("Indice pedina nemica: " + enemyPieceUnitIndex);
 
                                 //Prova
                                 float xTarget = objectHit.transform.position.x;
                                 float zTarget = objectHit.transform.position.z;
 
-                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                                //foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                                foreach(var item in _currentAvailableMoves)
                                 {
-                                    if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
+                                    //if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
+                                    if(item.Key.Item1 == enemyPiece_i_index && item.Key.Item2 == enemyPiece_j_index)
                                     {
                                         CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, 
                                         enemyPiece_i_index, enemyPiece_j_index);
@@ -459,10 +501,12 @@ public class ErDucaPlayer : NetworkBehaviour
 
                             else if (enemyPiece.MyPlayerNetId == _myNetId)
                             {
-                                Debug.Log("Ho selezionato una mia pedina");
+                                //Debug.Log("Ho ri-selezionato una mia pedina");
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
+
+                                CmdHighlightTile(piece_i_index, piece_j_index, Ptype.Spawn, this.connectionToClient);
 
                                 if (_currentSelectedPiece.IsPhaseOne)
                                 {
@@ -476,9 +520,15 @@ public class ErDucaPlayer : NetworkBehaviour
                                 }
 
                                 //Show available moves
-                                foreach (Tuple<int, int> t in _currentAvailableMoves)
+                                /*
+                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 {
-                                    CmdHighlightTile(t.Item1, t.Item2, this.connectionToClient);
+                                    CmdHighlightTile(tuple.Item1, tuple.Item2, moveType, this.connectionToClient);
+                                }
+                                */
+                                foreach (var item in _currentAvailableMoves)
+                                {
+                                    CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
                                 }
                             }
                         }
@@ -487,13 +537,15 @@ public class ErDucaPlayer : NetworkBehaviour
                         else if (_currentSelectedPiece != null && objectHit.CompareTag("Tile"))
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
-                            Debug.Log("Ho selezionato un tile mentre ho una pedina selezionata");
+                            //Debug.Log("Ho selezionato un tile mentre ho una pedina selezionata");
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
-                            foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                            //foreach (Tuple<int, int> tuple in _currentAvailableMoves)
+                            foreach (var item in _currentAvailableMoves)
                             {
-                                if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
+                                //if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
+                                if (item.Key.Item1 == tile_i_index && item.Key.Item2 == tile_j_index)
                                 {
                                     CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
 
@@ -544,7 +596,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
                         if (objectHit.CompareTag("Tile"))
                         {
-                            Debug.Log("Ho selezionato un tile e devo spawnare la carta che ho pescato");
+                            //Debug.Log("Ho selezionato un tile e devo spawnare la carta che ho pescato");
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -554,7 +606,7 @@ public class ErDucaPlayer : NetworkBehaviour
                             {
                                 if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                                 {
-                                    Debug.Log("Pedina spawnata!");
+                                    //Debug.Log("Pedina spawnata!");
                                     _gameUIBehaviour.DrawnUnitPlaced();
 
                                     CmdSpawnPiece(_currentDrawnCard, objectHit.transform, tile_i_index, tile_j_index);
@@ -575,11 +627,11 @@ public class ErDucaPlayer : NetworkBehaviour
                 break;
 
             case BattleState.PWin:
-                Debug.Log("Hai vinto");
+                //Debug.Log("Hai vinto");
                 break;
 
             case BattleState.PLost:
-                Debug.Log("Hai perso");
+                //Debug.Log("Hai perso");
                 break;
 
             default:
@@ -591,10 +643,8 @@ public class ErDucaPlayer : NetworkBehaviour
     //TEMPORARY ANIMATION STUFF
     private IEnumerator BattleAnimationCoroutine(int netId, int attackedUnitIndex, int attackerUnitIndex)
     {
-        Debug.Log("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" + attackedUnitIndex + " " + attackerUnitIndex);
         switch (netId)
         {
-            
             case 1:
                 switch (attackerUnitIndex)
                 {
@@ -634,7 +684,6 @@ public class ErDucaPlayer : NetworkBehaviour
     
 
         yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
-        //yield return null;
     }
 
     public bool IsDeckEmpty()
@@ -658,9 +707,6 @@ public class ErDucaPlayer : NetworkBehaviour
             _hasDrawn = true;
             _currentDrawnCard = GetDrawnCard();
 
-            Debug.Log("Posizione del duca: " + _dukeI + " " + _dukeJ);
-            Debug.Log("Indice carta pescata: " + _currentDrawnCard);
-
             for (int i = -1; i < 2; i++)
             {
                 for (int j = -1; j < 2; j++)
@@ -668,19 +714,14 @@ public class ErDucaPlayer : NetworkBehaviour
                     int iSpawnPos = _dukeI + i;
                     int jSpawnPos = _dukeJ + j;
 
-                    //Bounds Checking
                     if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                     {
-                        //Checking i am not in the duke's position
-                        if (!(i == 0 && j == 0))
+                        if (!(Math.Abs(i) == Math.Abs(j)))
                         {
-                            Debug.Log("Controllo se posso spawnare in " + iSpawnPos + ":" + jSpawnPos + " ...");
-
                             if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                             {
                                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
-                                Debug.Log("Posso spawnare in " + (iSpawnPos) + " " + (jSpawnPos));
-                                CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
+                                CmdHighlightTile(iSpawnPos, jSpawnPos, Ptype.Spawn, this.connectionToClient);
                             }
                         }
                     }
@@ -702,15 +743,12 @@ public class ErDucaPlayer : NetworkBehaviour
                     int iSpawnPos = _dukeI + i;
                     int jSpawnPos = _dukeJ + j;
 
-                    //Bounds Checking
                     if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                     {
-                        //Checking i am not in the duke's position
-                        if (!(i == 0 && j == 0))
+                        if (!(Math.Abs(i) == Math.Abs(j)))
                         {
                             if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                             {
-                                Debug.Log("Possibile spawning in " + (iSpawnPos) + " " + (jSpawnPos));
                                 return true;
                             }
                         }
@@ -726,26 +764,24 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if (isServer)
         {
-            for (int i = 1; i < _gridSize - 1; i++)
+            for (int i = 0; i < _gridSize; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(5, i));
-                CmdHighlightTile(5, i, this.connectionToClient);
+                CmdHighlightTile(5, i, Ptype.Spawn, this.connectionToClient);
             }
         }
         else
         {
-            for (int i = 1; i < _gridSize - 1; i++)
+            for (int i = 0; i < _gridSize; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(0, i));
-                CmdHighlightTile(0, i, this.connectionToClient);
+                CmdHighlightTile(0, i, Ptype.Spawn, this.connectionToClient);
             }
         }
     }
 
     public void SpawnPikemen()
     {
-        Debug.Log("Posizione del duca: " + _dukeI + " " + _dukeJ);
-
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
@@ -753,23 +789,14 @@ public class ErDucaPlayer : NetworkBehaviour
                 int iSpawnPos = _dukeI + i;
                 int jSpawnPos = _dukeJ + j;
 
-                Debug.Log("Controllo in: " + iSpawnPos + " " + jSpawnPos);
-
-                //Bounds Checking
-                if (iSpawnPos<= 5 && jSpawnPos<= 5 && iSpawnPos>= 0 && jSpawnPos >= 0)
+                if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                 {
-                    Debug.Log("Check bound superato");
-
-                    //Checking i am not in the duke's position
-                    if (!(i == 0 && j == 0))
+                    if (!(Math.Abs(i) == Math.Abs(j)))
                     {
-                        Debug.Log("Controllo se posso spawnare in " + iSpawnPos + ":" + jSpawnPos + " ...");
-
                         if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                         {
                             _currentAvailableSpawnPositions.Add(new Tuple<int, int>(iSpawnPos, jSpawnPos));
-                            Debug.Log("Posso spawnare in " + (iSpawnPos) + " " + (jSpawnPos));
-                            CmdHighlightTile(iSpawnPos, jSpawnPos, this.connectionToClient);
+                            CmdHighlightTile(iSpawnPos, jSpawnPos, Ptype.Spawn, this.connectionToClient);
                         }
                     }
                 }

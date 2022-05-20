@@ -3,13 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+public enum Unit
+{
+    DUKE = 0,
+    ASSASSIN = 1,
+    BARBARIAN = 2,
+    PLAYER_BOWMAN = 3,
+    CHAMPION = 4,
+    DRAGOON = 5,
+    ENGINEER = 6,
+    FOOTMAN = 7,
+    KNIGHT = 8,
+    LONGBOWMAN= 9,
+    MAGE = 10,
+    PIKEMAN = 11,
+    PRIEST = 12,
+    SEER = 13,
+}
+
 public enum Ptype
 {
     Walk,
     Jump,
     Slide,
     Fly,
-    Strike
+    Strike,
+    Spawn
 }
 public struct Movement
 {
@@ -80,7 +99,6 @@ public abstract class ErDucaPiece : NetworkBehaviour
     }
 
     public abstract int UnitIndex();
-
     public void SwitchPhase()
     {
         _isPhaseOne = !_isPhaseOne;
