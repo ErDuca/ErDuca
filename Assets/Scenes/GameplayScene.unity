@@ -4351,7 +4351,7 @@ MonoBehaviour:
   gameOverScreenGO: {fileID: 1157615294}
   blueWinsScreenGO: {fileID: 1026012410}
   redWinsScreenGO: {fileID: 500987302}
-  isHost: 0
+  isHost: 1
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3
