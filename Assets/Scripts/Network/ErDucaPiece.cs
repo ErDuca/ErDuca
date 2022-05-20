@@ -99,7 +99,6 @@ public abstract class ErDucaPiece : NetworkBehaviour
     }
 
     public abstract int UnitIndex();
-
     public void SwitchPhase()
     {
         _isPhaseOne = !_isPhaseOne;

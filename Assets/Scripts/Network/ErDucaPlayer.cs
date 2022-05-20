@@ -410,6 +410,8 @@ public class ErDucaPlayer : NetworkBehaviour
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
 
+                                CmdHighlightTile(piece_i_index, piece_j_index, Ptype.Spawn, this.connectionToClient);
+
                                 if (_currentSelectedPiece.IsPhaseOne)
                                 {
                                     _currentAvailableMoves = _erDucaMoveManager.
@@ -503,6 +505,8 @@ public class ErDucaPlayer : NetworkBehaviour
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
+
+                                CmdHighlightTile(piece_i_index, piece_j_index, Ptype.Spawn, this.connectionToClient);
 
                                 if (_currentSelectedPiece.IsPhaseOne)
                                 {
@@ -712,7 +716,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
                     if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                     {
-                        if (!(i == 0 && j == 0))
+                        if (!(Math.Abs(i) == Math.Abs(j)))
                         {
                             if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                             {
@@ -741,7 +745,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
                     if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                     {
-                        if (!(i == 0 && j == 0))
+                        if (!(Math.Abs(i) == Math.Abs(j)))
                         {
                             if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                             {
@@ -760,7 +764,7 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if (isServer)
         {
-            for (int i = 1; i < _gridSize - 1; i++)
+            for (int i = 0; i < _gridSize; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(5, i));
                 CmdHighlightTile(5, i, Ptype.Spawn, this.connectionToClient);
@@ -768,7 +772,7 @@ public class ErDucaPlayer : NetworkBehaviour
         }
         else
         {
-            for (int i = 1; i < _gridSize - 1; i++)
+            for (int i = 0; i < _gridSize; i++)
             {
                 _currentAvailableSpawnPositions.Add(new Tuple<int, int>(0, i));
                 CmdHighlightTile(0, i, Ptype.Spawn, this.connectionToClient);
@@ -785,9 +789,9 @@ public class ErDucaPlayer : NetworkBehaviour
                 int iSpawnPos = _dukeI + i;
                 int jSpawnPos = _dukeJ + j;
 
-                if (iSpawnPos<= 5 && jSpawnPos<= 5 && iSpawnPos>= 0 && jSpawnPos >= 0)
+                if (iSpawnPos <= 5 && jSpawnPos <= 5 && iSpawnPos >= 0 && jSpawnPos >= 0)
                 {
-                    if (!(i == 0 && j == 0))
+                    if (!(Math.Abs(i) == Math.Abs(j)))
                     {
                         if (_erDucaNetworkManager.GetMatrixIdAt(iSpawnPos, jSpawnPos) == 0)
                         {

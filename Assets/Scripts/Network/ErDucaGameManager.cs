@@ -83,17 +83,6 @@ public class ErDucaGameManager : NetworkBehaviour
 
             int invertedIdForAnimation = localPlayerId == 1 ? 2 : 1;
 
-            /*
-            if (invertedIdForAnimation == 1)
-            {
-                invertedIdForAnimation = 2;
-            }
-            else if (invertedIdForAnimation == 2)
-            {
-                invertedIdForAnimation = 1;
-            }
-            */
-
             switch (currentState)
             {
                 /*
