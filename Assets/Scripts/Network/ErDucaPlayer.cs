@@ -29,7 +29,8 @@ public class ErDucaPlayer : NetworkBehaviour
     private int _dukeJ = 0;
 
     private static int _numberOfUnits = 14;
-    private int _numberOfStartingPikeman = 2;
+    private int _numberOfStartingUnits = 2;
+    private Unit _startingUnitType = Unit.FOOTMAN;
     private int _gridSize;
     private List<int> _cards = new List<int>();
 
@@ -228,15 +229,15 @@ public class ErDucaPlayer : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-
+        
         _canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
-       
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
         _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
         _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
+        
 
         //Rotate the Opponent's camera
         if(_myNetId > 1)
@@ -255,7 +256,6 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
-
     }
     #endregion
 
@@ -271,7 +271,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
-        Debug.Log("Sono in fase Duke" + isLocalPlayer + " "+ _erDucaGameManager.IsOurTurn + " "+ Input.GetMouseButtonDown(0)+ " " + _gameUIBehaviour.changingTurn);
+        //Debug.Log("Sono in fase Duke" + isLocalPlayer + " "+ _erDucaGameManager.IsOurTurn + " "+ Input.GetMouseButtonDown(0)+ " " + _gameUIBehaviour.changingTurn);
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
@@ -303,7 +303,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                CmdSpawnPiece(0 /*duke unit index*/, objectHit.transform, tile_i_index, tile_j_index);
+                                CmdSpawnPiece((int)Unit.DUKE, objectHit.transform, tile_i_index, tile_j_index);
                                 
                                 _dukeI = tile_i_index;
                                 _dukeJ = tile_j_index;
@@ -336,11 +336,11 @@ public class ErDucaPlayer : NetworkBehaviour
                         {
                             if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                             {
-                                CmdSpawnPiece(7 /*Footman unit index*/, objectHit.transform, tile_i_index, tile_j_index);
+                                CmdSpawnPiece((int)_startingUnitType, objectHit.transform, tile_i_index, tile_j_index);
 
-                                _numberOfStartingPikeman--;
+                                _numberOfStartingUnits--;
                                 
-                                if (_numberOfStartingPikeman == 0)
+                                if (_numberOfStartingUnits == 0)
                                 {
                                     _currentAvailableSpawnPositions.Clear();
                                     CmdStartNewTurn();
