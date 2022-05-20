@@ -256,7 +256,7 @@ AnimatorStateMachine:
     m_Position: {x: 3670, y: -390, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3620525739562773086}
-    m_Position: {x: -760, y: 120, z: 0}
+    m_Position: {x: -810, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4899394143850496209}
     m_Position: {x: -280, y: -170, z: 0}
@@ -298,9 +298,9 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -1040, y: 190, z: 0}
-  m_EntryPosition: {x: -1040, y: 110, z: 0}
-  m_ExitPosition: {x: -1040, y: 150, z: 0}
+  m_AnyStatePosition: {x: -1260, y: -60, z: 0}
+  m_EntryPosition: {x: -1260, y: -140, z: 0}
+  m_ExitPosition: {x: -1260, y: -100, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 3620525739562773086}
 --- !u!1101 &-8045661173208196401
@@ -1401,7 +1401,7 @@ AnimatorController:
   - m_Name: playerColor
     m_Type: 3
     m_DefaultFloat: 0
-    m_DefaultInt: 1
+    m_DefaultInt: 2
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: startingPlayer

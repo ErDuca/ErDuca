@@ -17,6 +17,9 @@ public class ErDucaNetworkManager : NetworkManager
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
 
+    //Coin-flip result
+    private int coinflipResult;
+
     //Players Connections
     private NetworkConnectionToClient[] playersConnections = new NetworkConnectionToClient[2];
 
@@ -218,10 +221,9 @@ public class ErDucaNetworkManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, player);
         ErDucaPlayer erDucaPlayer = player.GetComponent<ErDucaPlayer>();
         
-        if (numPlayers == 2)
+        if (numPlayers == 2) //Blue player - Remote Client
         {
-            erDucaPlayer.gameObject.name = "OpponentPlayer";
-            erDucaPlayer.MyNetId = 2;// player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer.MyNetId = 2;
             erDucaPlayer.MyColor = p2Color;
 
             playersConnections[1] = conn;
@@ -229,17 +231,20 @@ public class ErDucaNetworkManager : NetworkManager
             InitializeTilesGrid();
 
             //Starting Match
-            int coinFlip = UnityEngine.Random.Range(0, 2);
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
-            gameManager.RpcBeginMatch(playersConnections[coinFlip]);
+            gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinflipResult + 1);
+
+            gameManager.RpcBeginMatch(playersConnections[coinflipResult]);
         }
-        else
+        else //Red Player - Host
         {
-            erDucaPlayer.gameObject.name = "HostPlayer";
-            erDucaPlayer.MyNetId = 1;//player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer.MyNetId = 1;
             erDucaPlayer.MyColor = p1Color;
 
             playersConnections[0] = conn;
+
+            ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
+            gameManager.RpcSetAnimatorValues(playersConnections[0], 1, coinflipResult + 1);
         }
     }
 
@@ -313,7 +318,10 @@ public class ErDucaNetworkManager : NetworkManager
     /// This is invoked when a server is started - including when a host is started.
     /// <para>StartServer has multiple signatures, but they all cause this hook to be called.</para>
     /// </summary>
-    public override void OnStartServer() { }
+    public override void OnStartServer() 
+    {
+        coinflipResult = UnityEngine.Random.Range(0, 2);
+    }
 
     /// <summary>
     /// This is invoked when the client is started.

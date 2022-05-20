@@ -272,7 +272,8 @@ public class GameUIBehaviour : MonoBehaviour
                 break;
 
             //Remote Client - Blue
-            case 2: PlayersTurnStart();
+            case 2: 
+                PlayersTurnStart();
                 break;
 
             default:

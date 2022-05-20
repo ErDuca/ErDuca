@@ -101,9 +101,9 @@ public class ErDucaPlayer : NetworkBehaviour
 
     #region Commands and RPCs
     [Command]
-    public void CmdWinMatch()
+    public void CmdWinMatch(uint winnerId)
     {
-        _erDucaGameManager.RpcWinMatch();
+        _erDucaGameManager.RpcWinMatch(winnerId);
     }
 
     [Command]
@@ -237,9 +237,6 @@ public class ErDucaPlayer : NetworkBehaviour
         _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
 
-        _drawButton = GameObject.FindGameObjectWithTag("DrawButton").GetComponent<Button>();
-        _drawButton.onClick.AddListener(DrawCard);
-
         //Rotate the Opponent's camera
         if(_myNetId > 1)
         {
@@ -257,7 +254,6 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
-        
     }
     #endregion
 
@@ -432,7 +428,7 @@ public class ErDucaPlayer : NetworkBehaviour
                                         //Ho mangiato il duca nemico!
                                         if(enemyPieceUnitIndex == 0)
                                         {
-                                            CmdWinMatch();
+                                            CmdWinMatch(_myNetId);
                                         }
                                         else
                                         {
@@ -542,6 +538,8 @@ public class ErDucaPlayer : NetworkBehaviour
                                 if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                                 {
                                     Debug.Log("Pedina spawnata!");
+                                    _gameUIBehaviour.DrawnUnitPlaced();
+
                                     CmdSpawnPiece(_currentDrawnCard, objectHit.transform, tile_i_index, tile_j_index);
 
                                     _currentDrawnCard = 0;
@@ -602,7 +600,7 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            if (areDukeNearTilesFree())
+            if (AreDukeNearTilesFree())
             {
                 _hasDrawn = true;
                 _currentDrawnCard = GetDrawnCard();
@@ -639,7 +637,12 @@ public class ErDucaPlayer : NetworkBehaviour
         }
     }
 
-    public bool areDukeNearTilesFree()
+    public bool IsDeckEmpty()
+    {
+        return _cards.Count == 0;
+    }
+
+    public bool AreDukeNearTilesFree()
     {
         if (isLocalPlayer)
         {
