@@ -24,14 +24,16 @@ public struct SoundAudioClip
 public class SoundManager : MonoBehaviour
 {
     public SoundAudioClip[] soundAudioClipArray;
+    public AudioSource sfxAudioSource;
+
+
 
     //Mettere volume da playerprefs
     public void PlaySound(Sound sound) {
         if (CanPlaySound(sound)) {
             //Valutare se utilizzare uno o multipli audiosource
-            GameObject soundGameObject = new GameObject("Sound");
-            AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
-            audioSource.PlayOneShot(GetAudioClip(sound));
+            
+            sfxAudioSource.PlayOneShot(GetAudioClip(sound));
         }
     }
 
