@@ -589,21 +589,23 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     //TEMPORARY ANIMATION STUFF
-    private IEnumerator BattleAnimationCoroutine(int netId, int blueUnitIndex, int redUnitIndex)
+    private IEnumerator BattleAnimationCoroutine(int netId, int attackedUnitIndex, int attackerUnitIndex)
     {
+        Debug.Log("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" + attackedUnitIndex + " " + attackerUnitIndex);
         switch (netId)
         {
+            
             case 1:
-                switch (redUnitIndex)
+                switch (attackerUnitIndex)
                 {
                     //Ranged Red attacks Blue
-                    case 3: case 6: case 9: case 10: case 12:
-                        CmdPlayAnimation(14, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
+                    case 3: case 6: case 9: case 10: case 12: case 13:
+                        CmdPlayAnimation(14, (attackedUnitIndex * 2), (attackerUnitIndex * 2) + 1);
                         break;
 
                     //Melee Red attacks Blue
-                    case 0: case 1: case 2: case 4: case 5: case 7: case 8: case 11: case 13:
-                        CmdPlayAnimation(2, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
+                    case 0: case 1: case 2: case 4: case 5: case 7: case 8: case 11:
+                        CmdPlayAnimation(2, (attackedUnitIndex * 2), (attackerUnitIndex * 2) + 1);
                         break;
 
                     default:
@@ -612,16 +614,16 @@ public class ErDucaPlayer : NetworkBehaviour
                 break;
 
             case 2:
-                switch (blueUnitIndex)
+                switch (attackerUnitIndex)
                 {
                     //Ranged Blue attacks Red
-                    case 3: case 6: case 9: case 10: case 12:
-                        CmdPlayAnimation(13, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
+                    case 3: case 6: case 9: case 10: case 12: case 13:
+                        CmdPlayAnimation(13, (attackerUnitIndex * 2), (attackedUnitIndex * 2) + 1);
                         break;
 
                     //Melee Blue attacks Red
-                    case 0: case 1: case 2: case 4: case 5: case 7: case 8: case 11: case 13:
-                        CmdPlayAnimation(1, (blueUnitIndex * 2), (redUnitIndex * 2) + 1);
+                    case 0: case 1: case 2: case 4: case 5: case 7: case 8: case 11:
+                        CmdPlayAnimation(1, (attackerUnitIndex * 2), (attackedUnitIndex * 2) + 1);
                         break;
 
                     default:
