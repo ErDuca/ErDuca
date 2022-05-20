@@ -131,7 +131,7 @@ public class GameUIBehaviour : MonoBehaviour
     private IEnumerator GameStartAnimationCoroutine()
     {
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
-        if (gameAnimator.GetInteger("startingPlayer") == 0)
+        if (gameAnimator.GetInteger("startingPlayer") == 2)
         {
             PlayersTurnStart();
         }

@@ -147,10 +147,10 @@ public class ErDucaGameManager : NetworkBehaviour
         currentState = BattleState.PDuke;
         ErDucaPlayer.LocalPlayer.SpawnDuke();
     }
+
     [TargetRpc]
     public void RpcSetAnimatorValues(NetworkConnection target, int playerColor, int coinFlipResult)
     {
-        Debug.Log("Sto assegnando i valori");
         ErDucaPlayer.LocalPlayer.GameUIBehavior.SetPlayerInitialValues(playerColor, coinFlipResult);
     }
 }
