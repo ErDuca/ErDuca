@@ -9,7 +9,7 @@ public class ErDucaMoveManager : MonoBehaviour
 {
     private bool invertIndex = false;
 
-    public List<Tuple<int, int>> GetAvailableMoves(uint netId, int i, int j, List<Movement> pieceRelativeMoves)
+    public List<Tuple<int, int>> GetAvailableMoves(int netId, int i, int j, List<Movement> pieceRelativeMoves)
     {
         //"Host situation" (the board is seen upside down)
         if (netId == 1)
@@ -81,7 +81,7 @@ public class ErDucaMoveManager : MonoBehaviour
     }
 
     //BROKEN
-    private Tuple<int, int> GetWalkMoves(uint netId, int i, int j, int xOffset, int yOffset)
+    private Tuple<int, int> GetWalkMoves(int netId, int i, int j, int xOffset, int yOffset)
     {
         if (invertIndex)
         {
@@ -102,7 +102,7 @@ public class ErDucaMoveManager : MonoBehaviour
         return tupleToRet;
     }
 
-    private Tuple<int, int> GetJumpMoves(uint netId, int i, int j, int xOffset, int yOffset)
+    private Tuple<int, int> GetJumpMoves(int netId, int i, int j, int xOffset, int yOffset)
     {
         if (invertIndex)
         {
@@ -123,7 +123,7 @@ public class ErDucaMoveManager : MonoBehaviour
         return tupleToRet;
     }
 
-    private Tuple<int, int> GetSlideMoves(uint netId, int i, int j, int xOffset, int yOffset, ref bool hasFoundEnemy,
+    private Tuple<int, int> GetSlideMoves(int netId, int i, int j, int xOffset, int yOffset, ref bool hasFoundEnemy,
         ref int isl, ref int jsl)
     {
         if (invertIndex)

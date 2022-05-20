@@ -13,17 +13,12 @@ public class ErDucaPlayer : NetworkBehaviour
     private static ErDucaPlayer _localPlayer;
     [SerializeField]
     private static ErDucaGameManager _erDucaGameManager;
-    /// <summary>
-    /// ////////
-    /// </summary>
-    [SerializeField]
-    private static GameUIBehaviour _gameUIBehaviour;
 
     //References
     private Camera _camera;
     private ErDucaNetworkManager _erDucaNetworkManager;
     private ErDucaMoveManager _erDucaMoveManager;
-    //private GameUIBehaviour _gameUIBehaviour;
+    private GameUIBehaviour _gameUIBehaviour;
     private BattleAnimationsScript _battleAnimationScript;
     private Animator _canvasAnimator;
 
@@ -50,7 +45,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     //Sync var elements
     [SerializeField]
-    [SyncVar] private uint _myNetId;
+    [SyncVar] private int _myNetId;
     [SerializeField]
     [SyncVar] private Color _myColor;
     [SerializeField]
@@ -65,7 +60,7 @@ public class ErDucaPlayer : NetworkBehaviour
             _hasDrawn = value;
         }
     }
-    public uint MyNetId
+    public int MyNetId
     {
         get => _myNetId;
         set
@@ -105,7 +100,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     #region Commands and RPCs
     [Command]
-    public void CmdWinMatch(uint winnerId)
+    public void CmdWinMatch(int winnerId)
     {
         _erDucaGameManager.RpcWinMatch(winnerId);
     }
@@ -183,7 +178,7 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcOnSpawnPiece(ErDucaPiece edp, uint netId)
+    public void RpcOnSpawnPiece(ErDucaPiece edp, int netId)
     {
         edp.GetComponent<SpriteRenderer>().color = _myColor;
 
@@ -223,7 +218,7 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcUpdateLocalNetIdMatrix(int i, int j, uint _myNetId)
+    public void RpcUpdateLocalNetIdMatrix(int i, int j, int _myNetId)
     {
         ErDucaNetworkManager.singleton.SetMatrixIdAt(_myNetId, i, j);
     }
@@ -235,15 +230,13 @@ public class ErDucaPlayer : NetworkBehaviour
         base.OnStartClient();
 
         _canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
-        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
        
         _camera = Camera.main;
         _erDucaNetworkManager = ErDucaNetworkManager.singleton;
         _erDucaMoveManager = ErDucaNetworkManager.singleton.GetComponent<ErDucaMoveManager>();
-        //_gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
+        _gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
         _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
-        
 
         //Rotate the Opponent's camera
         if(_myNetId > 1)
@@ -262,8 +255,6 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         _localPlayer = this;
-        //_canvasAnimator = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Animator>();
-        //_gameUIBehaviour = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<GameUIBehaviour>();
 
     }
     #endregion
@@ -439,7 +430,7 @@ public class ErDucaPlayer : NetworkBehaviour
                                         yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == xTarget &&
                                         _currentSelectedPiece.transform.position.z == zTarget);
 
-                                        yield return StartCoroutine(BattleAnimationCoroutine((int)_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
+                                        yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
                                         //yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle")); 
                                         //yield return new WaitForSeconds(.05f);
 

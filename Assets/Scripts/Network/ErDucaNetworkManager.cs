@@ -34,13 +34,13 @@ public class ErDucaNetworkManager : NetworkManager
     private Color p2Color = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
     
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the move-algorithms
-    private uint[,] _netIdMatrix = new uint[6, 6];
+    private int[,] _netIdMatrix = new int[6, 6];
 
-    public uint GetMatrixIdAt(int i, int j)
+    public int GetMatrixIdAt(int i, int j)
     {
         return _netIdMatrix[i,j];
     }
-    public void SetMatrixIdAt(uint value, int i, int j)
+    public void SetMatrixIdAt(int value, int i, int j)
     {
         _netIdMatrix[i, j] = value;
     }
@@ -222,8 +222,7 @@ public class ErDucaNetworkManager : NetworkManager
         
         if (numPlayers == 2)
         {
-            erDucaPlayer.gameObject.name = "OpponentPlayer";
-            erDucaPlayer.MyNetId = 2;// player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer.MyNetId = 2;
             erDucaPlayer.MyColor = p2Color;
 
             playersConnections[1] = conn;
@@ -231,15 +230,13 @@ public class ErDucaNetworkManager : NetworkManager
             InitializeTilesGrid();
 
             //Starting Match - Coin Flip
-            //int coinFlip = UnityEngine.Random.Range(0, 2);
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1);
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
         }
         else
         {
-            erDucaPlayer.gameObject.name = "HostPlayer";
-            erDucaPlayer.MyNetId = 1;//player.GetComponent<NetworkIdentity>().netId;
+            erDucaPlayer.MyNetId = 1;
             erDucaPlayer.MyColor = p1Color;
 
             playersConnections[0] = conn;

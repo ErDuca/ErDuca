@@ -100,14 +100,11 @@ public class ErDucaGameManager : NetworkBehaviour
                 */
 
                 case BattleState.PPikemen:
-                    //currentState = BattleState.PTurn;
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
-                    //ErDucaPlayer.LocalPlayer.GameUIBehavior.IconaPensante
                     break;
                     
                 case BattleState.PTurn:
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
-                    //ErDucaPlayer.LocalPlayer.GameUIBehavior.IconaPensante
                     break;
                     
             }
@@ -115,7 +112,7 @@ public class ErDucaGameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcWinMatch(uint winnerId)
+    public void RpcWinMatch(int winnerId)
     {
         isOurTurn = !isOurTurn;
 
@@ -123,12 +120,12 @@ public class ErDucaGameManager : NetworkBehaviour
         if (isOurTurn)
         {
             currentState = BattleState.PLost;
-            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen((int)winnerId);
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen(winnerId);
         }
         else
         {
             currentState = BattleState.PWin;
-            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen((int)winnerId);
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen(winnerId);
         }
     }
 
@@ -143,7 +140,6 @@ public class ErDucaGameManager : NetworkBehaviour
     [TargetRpc]
     public void RpcBeginMatch(NetworkConnection target)
     {
-        Debug.Log("Sto beginnando match");
         isOurTurn = !isOurTurn;
         currentState = BattleState.PDuke;
         ErDucaPlayer.LocalPlayer.SpawnDuke();
@@ -151,7 +147,6 @@ public class ErDucaGameManager : NetworkBehaviour
     [TargetRpc]
     public void RpcSetAnimatorValues(NetworkConnection target, int playerColor, int coinFlipResult)
     {
-        Debug.Log("Sto assegnando i valori");
         ErDucaPlayer.LocalPlayer.GameUIBehavior.SetPlayerInitialValues(playerColor, coinFlipResult);
     }
 }

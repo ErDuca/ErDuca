@@ -34,7 +34,7 @@ public abstract class ErDucaPiece : NetworkBehaviour
     [SerializeField]
     [SyncVar] private int _j;
     [SerializeField]
-    [SyncVar] private uint _myPlayerNetId;
+    [SyncVar] private int _myPlayerNetId;
     [SerializeField]
     [SyncVar] private bool _isPhaseOne = true;
 
@@ -62,7 +62,7 @@ public abstract class ErDucaPiece : NetworkBehaviour
             _j = value;
         }
     }
-    public uint MyPlayerNetId
+    public int MyPlayerNetId
     {
         get => _myPlayerNetId;
         set
