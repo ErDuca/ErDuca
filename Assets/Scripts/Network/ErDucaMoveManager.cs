@@ -22,18 +22,11 @@ public class ErDucaMoveManager : MonoBehaviour
 
         foreach (Movement m in pieceRelativeMoves)
         {
+            Debug.Log("Analizzo una mossa di tipo " + m._mType);
             switch (m._mType)
             {
-                //BROKEN! DA MODIFICARE; IO VADO Lì SE POSSO ANDARCI!
-                //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Walk:
-                    /*
                     temp = GetWalkMoves(netId, i, j, m._offsetX, m._offsetY);
-                    if (temp != null)
-                        availableMoves.Add(temp);
-                    break;
-                    */
-                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
                         availableMoves.Add(temp, Ptype.Walk);
                     break;
@@ -65,9 +58,9 @@ public class ErDucaMoveManager : MonoBehaviour
                         availableMoves.Add(temp, Ptype.Fly);
                     break;
 
-                //TEMPORARY LIKE JUMP (DEBUGGING)!
+                //(DEBUGGING)!
                 case Ptype.Strike:
-                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
+                    temp = GetStrikeMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
                         availableMoves.Add(temp, Ptype.Strike);
                     break;
@@ -80,7 +73,7 @@ public class ErDucaMoveManager : MonoBehaviour
         return availableMoves;
     }
 
-    //BROKEN
+    //APPARENTLY WORKING
     private Tuple<int, int> GetWalkMoves(int netId, int i, int j, int xOffset, int yOffset)
     {
         if (invertIndex)
@@ -89,17 +82,46 @@ public class ErDucaMoveManager : MonoBehaviour
             yOffset = -yOffset;
         }
 
+        int absoluteDirX = Math.Sign(xOffset);
+        int absoluteDirY = Math.Sign(yOffset);
+
+        Debug.Log("Direzione X = " + absoluteDirX);
+        Debug.Log("Direzione Y = " + absoluteDirY);
+
         //Bounds checking
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
+        {
+            Debug.Log("Out of Bounds");
             return null;
+        }
 
         //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
+        {
+            Debug.Log("Nella mia destinazione finale c'è una mia pedina");
             return null;
+        }
 
-        Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
+        for(int x = i + absoluteDirX, y = j + absoluteDirY; x <= 5 && x >= 0 && y <= 5 && y >= 0; x += absoluteDirX, y += absoluteDirY)
+        {
+                Debug.Log("Controllo se posso muovermi in: " + x + " " + y);
 
-        return tupleToRet;
+                if ((x == i + xOffset && y == j + yOffset))
+                {
+                    Debug.Log("Sono dovevo volevo essere, aggiungo la mossa");
+                    Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
+
+                    return tupleToRet;
+                }
+
+                if (ErDucaNetworkManager.singleton.GetMatrixIdAt(x, y) != 0)
+                {
+                    Debug.Log("In " + x + " " + y + " c'è qualcuno, ritorno Null");
+                    return null;
+                }
+        }
+
+        return null;
     }
 
     private Tuple<int, int> GetJumpMoves(int netId, int i, int j, int xOffset, int yOffset)
@@ -153,5 +175,32 @@ public class ErDucaMoveManager : MonoBehaviour
         Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
 
         return tupleToRet;
+    }
+
+    private Tuple<int, int> GetStrikeMoves(int netId, int i, int j, int xOffset, int yOffset)
+    {
+        if (invertIndex)
+        {
+            xOffset = -xOffset;
+            yOffset = -yOffset;
+        }
+
+        //Bounds checking
+        if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
+            return null;
+
+        //Checking if there's a piece of mine, where i want to shoot/strike
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
+            return null;
+
+        //Checking if there's an enemy piece, where i want to shoot/strike
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != 0)
+        {
+            Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
+
+            return tupleToRet;
+        }
+
+        return null;
     }
 }

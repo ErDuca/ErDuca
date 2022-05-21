@@ -182,7 +182,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 break;
 
             default:
-                tile.SetMaterialColor(Color.red);
                 break;
         }
     }
@@ -247,6 +246,13 @@ public class ErDucaPlayer : NetworkBehaviour
         selectedPieceScript.GetComponent<ErDucaPiece>().J = j;
 
         RpcUpdateLocalNetIdMatrix(i, j, _myNetId);
+    }
+
+    [Command]
+    public void CmdStrikePiece(ErDucaPiece enemyPiece)
+    {
+        RpcUpdateLocalNetIdMatrix(enemyPiece.I, enemyPiece.J, 0);
+        NetworkServer.Destroy(enemyPiece.gameObject);
     }
 
     [ClientRpc]
@@ -464,14 +470,20 @@ public class ErDucaPlayer : NetworkBehaviour
                                     //if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
                                     if(item.Key.Item1 == enemyPiece_i_index && item.Key.Item2 == enemyPiece_j_index)
                                     {
-                                        CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece, 
-                                        enemyPiece_i_index, enemyPiece_j_index);
-
                                         //ATTENZIONE CASO STRIKE!
+                                        if (item.Value.Equals(Ptype.Strike))
+                                        {
+                                            CmdStrikePiece(enemyPiece);
+                                        }
+                                        else
+                                        {
+                                            CmdEatPiece(_currentSelectedPiece.gameObject, objectHit.transform, enemyPiece,
+                                            enemyPiece_i_index, enemyPiece_j_index);
 
-                                        yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == xTarget &&
-                                        _currentSelectedPiece.transform.position.z == zTarget);
-
+                                            yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == xTarget &&
+                                            _currentSelectedPiece.transform.position.z == zTarget);
+                                        }
+                                        
                                         yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
                                         //yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle")); 
                                         //yield return new WaitForSeconds(.05f);
@@ -530,6 +542,9 @@ public class ErDucaPlayer : NetworkBehaviour
                                 {
                                     CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
                                 }
+
+                                _currentSelectedPiece = null;
+                                _currentAvailableMoves.Clear();
                             }
                         }
 
@@ -682,7 +697,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 break;
         }
     
-
         yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
     }
 
