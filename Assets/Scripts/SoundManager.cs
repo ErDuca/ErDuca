@@ -30,11 +30,12 @@ public class SoundManager : MonoBehaviour
 
     //Mettere volume da playerprefs
     public void PlaySound(Sound sound) {
-        if (CanPlaySound(sound)) {
-            //Valutare se utilizzare uno o multipli audiosource
-            
-            sfxAudioSource.PlayOneShot(GetAudioClip(sound));
-        }
+
+        GameObject audioGO = new GameObject("Sound");
+        AudioSource audioSource =  audioGO.AddComponent<AudioSource>();
+        audioSource.PlayOneShot(GetAudioClip(sound));
+        StartCoroutine(waitUntilSoundEnds(audioGO, audioSource));            
+
     }
 
     private bool CanPlaySound(Sound sound) {
@@ -54,5 +55,11 @@ public class SoundManager : MonoBehaviour
 
         Debug.LogError("Sound " + sound + " not found!");
         return null;
+    }
+
+    private IEnumerator waitUntilSoundEnds(GameObject audio, AudioSource audioSource) {
+
+        yield return new WaitUntil(() => !audioSource.isPlaying);
+        Destroy(audio);
     }
 }
