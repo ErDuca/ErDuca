@@ -62,21 +62,21 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool isHost;
 
+    public bool IsHost
+    {
+        get => isHost;
+        set
+        {
+            isHost = value;
+        }
+    }
+
     private void Start()
     {
         transitionAnimator.SetTrigger("sceneStart");
 
         //HOST TESTING
-        if(isHost)
-        {
-            gameAnimator.SetBool("hostScreen", true);
-            hostMenuGO.SetActive(true);            
-        }
-        else
-        {
-            gameAnimator.SetBool("hostScreen", false);
-            GameStart();
-        }
+        
 
         musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
@@ -141,10 +141,26 @@ public class GameUIBehaviour : MonoBehaviour
         }        
     }
 
-    public void SetPlayerInitialValues(int colorPlayerId, int startingPlayerId)
+    public void SetPlayerInitialValues(int colorPlayerId, int startingPlayerId, bool amIHost)
     {
         gameAnimator.SetInteger("playerColor", colorPlayerId);
         gameAnimator.SetInteger("startingPlayer", startingPlayerId);
+        SetHost(amIHost);
+    }
+
+    public void SetHost(bool amIHost)
+    {
+        if (amIHost)
+        {
+            hostMenuGO.SetActive(true);
+            gameAnimator.SetBool("hostScreen", true);
+
+        }
+        else
+        {
+            gameAnimator.SetBool("hostScreen", false);
+            GameStart();
+        }
     }
 
     #endregion

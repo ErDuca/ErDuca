@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,11 @@ public class ErDucaNetworkManager : NetworkManager
     //Server-side stuff
     [SerializeField]
     public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
+
+    /*
+    [SerializeField]
+    public List<ErDucaPiece> spawnedPieces = new List<ErDucaPiece>();
+    */
 
     //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
@@ -231,8 +237,11 @@ public class ErDucaNetworkManager : NetworkManager
 
             //Starting Match - Coin Flip
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
-            gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1);
+            gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1, false);
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
+
+            //Host player
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.CloseHostMenu();
         }
         else
         {
@@ -241,7 +250,7 @@ public class ErDucaNetworkManager : NetworkManager
 
             playersConnections[0] = conn;
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
-            gameManager.RpcSetAnimatorValues(playersConnections[0], 1, coinFlip + 1);
+            gameManager.RpcSetAnimatorValues(playersConnections[0], 1, coinFlip + 1, true);
         }
     }
 

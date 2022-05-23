@@ -2595,6 +2595,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: ca2d4abd545c0794883607f089338fa3, type: 3}
   - sound: 1
     audioClip: {fileID: 8300000, guid: 2baeb837f342c014f9bc87f8ca0751ac, type: 3}
+  sfxAudioSource: {fileID: 0}
 --- !u!1 &639626428 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1261190226786751665, guid: ce6d88a33f82d7145a3f332c413fd830, type: 3}
@@ -4336,7 +4337,7 @@ MonoBehaviour:
   timeSliderImageLeft: {fileID: 889297408}
   timeSliderImageRight: {fileID: 2118326503}
   changingTurn: 0
-  turnTime: 65
+  turnTime: 15
   pauseMenu: {fileID: 1698679723}
   eventSystem: {fileID: 1915030113}
   musicSliderGO: {fileID: 534154753}
@@ -4482,6 +4483,7 @@ MonoBehaviour:
   soundAudioClipArray:
   - sound: 5
     audioClip: {fileID: 8300000, guid: 479486de86385f34db8abb1552a60af5, type: 3}
+  sfxAudioSource: {fileID: 0}
 --- !u!1 &928692292
 GameObject:
   m_ObjectHideFlags: 0

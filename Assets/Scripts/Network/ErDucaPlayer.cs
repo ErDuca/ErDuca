@@ -41,8 +41,6 @@ public class ErDucaPlayer : NetworkBehaviour
     private List<Tuple<int, int>> _currentAvailableSpawnPositions = new List<Tuple<int, int>>();
     [SerializeField]
     private ErDucaPiece _currentSelectedPiece;
-    /*[SerializeField]
-    private List<Tuple<int, int>> _currentAvailableMoves = new List<Tuple<int, int>>();*/
     [SerializeField]
     private Dictionary<Tuple<int, int>, Ptype> _currentAvailableMoves = new Dictionary<Tuple<int, int>, Ptype>();
 
@@ -101,7 +99,48 @@ public class ErDucaPlayer : NetworkBehaviour
     }
     #endregion
 
+
     #region Commands and RPCs
+    /*
+    [Command]
+    public void CmdMoveRandomPiece(int playerId)
+    {
+        foreach(ErDucaPiece e in _erDucaNetworkManager.spawnedPieces)
+        {
+            if(e.MyPlayerNetId == playerId)
+            {
+                ErDucaTile targetTile;
+                Transform transformExample = _erDucaNetworkManager.transform;
+
+                if (e.IsPhaseOne)
+                {
+                    foreach(KeyValuePair<Tuple<int,int>,Ptype> t in _erDucaMoveManager.GetAvailableMoves(playerId, e.I, e.J, _currentSelectedPiece.P1MOVARR))
+                    {
+                        if(_erDucaNetworkManager.GetMatrixIdAt(t.Key.Item1, t.Key.Item2) == 0)
+                        {
+                            //_erDucaNetworkManager._tiles.TryGetValue(new Tuple<int, int>(t.Key.Item1, t.Key.Item2), out targetTile);
+                            CmdMovePiece(e.gameObject, transformExample, e.I, e.J);
+                            return;
+                        } 
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<Tuple<int, int>, Ptype> t in _erDucaMoveManager.GetAvailableMoves(playerId, e.I, e.J, _currentSelectedPiece.P2MOVARR))
+                    {
+                        if (_erDucaNetworkManager.GetMatrixIdAt(t.Key.Item1, t.Key.Item2) == 0)
+                        {
+                            _erDucaNetworkManager._tiles.TryGetValue(new Tuple<int, int>(t.Key.Item1, t.Key.Item2), out targetTile);
+                            CmdMovePiece(e.gameObject, transformExample, e.I, e.J);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    */
+
     [Command]
     public void CmdWinMatch(int winnerId)
     {
@@ -203,6 +242,8 @@ public class ErDucaPlayer : NetworkBehaviour
         piece.GetComponent<ErDucaPiece>().MyPlayerNetId = _myNetId;
         piece.GetComponent<ErDucaPiece>().I = i;
         piece.GetComponent<ErDucaPiece>().J = j;
+
+        //_erDucaNetworkManager.spawnedPieces.Add(piece.GetComponent<ErDucaPiece>());
 
         RpcUpdateLocalNetIdMatrix(i, j, _myNetId);
         RpcOnSpawnPiece(piece.GetComponent<ErDucaPiece>(), _myNetId);
@@ -308,7 +349,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
-        //Debug.Log("Sono in fase Duke" + isLocalPlayer + " "+ _erDucaGameManager.IsOurTurn + " "+ Input.GetMouseButtonDown(0)+ " " + _gameUIBehaviour.changingTurn);
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
@@ -531,13 +571,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                         GetAvailableMoves(_myNetId, piece_i_index, piece_j_index, _currentSelectedPiece.P2MOVARR);
                                 }
 
-                                //Show available moves
-                                /*
-                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
-                                {
-                                    CmdHighlightTile(tuple.Item1, tuple.Item2, moveType, this.connectionToClient);
-                                }
-                                */
                                 foreach (var item in _currentAvailableMoves)
                                 {
                                     CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
