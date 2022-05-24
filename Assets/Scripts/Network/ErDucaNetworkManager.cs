@@ -12,11 +12,6 @@ public class ErDucaNetworkManager : NetworkManager
     [SerializeField]
     public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
 
-    /*
-    [SerializeField]
-    public List<ErDucaPiece> spawnedPieces = new List<ErDucaPiece>();
-    */
-
     //Parameters for grid-instantiation
     private int _gridRowsNumber = 6;
     private int _boardSize = 480;
@@ -231,13 +226,13 @@ public class ErDucaNetworkManager : NetworkManager
             erDucaPlayer.MyNetId = 2;
             erDucaPlayer.MyColor = p2Color;
 
-            playersConnections[1] = conn;
-
             InitializeTilesGrid();
 
             //Starting Match - Coin Flip
+            playersConnections[1] = conn;
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1, false);
+
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
 
             //Host player

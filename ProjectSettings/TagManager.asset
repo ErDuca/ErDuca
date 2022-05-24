@@ -9,6 +9,7 @@ TagManager:
   - DrawButton
   - MainCanvas
   - GameAnims
+  - UIButton
   layers:
   - Default
   - TransparentFX

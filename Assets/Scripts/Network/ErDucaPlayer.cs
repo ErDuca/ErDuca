@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Mirror;
 
 public class ErDucaPlayer : NetworkBehaviour
@@ -21,6 +22,8 @@ public class ErDucaPlayer : NetworkBehaviour
     private GameUIBehaviour _gameUIBehaviour;
     private BattleAnimationsScript _battleAnimationScript;
     private Animator _canvasAnimator;
+
+    private ErDucaPiece pressedPiece;
 
     //Deck, Duke and Grid's info
     [SerializeField]
@@ -99,48 +102,7 @@ public class ErDucaPlayer : NetworkBehaviour
     }
     #endregion
 
-
     #region Commands and RPCs
-    /*
-    [Command]
-    public void CmdMoveRandomPiece(int playerId)
-    {
-        foreach(ErDucaPiece e in _erDucaNetworkManager.spawnedPieces)
-        {
-            if(e.MyPlayerNetId == playerId)
-            {
-                ErDucaTile targetTile;
-                Transform transformExample = _erDucaNetworkManager.transform;
-
-                if (e.IsPhaseOne)
-                {
-                    foreach(KeyValuePair<Tuple<int,int>,Ptype> t in _erDucaMoveManager.GetAvailableMoves(playerId, e.I, e.J, _currentSelectedPiece.P1MOVARR))
-                    {
-                        if(_erDucaNetworkManager.GetMatrixIdAt(t.Key.Item1, t.Key.Item2) == 0)
-                        {
-                            //_erDucaNetworkManager._tiles.TryGetValue(new Tuple<int, int>(t.Key.Item1, t.Key.Item2), out targetTile);
-                            CmdMovePiece(e.gameObject, transformExample, e.I, e.J);
-                            return;
-                        } 
-                    }
-                }
-                else
-                {
-                    foreach (KeyValuePair<Tuple<int, int>, Ptype> t in _erDucaMoveManager.GetAvailableMoves(playerId, e.I, e.J, _currentSelectedPiece.P2MOVARR))
-                    {
-                        if (_erDucaNetworkManager.GetMatrixIdAt(t.Key.Item1, t.Key.Item2) == 0)
-                        {
-                            _erDucaNetworkManager._tiles.TryGetValue(new Tuple<int, int>(t.Key.Item1, t.Key.Item2), out targetTile);
-                            CmdMovePiece(e.gameObject, transformExample, e.I, e.J);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    */
-
     [Command]
     public void CmdWinMatch(int winnerId)
     {
@@ -243,8 +205,6 @@ public class ErDucaPlayer : NetworkBehaviour
         piece.GetComponent<ErDucaPiece>().I = i;
         piece.GetComponent<ErDucaPiece>().J = j;
 
-        //_erDucaNetworkManager.spawnedPieces.Add(piece.GetComponent<ErDucaPiece>());
-
         RpcUpdateLocalNetIdMatrix(i, j, _myNetId);
         RpcOnSpawnPiece(piece.GetComponent<ErDucaPiece>(), _myNetId);
     }
@@ -341,10 +301,6 @@ public class ErDucaPlayer : NetworkBehaviour
     private void Start()
     {
         _erDucaGameManager = GameObject.FindObjectOfType<ErDucaGameManager>();
-
-        //Non riesce a settarlo, perchè legge prima del set in NetworkManager!
-        //_GameUIBehaviour.SetPlayerInitialValues((int)_myNetId, 1);
-        //! FIX!
     }
 
     private void Update()
@@ -352,6 +308,31 @@ public class ErDucaPlayer : NetworkBehaviour
         if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
+        } 
+
+        //Clicking on a piece, during the opponent's turn
+        else if (isLocalPlayer && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
+        {
+            RaycastHit hit;
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Transform objectHit = hit.transform;
+                if (objectHit.CompareTag("Piece"))
+                {
+                    pressedPiece = objectHit.GetComponent<ErDucaPiece>();
+                    _gameUIBehaviour.ShowPieceInfo(pressedPiece.UnitIndex(), pressedPiece.MyPlayerNetId);
+                }
+                else
+                {
+                    _gameUIBehaviour.HidePieceInfo();
+                }
+            }
+            else
+            {
+                _gameUIBehaviour.HidePieceInfo();
+            }
         }
     }
     #endregion
@@ -365,9 +346,11 @@ public class ErDucaPlayer : NetworkBehaviour
                 RaycastHit hitDuke;
                 Ray rayDuke = _camera.ScreenPointToRay(Input.mousePosition);
 
+                //Hit something - Gotta place the Duke
                 if (Physics.Raycast(rayDuke, out hitDuke))
                 {
                     Transform objectHit = hitDuke.transform;
+
                     if (objectHit.CompareTag("Tile"))
                     {
                         //Debug.Log("Ho selezionato un tile e ci voglio spawnare sopra il Duca");
@@ -387,6 +370,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
                                 _currentAvailableSpawnPositions.Clear();
                                 CmdStartNewTurn();
+
                                 break;
                             }
                         }
@@ -398,6 +382,7 @@ public class ErDucaPlayer : NetworkBehaviour
                 RaycastHit hitPikemen;
                 Ray rayPikemen = _camera.ScreenPointToRay(Input.mousePosition);
 
+                //Hit something - Gotta place the Pikemen
                 if (Physics.Raycast(rayPikemen, out hitPikemen))
                 {
                     Transform objectHit = hitPikemen.transform;
@@ -449,10 +434,12 @@ public class ErDucaPlayer : NetworkBehaviour
                         //No piece in cache, hit a piece (AVAILABLE MOVES)
                         if (_currentSelectedPiece == null && objectHit.CompareTag("Piece"))
                         {
+                            _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
+                            _gameUIBehaviour.ShowPieceInfo(_currentSelectedPiece.UnitIndex(), _currentSelectedPiece.MyPlayerNetId);
+
                             if (objectHit.gameObject.GetComponent<ErDucaPiece>().MyPlayerNetId == _myNetId)
                             {
                                 //Debug.Log("Ho selezionato una mia pedina");
-                                _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
 
@@ -469,14 +456,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                         GetAvailableMoves(_myNetId, piece_i_index, piece_j_index, _currentSelectedPiece.P2MOVARR);
                                 }
 
-                                //Mostrare le mosse disponibili
-                                /*
-                                foreach (Tuple<int, int> tuple in _currentAvailableMoves)
-                                {
-                                    CmdHighlightTile(tuple.Item1, tuple.Item2, moveType, this.connectionToClient);
-                                }
-                                */
-
                                 foreach(var item in _currentAvailableMoves)
                                 {
                                     CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
@@ -485,7 +464,7 @@ public class ErDucaPlayer : NetworkBehaviour
                         }
 
                         //Piece in cache, hit a piece (KILLING ENEMY)
-                        else if (_currentSelectedPiece != null && objectHit.CompareTag("Piece"))
+                        else if (_currentSelectedPiece != null && objectHit.CompareTag("Piece")) 
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
 
@@ -493,24 +472,23 @@ public class ErDucaPlayer : NetworkBehaviour
 
                             if (enemyPiece.MyPlayerNetId != _myNetId)
                             {
+                                _gameUIBehaviour.HidePieceInfo();
+
                                 //Debug.Log("Ho selezionato una pedina nemica");
                                 int enemyPiece_i_index = enemyPiece.I;
                                 int enemyPiece_j_index = enemyPiece.J;
                                 int enemyPieceUnitIndex = enemyPiece.UnitIndex();
-                                int currentPieceUnitIndex = _currentSelectedPiece.UnitIndex();
-                                //Debug.Log("Indice pedina nemica: " + enemyPieceUnitIndex);
 
-                                //Prova
+                                int currentPieceUnitIndex = _currentSelectedPiece.UnitIndex();
+
                                 float xTarget = objectHit.transform.position.x;
                                 float zTarget = objectHit.transform.position.z;
 
-                                //foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                                 foreach(var item in _currentAvailableMoves)
                                 {
-                                    //if (tuple.Item1 == enemyPiece_i_index && tuple.Item2 == enemyPiece_j_index)
                                     if(item.Key.Item1 == enemyPiece_i_index && item.Key.Item2 == enemyPiece_j_index)
                                     {
-                                        //ATTENZIONE CASO STRIKE!
+                                        //Strike
                                         if (item.Value.Equals(Ptype.Strike))
                                         {
                                             CmdStrikePiece(enemyPiece);
@@ -525,17 +503,15 @@ public class ErDucaPlayer : NetworkBehaviour
                                         }
                                         
                                         yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
-                                        //yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle")); 
-                                        //yield return new WaitForSeconds(.05f);
 
-                                        //Ho mangiato una pedina col duca, quindi aggiorno i suoi indici
+                                        //Moved the Duke, so i update his indexes
                                         if (_currentSelectedPiece.UnitIndex() == 0)
                                         {
                                             _dukeI = enemyPiece_i_index;
                                             _dukeJ = enemyPiece_j_index;
                                         }
 
-                                        //Ho mangiato il duca nemico!
+                                        //Killed the enemy duke!
                                         if(enemyPieceUnitIndex == 0)
                                         {
                                             CmdWinMatch(MyNetId);
@@ -555,6 +531,8 @@ public class ErDucaPlayer : NetworkBehaviour
                             {
                                 //Debug.Log("Ho ri-selezionato una mia pedina");
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
+                                _gameUIBehaviour.ShowPieceInfo(_currentSelectedPiece.UnitIndex(), _myNetId);
+
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
 
@@ -575,9 +553,6 @@ public class ErDucaPlayer : NetworkBehaviour
                                 {
                                     CmdHighlightTile(item.Key.Item1, item.Key.Item2, item.Value, this.connectionToClient);
                                 }
-
-                                _currentSelectedPiece = null;
-                                _currentAvailableMoves.Clear();
                             }
                         }
 
@@ -585,9 +560,13 @@ public class ErDucaPlayer : NetworkBehaviour
                         else if (_currentSelectedPiece != null && objectHit.CompareTag("Tile"))
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
+                            _gameUIBehaviour.HidePieceInfo();
+
                             //Debug.Log("Ho selezionato un tile mentre ho una pedina selezionata");
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
+
+                            int currentPieceUnitIndex = _currentSelectedPiece.UnitIndex();
 
                             //foreach (Tuple<int, int> tuple in _currentAvailableMoves)
                             foreach (var item in _currentAvailableMoves)
@@ -595,9 +574,13 @@ public class ErDucaPlayer : NetworkBehaviour
                                 //if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                                 if (item.Key.Item1 == tile_i_index && item.Key.Item2 == tile_j_index)
                                 {
+                                    yield return StartCoroutine(MovingAnimationCoroutine(_myNetId, currentPieceUnitIndex, item.Value));
+
                                     CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
 
-                                    //Se muovo il duca aggiorno i suoi indici
+                                    yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == objectHit.transform.position.x &&
+                                    _currentSelectedPiece.transform.position.z == objectHit.transform.position.z);
+
                                     if (_currentSelectedPiece.UnitIndex() == 0)
                                     {
                                         _dukeI = tile_i_index;
@@ -612,20 +595,30 @@ public class ErDucaPlayer : NetworkBehaviour
                             _currentAvailableMoves.Clear();
                         }
 
-                        //Hit the board
+                        //Hit the DrawButton
+                        else if (objectHit.CompareTag("DrawButton"))
+                        {
+                            //BOMBAH
+                        }
+
+                        //Hit the board (or something else which is not a tile)
                         else
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
+                            
+                            _gameUIBehaviour.HidePieceInfo();
 
                             _currentSelectedPiece = null;
                             _currentAvailableMoves.Clear();
                         }
                     }
 
-                    //No Hit (Background) -> "deselect" and clear references
+                    //No Hit (Background) -> "deselect" and Clear references
                     else
                     {
                         CmdDeHighlightAllTiles(this.connectionToClient);
+
+                        _gameUIBehaviour.HidePieceInfo();
 
                         _currentSelectedPiece = null;
                         _currentAvailableMoves.Clear();
@@ -648,20 +641,23 @@ public class ErDucaPlayer : NetworkBehaviour
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
-                            CmdDeHighlightAllTiles(this.connectionToClient);
+                            
 
                             foreach (Tuple<int, int> tuple in _currentAvailableSpawnPositions)
                             {
                                 if (tuple.Item1 == tile_i_index && tuple.Item2 == tile_j_index)
                                 {
-                                    //Debug.Log("Pedina spawnata!");
+                                    CmdDeHighlightAllTiles(this.connectionToClient);
+
+                                    _gameUIBehaviour.HidePieceInfo();
+                                    yield return StartCoroutine(SpawningAnimationCoroutine(_myNetId, _currentDrawnCard));
                                     _gameUIBehaviour.DrawnUnitPlaced();
 
-                                    CmdSpawnPiece(_currentDrawnCard, objectHit.transform, tile_i_index, tile_j_index);
+                                    if(_currentDrawnCard != 0)
+                                        CmdSpawnPiece(_currentDrawnCard, objectHit.transform, tile_i_index, tile_j_index);
 
                                     _currentDrawnCard = 0;
                                     _currentAvailableSpawnPositions.Clear();
-
                                     _hasDrawn = false;
 
                                     CmdStartNewTurn();
@@ -675,11 +671,9 @@ public class ErDucaPlayer : NetworkBehaviour
                 break;
 
             case BattleState.PWin:
-                //Debug.Log("Hai vinto");
                 break;
 
             case BattleState.PLost:
-                //Debug.Log("Hai perso");
                 break;
 
             default:
@@ -688,7 +682,7 @@ public class ErDucaPlayer : NetworkBehaviour
         yield return null;
     }
 
-    //TEMPORARY ANIMATION STUFF
+    //ANIMATION STUFF
     private IEnumerator BattleAnimationCoroutine(int netId, int attackedUnitIndex, int attackerUnitIndex)
     {
         switch (netId)
@@ -733,6 +727,71 @@ public class ErDucaPlayer : NetworkBehaviour
         yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
     }
 
+    private IEnumerator MovingAnimationCoroutine(int netId, int movingUnitIndex, Ptype moveType)
+    {
+        switch (netId)
+        {
+            //RED
+            case 1:
+                switch (moveType)
+                {
+                    case Ptype.Walk:
+                        CmdPlayAnimation(4, 0, (movingUnitIndex * 2) + 1);
+                        break;
+                    case Ptype.Jump:
+                        CmdPlayAnimation(6, 0, (movingUnitIndex * 2) + 1);
+                        break;
+                    case Ptype.Slide:
+                        CmdPlayAnimation(8, 0, (movingUnitIndex * 2) + 1);
+                        break;
+                    case Ptype.Fly:
+                        CmdPlayAnimation(10, 0, (movingUnitIndex * 2) + 1);
+                        break;
+                }
+                break;
+
+            //BLUE
+            case 2:
+                switch (moveType)
+                {
+                    case Ptype.Walk:
+                        CmdPlayAnimation(3, (movingUnitIndex * 2), 1);
+                        break;
+                    case Ptype.Jump:
+                        CmdPlayAnimation(5, (movingUnitIndex * 2), 1);
+                        break;
+                    case Ptype.Slide:
+                        CmdPlayAnimation(7, (movingUnitIndex * 2), 1);
+                        break;
+                    case Ptype.Fly:
+                        CmdPlayAnimation(9, (movingUnitIndex * 2), 1);
+                        break;
+                }
+                break;
+        }
+
+        yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
+    }
+
+    private IEnumerator SpawningAnimationCoroutine(int netId, int spawningUnitIndex)
+    {
+        switch (netId)
+        {
+            //RED
+            case 1:
+                CmdPlayAnimation(12, 0, (spawningUnitIndex * 2) + 1);
+                break;
+
+            //BLUE
+            case 2:
+                CmdPlayAnimation(11, (spawningUnitIndex * 2), 1);
+                break;
+        }
+
+        yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
+    }
+
+
     public bool IsDeckEmpty()
     {
         return _cards.Count == 0;
@@ -751,6 +810,8 @@ public class ErDucaPlayer : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            CmdDeHighlightAllTiles(this.connectionToClient);
+
             _hasDrawn = true;
             _currentDrawnCard = GetDrawnCard();
 

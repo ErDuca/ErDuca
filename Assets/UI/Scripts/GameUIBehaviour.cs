@@ -219,24 +219,26 @@ public class GameUIBehaviour : MonoBehaviour
     #endregion
 
     #region info box
-
     //TODO: Replace int with proper GameObject type
     //TODO: TEMP for the temp UI button, remove later
-    public void ButtonShowInfo() => ShowPieceInfo(pieceInfo);
-    private void ShowPieceInfo(int piece)
+    public void ButtonShowInfo() => ShowPieceInfo(pieceInfo, 1);
+    public void ShowPieceInfo(int piece, int netId)
     {
+        int mappedPieceValue = (netId % 2 == 0) ? piece * 2 : (piece * 2 ) + 1;
+
         infoBlock.SetActive(true);
-        if (piece % 2 == 0)
+        if (netId == 2)
         {
             infoSpriteRenderer.flipX = false;
-            battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, piece);
+            battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, mappedPieceValue);
         }
         else
         {
             infoSpriteRenderer.flipX = true;
-            battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, piece);
+            battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, mappedPieceValue);
         }        
     }
+
     public void HidePieceInfo() => StartCoroutine(HidePieceInfoCoroutine());
     private IEnumerator HidePieceInfoCoroutine()
     {
@@ -370,17 +372,17 @@ public class GameUIBehaviour : MonoBehaviour
     {
         drawBoxAnimator.SetTrigger("unitDrawn");
         int cardIndex = ErDucaPlayer.LocalPlayer.DrawCard();
-        Color playerColor = ErDucaPlayer.LocalPlayer.MyColor;
+        int playerColor = ErDucaPlayer.LocalPlayer.MyNetId;
 
         //Pass in some way the unit to display
-        ShowPieceInfo(cardIndex);
+        ShowPieceInfo(cardIndex, playerColor);
     }
 
     public void DrawnUnitPlaced() => StartCoroutine(DrawnUnitPlacedCoroutine());
     private IEnumerator DrawnUnitPlacedCoroutine()
     {
         drawBoxAnimator.SetTrigger("unitPlaced");
-        HidePieceInfo();
+        //HidePieceInfo();
         yield return new WaitUntil(() => drawBoxAnimator.GetCurrentAnimatorStateInfo(0).IsName("drawBoxHidden"));
         drawBoxGO.SetActive(false);           
     }

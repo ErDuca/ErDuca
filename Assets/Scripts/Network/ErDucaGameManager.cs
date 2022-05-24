@@ -36,10 +36,10 @@ public class ErDucaGameManager : NetworkBehaviour
     {
         int localPlayerId = ErDucaPlayer.LocalPlayer.MyNetId;
 
-        // If isOurTurn was true, set it false. If it was false, set it true.
+        //If isOurTurn was true, set it false. If it was false, set it true.
         isOurTurn = !isOurTurn;
 
-        // Player who's about to start the turn - Logic
+        //Player who's about to start the turn - Logic
         if (isOurTurn)
         {
             switch (currentState)
@@ -77,10 +77,10 @@ public class ErDucaGameManager : NetworkBehaviour
                     break;
             }
         }
+
         //Player who just finished its turn - Logic
         else
         {
-
             int invertedIdForAnimation = localPlayerId == 1 ? 2 : 1;
 
             switch (currentState)
@@ -93,6 +93,7 @@ public class ErDucaGameManager : NetworkBehaviour
                 case BattleState.PTurn:
                     //Hides the draw button
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.HideDrawBox();
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
 
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
                     break;
@@ -122,6 +123,7 @@ public class ErDucaGameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcPlayAnimation(int animId, int idBlue, int idRed)
     {
+        ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
         ErDucaPlayer.LocalPlayer.BattleAnimationScript.SpritesAnimation(animId, idBlue, idRed);
     }
 
@@ -135,6 +137,7 @@ public class ErDucaGameManager : NetworkBehaviour
         ErDucaPlayer.LocalPlayer.SpawnDuke();
     }
 
+    //Setting the clients Animator values
     [TargetRpc]
     public void RpcSetAnimatorValues(NetworkConnection target, int playerColor, int coinFlipResult, bool isHost)
     {
