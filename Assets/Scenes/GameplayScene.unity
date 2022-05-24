@@ -4353,6 +4353,23 @@ MonoBehaviour:
   hostMenuGO: {fileID: 1634342154}
   drawBoxGO: {fileID: 1658671995}
   drawBoxAnimator: {fileID: 1658671997}
+  drawBoxUnitIcon: {fileID: 1327501879}
+  drawBoxBaseColor: {fileID: 1211243993}
+  unitIcons:
+  - {fileID: 21300000, guid: 75c56da48db7d984aa8fd62d13e8ae9b, type: 3}
+  - {fileID: 21300000, guid: 8506ca75ea0ec45429dc8cb1977787e5, type: 3}
+  - {fileID: 21300000, guid: d60344ebb2ba1154f8ddb01bdf17344a, type: 3}
+  - {fileID: 21300000, guid: 5db341c22ec321c4f9f274a78c0b47e0, type: 3}
+  - {fileID: 21300000, guid: e46ea7919e181e94dbaa35b4e1bf5bfc, type: 3}
+  - {fileID: 21300000, guid: 132d4c09535b7ea4dbf4dc7cbae18580, type: 3}
+  - {fileID: 21300000, guid: 075567906fdc20e478f8fd924fc0bc13, type: 3}
+  - {fileID: 21300000, guid: ba0e32c3192640a439d8eb8d797ea545, type: 3}
+  - {fileID: 21300000, guid: c7355da58d802a642a46cc499125c283, type: 3}
+  - {fileID: 21300000, guid: 322b482173812064d9dcf0f380abe894, type: 3}
+  - {fileID: 21300000, guid: a3f8f116e3cec664782f1a4aa7dfa392, type: 3}
+  - {fileID: 21300000, guid: 0bcaf0a912ca03b45a3ca34848a87842, type: 3}
+  - {fileID: 21300000, guid: 36ac646729d73c4458290e41f322f744, type: 3}
+  - {fileID: 21300000, guid: 88a9fd492967c6b4baf9406361003ba8, type: 3}
   gameOverScreenGO: {fileID: 1157615294}
   blueWinsScreenGO: {fileID: 1026012410}
   redWinsScreenGO: {fileID: 500987302}
@@ -7694,7 +7711,7 @@ GameObject:
   - component: {fileID: 1327501880}
   - component: {fileID: 1327501879}
   m_Layer: 5
-  m_Name: TEMPImage
+  m_Name: UnitImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8833,7 +8850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1658671996
 RectTransform:
   m_ObjectHideFlags: 0

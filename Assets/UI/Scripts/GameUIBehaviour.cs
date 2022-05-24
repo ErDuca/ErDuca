@@ -51,6 +51,9 @@ public class GameUIBehaviour : MonoBehaviour
     [Header("Draw Box Related")]
     [SerializeField] private GameObject drawBoxGO;
     [SerializeField] private Animator drawBoxAnimator;
+    [SerializeField] private Image drawBoxUnitIcon;
+    [SerializeField] private Image drawBoxBaseColor;
+    [SerializeField] private Sprite[] unitIcons;
 
     [Header("Game Over Screen Related")]
     [SerializeField] private GameObject gameOverScreenGO;
@@ -375,6 +378,9 @@ public class GameUIBehaviour : MonoBehaviour
         int playerColor = ErDucaPlayer.LocalPlayer.MyNetId;
 
         //Pass in some way the unit to display
+        drawBoxBaseColor.color = ErDucaPlayer.LocalPlayer.MyColor;
+        drawBoxUnitIcon.sprite = unitIcons[cardIndex];
+
         ShowPieceInfo(cardIndex, playerColor);
     }
 
