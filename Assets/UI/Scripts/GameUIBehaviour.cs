@@ -222,9 +222,6 @@ public class GameUIBehaviour : MonoBehaviour
     #endregion
 
     #region info box
-    //TODO: Replace int with proper GameObject type
-    //TODO: TEMP for the temp UI button, remove later
-    public void ButtonShowInfo() => ShowPieceInfo(pieceInfo, 1);
     public void ShowPieceInfo(int piece, int netId)
     {
         int mappedPieceValue = (netId % 2 == 0) ? piece * 2 : (piece * 2 ) + 1;
@@ -251,33 +248,31 @@ public class GameUIBehaviour : MonoBehaviour
     }
 
 
-    //TODO: Replace int with proper GameObject type
-    //PieceInfoTurning
-    public void PieceInfoTurn(int piece) => StartCoroutine(PieceInfoTurnCoroutine(piece));
-    private IEnumerator PieceInfoTurnCoroutine(int piece)
-    {
-        float elapsedTime = 0f;
-        while (elapsedTime < infoTurnAnimTime)
-        {
-            //TODO: get values from current scale
-            infoImage.transform.localScale = Vector3.Lerp(Vector3.one, new Vector3(0f, 1f, 1f), (elapsedTime / infoTurnAnimTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        infoImage.transform.localScale = Vector3.zero;
-        //TODO: add image change
-        elapsedTime = 0f;
-        while (elapsedTime < infoTurnAnimTime)
-        {
-            //TODO: get values from current scale
-            infoImage.transform.localScale = Vector3.Lerp(new Vector3(0f, 1f, 1f), Vector3.one, (elapsedTime / infoTurnAnimTime));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        infoImage.transform.localScale = Vector3.one;
+    //public void PieceInfoTurn(int piece) => StartCoroutine(PieceInfoTurnCoroutine(piece));
+    //private IEnumerator PieceInfoTurnCoroutine(int piece)
+    //{
+    //    float elapsedTime = 0f;
+    //    while (elapsedTime < infoTurnAnimTime)
+    //    {
+    //        //TODO: get values from current scale
+    //        infoImage.transform.localScale = Vector3.Lerp(Vector3.one, new Vector3(0f, 1f, 1f), (elapsedTime / infoTurnAnimTime));
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //    infoImage.transform.localScale = Vector3.zero;
+    //    //TODO: add image change
+    //    elapsedTime = 0f;
+    //    while (elapsedTime < infoTurnAnimTime)
+    //    {
+    //        //TODO: get values from current scale
+    //        infoImage.transform.localScale = Vector3.Lerp(new Vector3(0f, 1f, 1f), Vector3.one, (elapsedTime / infoTurnAnimTime));
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //    infoImage.transform.localScale = Vector3.one;
 
-        yield return null;
-    }
+    //    yield return null;
+    //}
 
     #endregion
 

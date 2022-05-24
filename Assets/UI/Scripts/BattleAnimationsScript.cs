@@ -96,8 +96,8 @@ public class BattleAnimationsScript : MonoBehaviour
         OPPONENT_PIKEMAN,    //23
         PLAYER_PRIEST,       //24
         OPPONENT_PRIEST,     //25
-        PLAYER_SEER,         //24
-        OPPONENT_SEER        //25
+        PLAYER_SEER,         //26
+        OPPONENT_SEER        //27
     }
 
     //TEMP: Necessary to assign the method to an UI button. Remove later
