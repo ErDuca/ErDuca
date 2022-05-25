@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Experimental.U2D.Animation;
 using Mirror;
 using Mirror.Discovery;
+
 public class GameUIBehaviour : MonoBehaviour
 {
     [Header("Info card related")]
@@ -36,12 +37,12 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
     [SerializeField] private int maxPenalties = 1;
-
-    public bool changingTurn; //TODO: this can be used to prevent ray casts during animations (alternatively make the black plane a ray cast target)
+    public bool changingTurn; 
     private float timeRemaining;
     private float timeToDisplay;
     private int timeoutPenalty = 0;
     [SerializeField] private float turnTime;
+    [SerializeField] private GameObject messageToast;
 
     [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
@@ -54,7 +55,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
-    //[SerializeField] private Image blackPanelImage;
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
@@ -70,19 +70,17 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject gameOverScreenGO;
     [SerializeField] private GameObject blueWinsScreenGO;
     [SerializeField] private GameObject redWinsScreenGO;
-   
-    private SoundManager soundManager;
 
-    /// <summary>
     [Header("Transitions related")]
     [SerializeField] private GameObject sceneTransitionManager;
     private TransitionScript transitionScript;
-
     public NetworkDiscovery networkDiscovery;
-    /// </summary>
-    /// 
+
+    //TODO: Why is this serialized?
     [Header("Debug")]
     [SerializeField] private bool isHost;
+
+    private SoundManager soundManager;
 
     public bool IsHost
     {
@@ -96,9 +94,6 @@ public class GameUIBehaviour : MonoBehaviour
     private void Start()
     {
         transitionAnimator.SetTrigger("sceneStart");
-
-        //HOST TESTING
-        
 
         musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
@@ -133,6 +128,7 @@ public class GameUIBehaviour : MonoBehaviour
                 else
                 {
                     //Show Toast
+                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nTIME'S UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
                     timeRemaining = turnTime;
                 }
             }
@@ -470,6 +466,14 @@ public class GameUIBehaviour : MonoBehaviour
         eventSystem.SetActive(true);
 
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
+    }
+
+    public IEnumerator ShowToast(string message)
+    {
+        messageToast.GetComponentInChildren<Text>().text = message;
+        messageToast.SetActive(true);
+        yield return new WaitUntil(() => messageToast.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("ToastShown"));
+        messageToast.SetActive(false);
     }
 
     #endregion
