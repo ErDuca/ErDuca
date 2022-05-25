@@ -2,7 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Experimental.U2D.Animation;
-
+using Mirror;
+using Mirror.Discovery;
 public class GameUIBehaviour : MonoBehaviour
 {
     [Header("Info card related")]
@@ -72,6 +73,14 @@ public class GameUIBehaviour : MonoBehaviour
    
     private SoundManager soundManager;
 
+    /// <summary>
+    [Header("Transitions related")]
+    [SerializeField] private GameObject sceneTransitionManager;
+    private TransitionScript transitionScript;
+
+    public NetworkDiscovery networkDiscovery;
+    /// </summary>
+    /// 
     [Header("Debug")]
     [SerializeField] private bool isHost;
 
@@ -182,6 +191,8 @@ public class GameUIBehaviour : MonoBehaviour
     {
         if (amIHost)
         {
+            string myName = PlayerPrefs.GetString("Room Name");
+            hostMenuGO.transform.Find("MenuWindow/RoomNameText").gameObject.GetComponent<Text>().text = "room name: " + myName;
             hostMenuGO.SetActive(true);
             gameAnimator.SetBool("hostScreen", true);
 
@@ -243,7 +254,38 @@ public class GameUIBehaviour : MonoBehaviour
     {
         PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+        ///
+        //chiamare 
+        if (NetworkServer.active && NetworkClient.isConnected)
+        {
+            NetworkManager.singleton.StopHost();
+            networkDiscovery.StopDiscovery();
+        }
+        // stop client if client-only
+        else if (NetworkClient.isConnected)
+        {
+            NetworkManager.singleton.StopClient();
+            networkDiscovery.StopDiscovery();
+        }
+        ///
         transitionManagerGO.GetComponent<TransitionScript>().LoadSceneByID(0);
+        
+    }
+
+    public void CancelButton()
+    {
+        if (NetworkServer.active && NetworkClient.isConnected)
+        {
+            NetworkManager.singleton.StopHost();
+            networkDiscovery.StopDiscovery();
+        }
+        // stop client if client-only
+        else if (NetworkClient.isConnected)
+        {
+            NetworkManager.singleton.StopClient();
+            networkDiscovery.StopDiscovery();
+        }
+        transitionScript.LoadSceneByID(0);
     }
 
     #endregion

@@ -3724,6 +3724,7 @@ MonoBehaviour:
   musicSliderGO: {fileID: 2094767032}
   sfxSliderGO: {fileID: 860584482}
   soundManager: {fileID: 0}
+  networkDiscovery: {fileID: 1769651075}
 --- !u!95 &808467527
 Animator:
   serializedVersion: 3
@@ -6593,7 +6594,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896262033}
   m_HandleRect: {fileID: 896262032}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

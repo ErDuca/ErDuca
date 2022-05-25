@@ -2,7 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using System.Collections.Generic;
+///
+using Mirror;
+using Mirror.Discovery;
+using UnityEngine.Events;
+using System.Net;
+using System;
+///
 public class MMenuBehaviour : MonoBehaviour
 {
     [Header("Animations related")]
@@ -52,6 +59,20 @@ public class MMenuBehaviour : MonoBehaviour
 
     public SoundManager soundManager;
 
+    /// 
+    public struct HostMessage : NetworkMessage
+    {
+        public IPEndPoint EndPoint { get; set; }
+
+        public Uri uri;
+
+        // Prevent duplicate server appearance when a connection can be made via LAN on multiple NICs
+        public long serverId;
+        public string roomName;
+    }
+    public NetworkDiscovery networkDiscovery;
+    readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
+    ///
     private enum Screen6IDs
     {
         RULES,       //0
@@ -106,8 +127,11 @@ public class MMenuBehaviour : MonoBehaviour
             musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
             sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
         }
+        //UnityEvent OnNewServer = networkDiscovery.OnServerFound
+        networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
     }
 
+    
     //Main Menu -> Options Menu
     public void GoToScreen2() => StartCoroutine(MoveToScreenCoroutine(screen1Position, screen2Position));
     //Main Menu -> Multiplayer Menu
@@ -153,27 +177,52 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void HostBeginMatch()
     {
+
+        networkDiscovery.globalRoomName = roomNameTextGO.text;
+        if (string.IsNullOrEmpty(networkDiscovery.globalRoomName))
+            networkDiscovery.globalRoomName = "GameRoom";
+        /////
+        discoveredServers.Clear();
+        NetworkManager.singleton.StartHost();
+        networkDiscovery.AdvertiseServer();
+        /////
+
         //TODO: This is limited to 20 characters, look for the reason and increase it to 40
-        roomName = roomNameTextGO.text;
-        if (string.IsNullOrEmpty(roomName))
-            roomName = "GameRoom";
-        transitionScript.LoadSceneByID(1);
+        PlayerPrefs.SetString("Room Name", networkDiscovery.globalRoomName);
+        //transitionScript.LoadSceneByID(1); 
     }
 
     public void JoinSearch()
     {
         //TODO: Actual searching of the match
-
+        ///////
+        ///scrollViewContentGO.transform
+        foreach (Transform child in scrollViewContentGO.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        discoveredServers.Clear();
+        networkDiscovery.StartDiscovery();
+        //JoinSpawn(); 
+        ///////
     }
 
     //TODO: PLACEHOLDER METHOD (spawns an entry in the rooms list)
     public void JoinSpawn()
     {
-        string roomName = "Lorem Ipsum dolor sit";
-        CreateRoomButton(roomName);
+        ////
+        foreach (ServerResponse info in discoveredServers.Values)
+        {
+            //string roomName = info.EndPoint.Address.ToString();
+            string roomName = info.name;
+            CreateRoomButton(roomName, info);
+        }
+        /////
+        //string roomName = "Lorem Ipsum dolor sit";
+        //CreateRoomButton(roomName, new ServerResponse()); 
     }
 
-    private void CreateRoomButton(string roomName)
+    private void CreateRoomButton(string roomName, ServerResponse info)
     {
         GameObject roomButton = Instantiate(roomButtonPrefab);
         roomButton.transform.SetParent(scrollViewContentGO.transform);
@@ -181,13 +230,18 @@ public class MMenuBehaviour : MonoBehaviour
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
         roomButton.GetComponentInChildren<Text>().text = roomName;
-        roomButton.GetComponent<Button>().onClick.AddListener(delegate { JoinBeginMatch(); });
+        ///
+        roomButton.GetComponent<Button>().onClick.AddListener(delegate { JoinBeginMatch(info); });
+        ///
     }
 
-    public void JoinBeginMatch()
+    public void JoinBeginMatch(ServerResponse info)
     {
         //TODO: Pass variables to game scene
-        transitionScript.LoadSceneByID(1);
+        ///
+        Connect(info);
+        ///
+        //transitionScript.LoadSceneByID(1); 
     }
 
     private void SwitchExtraScreen(int screenId)
@@ -256,6 +310,27 @@ public class MMenuBehaviour : MonoBehaviour
     public void CallSoundManager(Sound sound) {
         soundManager.PlaySound(sound);
     }
+
+    ///////////
+    void Connect(ServerResponse info)
+    {
+        networkDiscovery.StopDiscovery();
+        NetworkManager.singleton.StartClient(info.uri);
+    }
+
+    public void OnDiscoveredServer(ServerResponse info)
+    {
+        // Note that you can check the versioning to decide if you can connect to the server or not using this method
+        if (!(discoveredServers.ContainsKey(info.serverId)))
+        {
+            discoveredServers[info.serverId] = info;
+            JoinSpawn(); 
+        }
+        
+    }
+
+    
+    ///////////
 }
 
 
