@@ -47,11 +47,13 @@ public class ErDucaGameManager : NetworkBehaviour
                 case BattleState.CoinFlip:
                     currentState = BattleState.PDuke;
                     ErDucaPlayer.LocalPlayer.SpawnDuke();
+                    ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
                     break;
 
                 case BattleState.PDuke:
                     currentState = BattleState.PPikemen;
                     ErDucaPlayer.LocalPlayer.SpawnPikemen();
+                    ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
                     break;
 
                 case BattleState.PPikemen:
@@ -63,6 +65,7 @@ public class ErDucaGameManager : NetworkBehaviour
                     }
 
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
+                    ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
                     break;
 
                 case BattleState.PTurn:
@@ -73,6 +76,7 @@ public class ErDucaGameManager : NetworkBehaviour
                     }
 
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
+                    ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
 
                     break;
             }
@@ -91,7 +95,6 @@ public class ErDucaGameManager : NetworkBehaviour
                     break;
 
                 case BattleState.PTurn:
-                    //Hides the draw button
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.HideDrawBox();
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
 
@@ -111,11 +114,36 @@ public class ErDucaGameManager : NetworkBehaviour
         {
             currentState = BattleState.PLost;
             ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen(winnerId);
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.changingTurn = true;
         }
         else
         {
             currentState = BattleState.PWin;
             ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen(winnerId);
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.changingTurn = true;
+        }
+    }
+
+    [ClientRpc]
+    public void RpcForfeitMatch(int winnerId)
+    {
+        isOurTurn = !isOurTurn;
+
+        if (isOurTurn)
+        {
+            currentState = BattleState.PWin;
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen(winnerId);
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.HideTimeSlider();
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.changingTurn = true;
+        }
+        else
+        {
+            currentState = BattleState.PLost;
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowGameOverScreen(winnerId);
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.HideTimeSlider();
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.changingTurn = true;
         }
     }
 

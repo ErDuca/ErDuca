@@ -780,7 +780,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 917277562}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1502,7 +1502,7 @@ RectTransform:
   - {fileID: 20541863}
   - {fileID: 1478309473}
   m_Father: {fileID: 917277562}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3918,13 +3918,13 @@ RectTransform:
   - {fileID: 745643398}
   - {fileID: 928692293}
   - {fileID: 1658671996}
-  - {fileID: 212515839}
-  - {fileID: 1932638658}
   - {fileID: 71372210}
+  - {fileID: 212515839}
   - {fileID: 469287883}
   - {fileID: 1627656568}
   - {fileID: 1013836659}
   - {fileID: 1828273052}
+  - {fileID: 1932638658}
   - {fileID: 1698679724}
   - {fileID: 1634342155}
   - {fileID: 1157615295}
@@ -3957,6 +3957,55 @@ MonoBehaviour:
   infoSpriteRenderer: {fileID: 266264579}
   infoSpriteLibrary: {fileID: 266264578}
   pieceInfo: 0
+  unitNames:
+  - Duke
+  - Assassin
+  - Barbarian
+  - Bowman
+  - Champion
+  - Dragoon
+  - Engineer
+  - Footman
+  - Knight
+  - Longbowman
+  - Mage
+  - Pikeman
+  - Priest
+  - Seer
+  unitMovingTables:
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  - {fileID: 21300000, guid: a21b3f7dfe8778245afcc73543a09bce, type: 3}
+  - {fileID: 21300000, guid: 3a73950c98545d449aad0206e546be26, type: 3}
+  pieceInfoName: {fileID: 2035286795}
+  pieceInfoMoveTable1: {fileID: 1589083829}
+  pieceInfoMoveTable2: {fileID: 1880890962}
+  pieceInfoMoveBackground1: {fileID: 931795315}
+  pieceInfoMoveBackground2: {fileID: 10195063}
   thinkingIcon: {fileID: 639626428}
   turnText: {fileID: 899291688}
   colorBlue: {r: 0.35, g: 0.41, b: 0.96, a: 1}
@@ -3966,6 +4015,7 @@ MonoBehaviour:
   timeSliderFill: {fileID: 954885902}
   timeSliderImageLeft: {fileID: 889297408}
   timeSliderImageRight: {fileID: 2118326503}
+  maxPenalties: 1
   changingTurn: 0
   turnTime: 15
   pauseMenu: {fileID: 1698679723}
@@ -4149,7 +4199,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &928692293
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4814,7 +4864,7 @@ RectTransform:
   - {fileID: 1680569430}
   - {fileID: 108642353}
   m_Father: {fileID: 917277562}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7478,7 +7528,7 @@ RectTransform:
   - {fileID: 106731029}
   - {fileID: 1817314231}
   m_Father: {fileID: 917277562}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8445,7 +8495,7 @@ RectTransform:
   - {fileID: 990773759}
   - {fileID: 2128294676}
   m_Father: {fileID: 917277562}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9236,6 +9286,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034326856}
   m_CullTransparentMesh: 1
+--- !u!114 &2035286795 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
+  m_PrefabInstance: {fileID: 1639031942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2044253253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10176,7 +10237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1261190227352843711, guid: ce6d88a33f82d7145a3f332c413fd830, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1261190227352843711, guid: ce6d88a33f82d7145a3f332c413fd830, type: 3}
       propertyPath: m_AnchorMax.x
@@ -10212,7 +10273,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1261190227352843711, guid: ce6d88a33f82d7145a3f332c413fd830, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1261190227352843711, guid: ce6d88a33f82d7145a3f332c413fd830, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10313,7 +10374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4192565489053107867, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4192565489053107867, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_AnchorMax.x

@@ -14,6 +14,13 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private SpriteRenderer infoSpriteRenderer;
     [SerializeField] private SpriteLibrary infoSpriteLibrary;
     [SerializeField] private int pieceInfo;
+    [SerializeField] private string[] unitNames;
+    [SerializeField] private Sprite[] unitMovingTables;
+    [SerializeField] private Text pieceInfoName;
+    [SerializeField] private Image pieceInfoMoveTable1;
+    [SerializeField] private Image pieceInfoMoveTable2;
+    [SerializeField] private GameObject pieceInfoMoveBackground1;
+    [SerializeField] private GameObject pieceInfoMoveBackground2;
 
     [Header("Turns related")]
     [SerializeField] private GameObject thinkingIcon;
@@ -27,9 +34,12 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
+    [SerializeField] private int maxPenalties = 1;
+
     public bool changingTurn; //TODO: this can be used to prevent ray casts during animations (alternatively make the black plane a ray cast target)
     private float timeRemaining;
     private float timeToDisplay;
+    private int timeoutPenalty = 0;
     [SerializeField] private float turnTime;
 
     [Header("Options menu related")]
@@ -103,8 +113,25 @@ public class GameUIBehaviour : MonoBehaviour
         }
         else
         {
-            //TODO: add real action for when time runs out
-            //Debug.Log("TIME'S UP");
+            if (ErDucaPlayer.LocalPlayer.isMyTurn && !(ErDucaPlayer.LocalPlayer.myCurrentBattleState.Equals(BattleState.PWin)))
+            {
+                timeoutPenalty++;
+                if (timeoutPenalty > maxPenalties)
+                {
+                    int winnerId = (ErDucaPlayer.LocalPlayer.MyNetId == 1) ? 2 : 1;
+                    ErDucaPlayer.LocalPlayer.CmdForfeitMatch(winnerId);
+                }
+                else
+                {
+                    //Show Toast
+                    timeRemaining = turnTime;
+                }
+            }
+
+            else
+            {
+                timeRemaining = turnTime;
+            }
         }
     }
 
@@ -222,20 +249,74 @@ public class GameUIBehaviour : MonoBehaviour
     #endregion
 
     #region info box
-    public void ShowPieceInfo(int piece, int netId)
+    public void ShowPieceInfo(int piece, int netId, bool isPhaseOne, bool isOpponentPiece)
     {
         int mappedPieceValue = (netId % 2 == 0) ? piece * 2 : (piece * 2 ) + 1;
 
         infoBlock.SetActive(true);
+
         if (netId == 2)
         {
             infoSpriteRenderer.flipX = false;
             battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, mappedPieceValue);
+
+            pieceInfoName.text = unitNames[piece];
+            pieceInfoMoveTable1.sprite = unitMovingTables[(piece * 2)];
+            pieceInfoMoveTable2.sprite = unitMovingTables[(piece * 2) + 1];
+
+            if (isPhaseOne)
+            {
+                pieceInfoMoveBackground1.SetActive(true);
+                pieceInfoMoveBackground2.SetActive(false);
+            }
+            else
+            {
+                pieceInfoMoveBackground2.SetActive(true);
+                pieceInfoMoveBackground1.SetActive(false);
+            }
+
+            if (isOpponentPiece)
+            {
+                pieceInfoMoveTable1.rectTransform.localScale = new Vector2(-1, -1);
+                pieceInfoMoveTable2.rectTransform.localScale = new Vector2(-1, -1);
+            }
+            else
+            {
+                pieceInfoMoveTable1.rectTransform.localScale = new Vector2(1, 1);
+                pieceInfoMoveTable2.rectTransform.localScale = new Vector2(1, 1);
+            }
         }
+
         else
         {
             infoSpriteRenderer.flipX = true;
             battleAnimScript.AssignSpriteLibrary(infoSpriteLibrary, mappedPieceValue);
+
+            pieceInfoName.text = unitNames[piece];
+            pieceInfoMoveTable1.sprite = unitMovingTables[(piece * 2)];
+            pieceInfoMoveTable2.sprite = unitMovingTables[(piece * 2) + 1];
+
+            if (isPhaseOne)
+            {
+                pieceInfoMoveBackground1.SetActive(true);
+                pieceInfoMoveBackground2.SetActive(false);
+            }
+            else
+            {
+                pieceInfoMoveBackground2.SetActive(true);
+                pieceInfoMoveBackground1.SetActive(false);
+            }
+
+            if (isOpponentPiece)
+            {
+                pieceInfoMoveTable1.rectTransform.localScale = new Vector2(-1, -1);
+                pieceInfoMoveTable2.rectTransform.localScale = new Vector2(-1, -1);
+            }
+            else
+            {
+                pieceInfoMoveTable1.rectTransform.localScale = new Vector2(1, 1);
+                pieceInfoMoveTable2.rectTransform.localScale = new Vector2(1, 1);
+            }
         }        
     }
 
@@ -376,7 +457,7 @@ public class GameUIBehaviour : MonoBehaviour
         drawBoxBaseColor.color = ErDucaPlayer.LocalPlayer.MyColor;
         drawBoxUnitIcon.sprite = unitIcons[cardIndex];
 
-        ShowPieceInfo(cardIndex, playerColor);
+        ShowPieceInfo(cardIndex, playerColor, true, false);
     }
 
     public void DrawnUnitPlaced() => StartCoroutine(DrawnUnitPlacedCoroutine());
@@ -391,6 +472,11 @@ public class GameUIBehaviour : MonoBehaviour
     #endregion
 
     #region game over screen
+
+    public void HideTimeSlider()
+    {
+        timeSlider.gameObject.SetActive(false);
+    }
 
     public void ShowGameOverScreen(int winner)
     {
