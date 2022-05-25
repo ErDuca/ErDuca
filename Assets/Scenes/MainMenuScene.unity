@@ -6500,10 +6500,7 @@ MonoBehaviour:
 
     TODO?:
     The solution for spawning the join buttons with the right dimensions is hardcoded
-    and stupid
-
-
-    TODO: Start game''s buttons network behavior'
+    and stupid'
 --- !u!222 &1411478659
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7408,6 +7405,7 @@ MonoBehaviour:
   serverBroadcastListenPort: 47777
   enableActiveDiscovery: 1
   ActiveDiscoveryInterval: 3
+  globalRoomName: 
   transport: {fileID: 0}
   OnServerFound:
     m_PersistentCalls:

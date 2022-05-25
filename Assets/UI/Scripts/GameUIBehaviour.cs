@@ -36,13 +36,13 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject timeSliderFill;
     [SerializeField] private GameObject timeSliderImageLeft;
     [SerializeField] private GameObject timeSliderImageRight;
-    [SerializeField] private int maxPenalties = 1;
-    public bool changingTurn; 
+    [SerializeField] private int maxPenalties;
     private float timeRemaining;
     private float timeToDisplay;
     private int timeoutPenalty = 0;
     [SerializeField] private float turnTime;
     [SerializeField] private GameObject messageToast;
+    [HideInInspector] public bool changingTurn;
 
     [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
@@ -58,6 +58,7 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
+    private bool isHost;
 
     [Header("Draw Box Related")]
     [SerializeField] private GameObject drawBoxGO;
@@ -75,10 +76,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject sceneTransitionManager;
     private TransitionScript transitionScript;
     public NetworkDiscovery networkDiscovery;
-
-    //TODO: Why is this serialized?
-    [Header("Debug")]
-    [SerializeField] private bool isHost;
 
     private SoundManager soundManager;
 
@@ -127,14 +124,14 @@ public class GameUIBehaviour : MonoBehaviour
                 }
                 else
                 {
-                    //Show Toast
-                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nTIME'S UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
+                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nYOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
                     timeRemaining = turnTime;
                 }
             }
 
             else
             {
+                StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONE-PER-MATCH ADDITIONAL TIME GRANTED"));
                 timeRemaining = turnTime;
             }
         }
@@ -166,14 +163,7 @@ public class GameUIBehaviour : MonoBehaviour
     private IEnumerator GameStartAnimationCoroutine()
     {
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
-        if (gameAnimator.GetInteger("startingPlayer") == 2)
-        {
-            PlayersTurnStart();
-        }
-        else if (gameAnimator.GetInteger("startingPlayer") == 1)
-        {
-            OpponentsTurnStart();
-        }        
+        TurnStart(gameAnimator.GetInteger("startingPlayer"));
     }
 
     public void SetPlayerInitialValues(int colorPlayerId, int startingPlayerId, bool amIHost)
@@ -361,11 +351,16 @@ public class GameUIBehaviour : MonoBehaviour
     public void HidePieceInfo() => StartCoroutine(HidePieceInfoCoroutine());
     private IEnumerator HidePieceInfoCoroutine()
     {
-        infoAnimator.SetTrigger("hide");
-        yield return new WaitUntil(() => infoAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"));
-        infoBlock.SetActive(false);
+        if(infoBlock.activeSelf == true)
+        {
+            infoAnimator.SetTrigger("hide");
+            yield return new WaitUntil(() => infoAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"));
+            infoBlock.SetActive(false);
+        }
+        
     }
 
+    //Old method with the tile turning animation
 
     //public void PieceInfoTurn(int piece) => StartCoroutine(PieceInfoTurnCoroutine(piece));
     //private IEnumerator PieceInfoTurnCoroutine(int piece)
@@ -416,7 +411,7 @@ public class GameUIBehaviour : MonoBehaviour
         }
     }
 
-    public void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
+    private void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()
     {
         eventSystem.SetActive(false);
@@ -442,7 +437,7 @@ public class GameUIBehaviour : MonoBehaviour
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
     }
 
-    public void OpponentsTurnStart() => StartCoroutine(OpponentsTurnStartCoroutine());
+    private void OpponentsTurnStart() => StartCoroutine(OpponentsTurnStartCoroutine());
     private IEnumerator OpponentsTurnStartCoroutine()
     {
         eventSystem.SetActive(false);
@@ -468,7 +463,7 @@ public class GameUIBehaviour : MonoBehaviour
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
     }
 
-    public IEnumerator ShowToast(string message)
+    private IEnumerator ShowToast(string message)
     {
         messageToast.GetComponentInChildren<Text>().text = message;
         messageToast.SetActive(true);
