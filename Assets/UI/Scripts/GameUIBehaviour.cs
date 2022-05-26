@@ -245,24 +245,28 @@ public class GameUIBehaviour : MonoBehaviour
 
     public void GiveUpMatch()
     {
-        PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
-        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-        ///
-        //chiamare 
+        // host
         if (NetworkServer.active && NetworkClient.isConnected)
         {
-            NetworkManager.singleton.StopHost();
+            ErDucaNetworkManager.singleton.IGaveUp = true;
+            PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            //ErDucaNetworkManager.singleton.IRageQuit = false;
+            ErDucaNetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
+
         // stop client if client-only
         else if (NetworkClient.isConnected)
         {
-            NetworkManager.singleton.StopClient();
+            ErDucaNetworkManager.singleton.IGaveUp = true;
+            PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            //ErDucaNetworkManager.singleton.IRageQuit = false;
+
+            ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
         }
-        ///
-        transitionManagerGO.GetComponent<TransitionScript>().LoadSceneByID(0);
-        
     }
 
     public void CancelButton()

@@ -934,5 +934,18 @@ public class ErDucaPlayer : NetworkBehaviour
         }
     }
 
+    public override void OnStopClient()
+    {
+        Debug.Log(_erDucaNetworkManager.numPlayers);
+        if(_erDucaNetworkManager.numPlayers == 2)
+        {
+            if (!_erDucaNetworkManager.IGaveUp)
+            {
+                Debug.Log("Ho ragequittato io");
+            }
+        }
+    }
+
+
     #endregion
 }

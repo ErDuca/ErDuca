@@ -17,8 +17,30 @@ public class ErDucaNetworkManager : NetworkManager
     private int _boardSize = 480;
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
-
     private int coinFlip;
+
+    private bool _iGaveUp = false;
+    private bool _iRageQuit = false;
+
+    private bool _iAmHostAtStart = false;
+
+    public bool IGaveUp
+    {
+        get => _iGaveUp;
+        set
+        {
+            _iGaveUp = value;
+        }
+    }
+
+    public bool IRageQuit
+    {
+        get => _iRageQuit;
+        set
+        {
+            _iRageQuit = value;
+        }
+    }
 
     //Players Connections
     private NetworkConnectionToClient[] playersConnections = new NetworkConnectionToClient[2];
@@ -242,6 +264,7 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 1;
             erDucaPlayer.MyColor = p1Color;
+            _iAmHostAtStart = true;
 
             playersConnections[0] = conn;
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
@@ -257,6 +280,7 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
         base.OnServerDisconnect(conn);
+        StopHost();
     }
 
     /// <summary>

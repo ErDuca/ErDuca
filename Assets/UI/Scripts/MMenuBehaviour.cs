@@ -109,11 +109,23 @@ public class MMenuBehaviour : MonoBehaviour
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
             //Extra menu stats
+            /*
             if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
+            */
+
+            if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
+            {
+                if (!ErDucaNetworkManager.singleton.IGaveUp)
+                {
+                    PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
+                    PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+                }
+            }
+
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
             losses = PlayerPrefsUtility.GetEncryptedInt("Losses");
             gamesPlayed = wins + losses;
@@ -145,7 +157,11 @@ public class MMenuBehaviour : MonoBehaviour
     //Screen 4 -> Main Menu
     public void GoToScreen1From4() => StartCoroutine(MoveToScreenCoroutine(screen4Position, screen1Position));
     //Screen Multiplayer Menu -> Join Menu
-    public void GoToScreen5From3() => StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
+    public void GoToScreen5From3() { 
+        JoinSearch();
+        StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
+    }
+
     //Screen Join Menu -> Multiplayer Menu
     public void GoToScreen3From5() => StartCoroutine(MoveToScreenCoroutine(screen5Position, screen3Position));
     //Screen Guide -> Screen Extras
