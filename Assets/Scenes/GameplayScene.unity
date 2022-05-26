@@ -3586,7 +3586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098730, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
@@ -4081,9 +4081,9 @@ MonoBehaviour:
   timeSliderImageLeft: {fileID: 889297408}
   timeSliderImageRight: {fileID: 2118326503}
   maxPenalties: 1
-  changingTurn: 0
   turnTime: 15
   messageToast: {fileID: 337379410}
+  changingTurn: 0
   pauseMenu: {fileID: 1698679723}
   eventSystem: {fileID: 1915030113}
   musicSliderGO: {fileID: 534154753}
@@ -4117,7 +4117,6 @@ MonoBehaviour:
   redWinsScreenGO: {fileID: 500987302}
   sceneTransitionManager: {fileID: 1976464447}
   networkDiscovery: {fileID: 1028859632}
-  isHost: 0
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

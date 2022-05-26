@@ -43,6 +43,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private float turnTime;
     [SerializeField] private GameObject messageToast;
     [HideInInspector] public bool changingTurn;
+    //private bool hasMatchBegun = false;
 
     [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
@@ -96,45 +97,50 @@ public class GameUIBehaviour : MonoBehaviour
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
 
         soundManager = GetComponent<SoundManager>();
+
+        //This makes sure that the timer does not start until the animations are done
+        changingTurn = true;
     }
 
     private void Update()
     {
-        if (timeRemaining > 0)
-        {
-            if (!changingTurn)
+        if(!changingTurn)
+            if (timeRemaining > 0)
             {
+                
                 timeRemaining -= Time.deltaTime;
                 //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
                 timeToDisplay = timeRemaining + 1;
                 //Sets time text to minutes:seconds, both always displayed as 2 digits
                 timeText.text = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(timeToDisplay / 60), Mathf.FloorToInt(timeToDisplay % 60));
                 timeSlider.value = timeRemaining / turnTime;
+
             }
-        }
-        else
-        {
-            if (ErDucaPlayer.LocalPlayer.isMyTurn && !(ErDucaPlayer.LocalPlayer.myCurrentBattleState.Equals(BattleState.PWin)))
+            else
             {
-                timeoutPenalty++;
-                if (timeoutPenalty > maxPenalties)
+                //If a player times out there are maxPenalties "warnings" with a toast appearing on the screen and additional time added
+                //After that the player automatically loses
+                if (ErDucaPlayer.LocalPlayer.isMyTurn && !(ErDucaPlayer.LocalPlayer.myCurrentBattleState.Equals(BattleState.PWin)))
                 {
-                    int winnerId = (ErDucaPlayer.LocalPlayer.MyNetId == 1) ? 2 : 1;
-                    ErDucaPlayer.LocalPlayer.CmdForfeitMatch(winnerId);
+                    timeoutPenalty++;
+                    if (timeoutPenalty > maxPenalties)
+                    {
+                        int winnerId = (ErDucaPlayer.LocalPlayer.MyNetId == 1) ? 2 : 1;
+                        ErDucaPlayer.LocalPlayer.CmdForfeitMatch(winnerId);
+                    }
+                    else
+                    {
+                        StartCoroutine(ShowToast("PLACEHOLDER WARNING\nYOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
+                        timeRemaining = turnTime;
+                    }
                 }
+
                 else
                 {
-                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nYOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
+                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONE-PER-MATCH ADDITIONAL TIME GRANTED"));
                     timeRemaining = turnTime;
                 }
             }
-
-            else
-            {
-                StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONE-PER-MATCH ADDITIONAL TIME GRANTED"));
-                timeRemaining = turnTime;
-            }
-        }
     }
 
     #region host menu
@@ -155,6 +161,7 @@ public class GameUIBehaviour : MonoBehaviour
     {
         timeRemaining = turnTime;
         changingTurn = true;
+        //hasMatchBegun = true;
         
         eventSystem.SetActive(false);
         StartCoroutine(GameStartAnimationCoroutine());
@@ -559,6 +566,7 @@ public class GameUIBehaviour : MonoBehaviour
 
     #endregion
 
+    #region sound
 
     public void CallSoundManager(Sound element)
     {
@@ -569,4 +577,6 @@ public class GameUIBehaviour : MonoBehaviour
     {
 
     }
+
+    #endregion
 }
