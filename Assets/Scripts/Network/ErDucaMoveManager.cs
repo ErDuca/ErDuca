@@ -58,7 +58,6 @@ public class ErDucaMoveManager : MonoBehaviour
                         availableMoves.Add(temp, Ptype.Fly);
                     break;
 
-                //(DEBUGGING)!
                 case Ptype.Strike:
                     temp = GetStrikeMoves(netId, i, j, m._offsetX, m._offsetY);
                     if (temp != null)
