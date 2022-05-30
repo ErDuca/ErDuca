@@ -4069,6 +4069,7 @@ MonoBehaviour:
   redWinsScreenGO: {fileID: 500987302}
   sceneTransitionManager: {fileID: 1976464447}
   networkDiscovery: {fileID: 1028859632}
+  firstTurnBoxText: {fileID: 67292260}
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

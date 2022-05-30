@@ -78,6 +78,9 @@ public class GameUIBehaviour : MonoBehaviour
     private TransitionScript transitionScript;
     public NetworkDiscovery networkDiscovery;
 
+    [Header("Turn related")]
+    [SerializeField] private Text firstTurnBoxText;
+
     private SoundManager soundManager;
 
     public bool IsHost
@@ -403,6 +406,13 @@ public class GameUIBehaviour : MonoBehaviour
 
     #region turn management
 
+    public void FirstTurnMoveDone(bool firstTurnDone, string nextMessage)
+    {
+        gameAnimator.SetBool("FirstTurnDone", firstTurnDone);
+        gameAnimator.SetTrigger("FirstTurnMoveDone");
+        firstTurnBoxText.text = nextMessage;
+    }
+
     public void TurnStart(int playerId)
     {
         switch (playerId)
@@ -431,7 +441,8 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone"));
+        yield return new WaitUntil(() => (gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone")
+            || gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("FirstTurnIdle")));
 
         //Everything turn-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
