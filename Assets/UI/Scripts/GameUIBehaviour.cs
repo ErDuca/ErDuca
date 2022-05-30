@@ -431,7 +431,77 @@ public class GameUIBehaviour : MonoBehaviour
                 break;
         }
     }
+    /*
+    public void FirstTurnStart(int playerId)
+    {
+        switch (playerId)
+        {
+            //Host - Red
+            case 1:
+                OpponentsFirstTurnStart();
+                break;
 
+            //Remote Client - Blue
+            case 2:
+                PlayersFirstTurnStart();
+                break;
+
+            default:
+                PlayersFirstTurnStart();
+                break;
+        }
+    }
+
+    private void PlayersFirstTurnStart() => StartCoroutine(PlayersFirstTurnStartCoroutine());
+    private IEnumerator PlayersFirstTurnStartCoroutine()
+    {
+        eventSystem.SetActive(false);
+        //changingturn stops time during turn swap animations
+        changingTurn = true;
+
+        //Everything turn-related gets moved to the left side
+        timeSliderImageRight.SetActive(false);
+        timeSliderImageLeft.SetActive(true);
+        turnText.alignment = TextAnchor.MiddleLeft;
+        turnText.text = "bLUE'S\nTURN";
+        timeSlider.direction = Slider.Direction.LeftToRight;
+        timeSliderFill.GetComponent<Image>().color = colorBlue;
+
+        timeRemaining = turnTime;
+        changingTurn = false;
+        eventSystem.SetActive(true);
+
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
+
+        yield return null;
+    }
+
+    private void OpponentsFirstTurnStart() => StartCoroutine(OpponentsFirstTurnStartCoroutine());
+    private IEnumerator OpponentsFirstTurnStartCoroutine()
+    {
+        eventSystem.SetActive(false);
+        //changingturn stops turn timer during turn swap animations
+        changingTurn = true;
+
+        //Everything turn-related gets moved to the right side
+        timeSliderImageLeft.SetActive(false);
+        timeSliderImageRight.SetActive(true);
+        turnText.alignment = TextAnchor.MiddleRight;
+        turnText.text = "RED'S\nTURN";
+        timeSlider.direction = Slider.Direction.RightToLeft;
+        timeSliderFill.GetComponent<Image>().color = colorRed;
+
+        //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
+        thinkingIcon.SetActive(true);
+        timeRemaining = turnTime;
+        changingTurn = false;
+        eventSystem.SetActive(true);
+
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
+
+        yield return null;
+    }
+    */
     private void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()
     {
@@ -441,8 +511,7 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitUntil(() => (gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone")
-            || gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("FirstTurnIdle")));
+        yield return new WaitUntil(() => (gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone")));
 
         //Everything turn-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
