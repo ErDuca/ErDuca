@@ -4044,7 +4044,6 @@ MonoBehaviour:
   transitionManagerGO: {fileID: 1976464447}
   transitionAnimator: {fileID: 878555019}
   gameAnimator: {fileID: 917277564}
-  isFirstTurn: 0
   hostMenuGO: {fileID: 1634342154}
   drawBoxGO: {fileID: 1658671995}
   drawBoxAnimator: {fileID: 1658671997}
@@ -4072,7 +4071,12 @@ MonoBehaviour:
   networkDiscovery: {fileID: 1028859632}
   firstTurnBoxText: {fileID: 67292260}
   firstTurnBoxGO: {fileID: 3432500759756726957}
-  centerPoint: {fileID: 0}
+  isFirstTurn: 0
+  firstTurnMessages:
+  - You place the duke
+  - Opponent places the duke
+  - You place the pikemen
+  - Opponent places the pikemen
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

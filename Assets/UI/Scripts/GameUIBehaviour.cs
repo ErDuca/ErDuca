@@ -56,16 +56,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
-    [SerializeField] private bool isFirstTurn;
 
-    public bool IsFirstTurn
-    {
-        get => isFirstTurn;
-        set
-        {
-            isFirstTurn = value;
-        }
-    }
     public Animator GameAnimator
     {
         get => gameAnimator;
@@ -89,13 +80,25 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Transitions related")]
     [SerializeField] private GameObject sceneTransitionManager;
-    private TransitionScript transitionScript;
+    //private TransitionScript transitionScript;
     public NetworkDiscovery networkDiscovery;
 
     [Header("Turn related")]
     [SerializeField] private Text firstTurnBoxText;
     [SerializeField] private GameObject firstTurnBoxGO;
-    [SerializeField] private GameObject centerPoint;
+    private bool isFirstTurn;
+    [SerializeField] private string[] firstTurnMessages;
+    private string[] myFirstTurnMessages;
+    private int firstTurnIndex = 0;
+
+    public bool IsFirstTurn
+    {
+        get => isFirstTurn;
+        set
+        {
+            isFirstTurn = value;
+        }
+    }
 
     private SoundManager soundManager;
 
@@ -119,6 +122,9 @@ public class GameUIBehaviour : MonoBehaviour
 
         //This makes sure that the timer does not start until the animations are done
         changingTurn = true;
+
+        //TODO: This cannot be the right way to do this, right?
+        myFirstTurnMessages = new string[] {"", "", "", "" };        
     }
 
     private void Update()
@@ -156,7 +162,7 @@ public class GameUIBehaviour : MonoBehaviour
 
                 else
                 {
-                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONE-PER-MATCH ADDITIONAL TIME GRANTED"));
+                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED"));
                     timeRemaining = turnTime;
                 }
             }
@@ -182,7 +188,24 @@ public class GameUIBehaviour : MonoBehaviour
         changingTurn = true;
         isFirstTurn = true;
         //hasMatchBegun = true;
-        
+
+        Debug.Log(gameAnimator.GetInteger("startingPlayer"));
+        Debug.Log(ErDucaPlayer.LocalPlayer.MyNetId);
+
+        //Define the order of messages during the first turn of the match
+        //depending if you're the first or the second to start
+        if (ErDucaPlayer.LocalPlayer.MyNetId == gameAnimator.GetInteger("startingPlayer"))
+        {
+            myFirstTurnMessages = firstTurnMessages;
+        }
+        else
+        {
+            myFirstTurnMessages[0] = firstTurnMessages[1];
+            myFirstTurnMessages[1] = firstTurnMessages[0];
+            myFirstTurnMessages[2] = firstTurnMessages[3];
+            myFirstTurnMessages[3] = firstTurnMessages[2];
+        }
+
         eventSystem.SetActive(false);
         StartCoroutine(GameStartAnimationCoroutine());
     }
@@ -498,7 +521,10 @@ public class GameUIBehaviour : MonoBehaviour
         if (isFirstTurn)
         {
             firstTurnBoxGO.SetActive(true);
-            firstTurnBoxText.text = message;
+
+            firstTurnBoxText.text = myFirstTurnMessages[firstTurnIndex];
+            if(firstTurnIndex < 4)
+                firstTurnIndex++;
         }
     }
 
