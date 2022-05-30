@@ -45,6 +45,8 @@ public class ErDucaGameManager : NetworkBehaviour
             {
                 case BattleState.CoinFlip:
                     currentState = BattleState.PDuke;
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.FirstTurnMoveDone(false, "Ehi Imbecile! Quel pirla del tuo avversario sta mettendo il duca");
                     ErDucaPlayer.LocalPlayer.SpawnDuke();
                     ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
                     break;
@@ -161,6 +163,8 @@ public class ErDucaGameManager : NetworkBehaviour
         isOurTurn = !isOurTurn;
         iStartFirst = true;
         currentState = BattleState.PDuke;
+        int localPlayerId = ErDucaPlayer.LocalPlayer.MyNetId;
+        ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
         ErDucaPlayer.LocalPlayer.SpawnDuke();
     }
 
