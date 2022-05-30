@@ -109,21 +109,10 @@ public class MMenuBehaviour : MonoBehaviour
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
             //Extra menu stats
-            /*
             if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
             {
-                PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+                PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-            }
-            */
-
-            if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
-            {
-                if (!ErDucaNetworkManager.singleton.IGaveUp)
-                {
-                    PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
-                    PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-                }
             }
 
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");

@@ -66,6 +66,29 @@ public class ErDucaPlayer : NetworkBehaviour
     [SerializeField]
     [SyncVar] private bool _hasDrawn = false;
 
+    [SerializeField]
+    [SyncVar] private bool _iGaveUp = false;
+    [SerializeField]
+    [SyncVar] private bool _iAmHostAtStart = false;
+
+    public bool IGaveUp
+    {
+        get => _iGaveUp;
+        set
+        {
+            _iGaveUp = value;
+        }
+    }
+
+    public bool IAmHostAtStart
+    {
+        get => _iAmHostAtStart;
+        set
+        {
+            _iAmHostAtStart = value;
+        }
+    }
+
     //Getters & Setters
     public bool HasDrawn
     {
@@ -936,6 +959,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
     public override void OnStopClient()
     {
+        /*
         Debug.Log(_erDucaNetworkManager.numPlayers);
         if(_erDucaNetworkManager.numPlayers == 2)
         {
@@ -944,8 +968,8 @@ public class ErDucaPlayer : NetworkBehaviour
                 Debug.Log("Ho ragequittato io");
             }
         }
+        */
     }
-
 
     #endregion
 }

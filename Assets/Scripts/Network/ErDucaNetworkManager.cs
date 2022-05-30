@@ -19,29 +19,6 @@ public class ErDucaNetworkManager : NetworkManager
     private int _tileSpawningHeight = -644;
     private int coinFlip;
 
-    private bool _iGaveUp = false;
-    private bool _iRageQuit = false;
-
-    private bool _iAmHostAtStart = false;
-
-    public bool IGaveUp
-    {
-        get => _iGaveUp;
-        set
-        {
-            _iGaveUp = value;
-        }
-    }
-
-    public bool IRageQuit
-    {
-        get => _iRageQuit;
-        set
-        {
-            _iRageQuit = value;
-        }
-    }
-
     //Players Connections
     private NetworkConnectionToClient[] playersConnections = new NetworkConnectionToClient[2];
 
@@ -247,11 +224,14 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 2;
             erDucaPlayer.MyColor = p2Color;
+            erDucaPlayer.IGaveUp = false;
+            erDucaPlayer.IAmHostAtStart = false;
 
             InitializeTilesGrid();
 
-            //Starting Match - Coin Flip
             playersConnections[1] = conn;
+
+            //Starting Match - Coin Flip
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1, false);
 
@@ -264,7 +244,8 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 1;
             erDucaPlayer.MyColor = p1Color;
-            _iAmHostAtStart = true;
+            erDucaPlayer.IGaveUp = false;
+            erDucaPlayer.IAmHostAtStart = true;
 
             playersConnections[0] = conn;
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();

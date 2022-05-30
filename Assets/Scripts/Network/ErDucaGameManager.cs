@@ -5,7 +5,6 @@ using Mirror;
 
 public enum BattleState
 {
-    Ante,
     CoinFlip,
     PDuke,
     PPikemen,

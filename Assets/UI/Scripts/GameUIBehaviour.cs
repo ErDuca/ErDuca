@@ -248,10 +248,9 @@ public class GameUIBehaviour : MonoBehaviour
         // host
         if (NetworkServer.active && NetworkClient.isConnected)
         {
-            ErDucaNetworkManager.singleton.IGaveUp = true;
+            ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-            //ErDucaNetworkManager.singleton.IRageQuit = false;
             ErDucaNetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
@@ -259,11 +258,9 @@ public class GameUIBehaviour : MonoBehaviour
         // stop client if client-only
         else if (NetworkClient.isConnected)
         {
-            ErDucaNetworkManager.singleton.IGaveUp = true;
+            ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-            //ErDucaNetworkManager.singleton.IRageQuit = false;
-
             ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
         }
@@ -276,6 +273,8 @@ public class GameUIBehaviour : MonoBehaviour
             NetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
+
+        /*
         // stop client if client-only
         else if (NetworkClient.isConnected)
         {
@@ -283,6 +282,7 @@ public class GameUIBehaviour : MonoBehaviour
             networkDiscovery.StopDiscovery();
         }
         transitionScript.LoadSceneByID(0);
+        */
     }
 
     #endregion
