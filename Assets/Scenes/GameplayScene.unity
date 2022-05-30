@@ -4044,6 +4044,7 @@ MonoBehaviour:
   transitionManagerGO: {fileID: 1976464447}
   transitionAnimator: {fileID: 878555019}
   gameAnimator: {fileID: 917277564}
+  isFirstTurn: 0
   hostMenuGO: {fileID: 1634342154}
   drawBoxGO: {fileID: 1658671995}
   drawBoxAnimator: {fileID: 1658671997}
@@ -4070,6 +4071,8 @@ MonoBehaviour:
   sceneTransitionManager: {fileID: 1976464447}
   networkDiscovery: {fileID: 1028859632}
   firstTurnBoxText: {fileID: 67292260}
+  firstTurnBoxGO: {fileID: 3432500759756726957}
+  centerPoint: {fileID: 0}
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3
@@ -10107,13 +10110,33 @@ GameObject:
   - component: {fileID: 3432500759756726946}
   - component: {fileID: 3432500759756726944}
   - component: {fileID: 3432500759756726947}
+  - component: {fileID: 3432500759756726958}
   m_Layer: 5
   m_Name: FirstTurnMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
+--- !u!95 &3432500759756726958
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3432500759756726957}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 789474ff219f492498cf1421eface615, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &4192565487762358105
 PrefabInstance:
   m_ObjectHideFlags: 0

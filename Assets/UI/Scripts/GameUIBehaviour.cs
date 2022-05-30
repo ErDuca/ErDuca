@@ -56,6 +56,20 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
+    [SerializeField] private bool isFirstTurn;
+
+    public bool IsFirstTurn
+    {
+        get => isFirstTurn;
+        set
+        {
+            isFirstTurn = value;
+        }
+    }
+    public Animator GameAnimator
+    {
+        get => gameAnimator;
+    }
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
@@ -80,6 +94,8 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Turn related")]
     [SerializeField] private Text firstTurnBoxText;
+    [SerializeField] private GameObject firstTurnBoxGO;
+    [SerializeField] private GameObject centerPoint;
 
     private SoundManager soundManager;
 
@@ -164,6 +180,7 @@ public class GameUIBehaviour : MonoBehaviour
     {
         timeRemaining = turnTime;
         changingTurn = true;
+        isFirstTurn = true;
         //hasMatchBegun = true;
         
         eventSystem.SetActive(false);
@@ -406,13 +423,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     #region turn management
 
-    public void FirstTurnMoveDone(bool firstTurnDone, string nextMessage)
-    {
-        gameAnimator.SetBool("FirstTurnDone", firstTurnDone);
-        gameAnimator.SetTrigger("FirstTurnMoveDone");
-        firstTurnBoxText.text = nextMessage;
-    }
-
     public void TurnStart(int playerId)
     {
         switch (playerId)
@@ -431,77 +441,6 @@ public class GameUIBehaviour : MonoBehaviour
                 break;
         }
     }
-    /*
-    public void FirstTurnStart(int playerId)
-    {
-        switch (playerId)
-        {
-            //Host - Red
-            case 1:
-                OpponentsFirstTurnStart();
-                break;
-
-            //Remote Client - Blue
-            case 2:
-                PlayersFirstTurnStart();
-                break;
-
-            default:
-                PlayersFirstTurnStart();
-                break;
-        }
-    }
-
-    private void PlayersFirstTurnStart() => StartCoroutine(PlayersFirstTurnStartCoroutine());
-    private IEnumerator PlayersFirstTurnStartCoroutine()
-    {
-        eventSystem.SetActive(false);
-        //changingturn stops time during turn swap animations
-        changingTurn = true;
-
-        //Everything turn-related gets moved to the left side
-        timeSliderImageRight.SetActive(false);
-        timeSliderImageLeft.SetActive(true);
-        turnText.alignment = TextAnchor.MiddleLeft;
-        turnText.text = "bLUE'S\nTURN";
-        timeSlider.direction = Slider.Direction.LeftToRight;
-        timeSliderFill.GetComponent<Image>().color = colorBlue;
-
-        timeRemaining = turnTime;
-        changingTurn = false;
-        eventSystem.SetActive(true);
-
-        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
-
-        yield return null;
-    }
-
-    private void OpponentsFirstTurnStart() => StartCoroutine(OpponentsFirstTurnStartCoroutine());
-    private IEnumerator OpponentsFirstTurnStartCoroutine()
-    {
-        eventSystem.SetActive(false);
-        //changingturn stops turn timer during turn swap animations
-        changingTurn = true;
-
-        //Everything turn-related gets moved to the right side
-        timeSliderImageLeft.SetActive(false);
-        timeSliderImageRight.SetActive(true);
-        turnText.alignment = TextAnchor.MiddleRight;
-        turnText.text = "RED'S\nTURN";
-        timeSlider.direction = Slider.Direction.RightToLeft;
-        timeSliderFill.GetComponent<Image>().color = colorRed;
-
-        //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
-        thinkingIcon.SetActive(true);
-        timeRemaining = turnTime;
-        changingTurn = false;
-        eventSystem.SetActive(true);
-
-        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
-
-        yield return null;
-    }
-    */
     private void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()
     {
@@ -554,6 +493,35 @@ public class GameUIBehaviour : MonoBehaviour
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
     }
 
+    public void ShowFirstTurnMessage(string message)
+    {
+        if (isFirstTurn)
+        {
+            firstTurnBoxGO.SetActive(true);
+            firstTurnBoxText.text = message;
+        }
+    }
+
+    public void HideFirstTurnMessage()
+    {
+        if (isFirstTurn)
+        {
+            StartCoroutine(HideFirstTurnMessageCoroutine());
+        }
+    }
+
+    public void KillFirstTurnMessage()
+    {
+        firstTurnBoxGO.SetActive(false);
+    }
+    
+    public IEnumerator HideFirstTurnMessageCoroutine()
+    {
+        firstTurnBoxGO.GetComponent<Animator>().SetTrigger("firstMessageFadeOut");
+        yield return new WaitUntil(() => firstTurnBoxGO.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("firstTurnMessageDone"));
+        firstTurnBoxGO.SetActive(false);
+    }
+    
     private IEnumerator ShowToast(string message)
     {
         messageToast.GetComponentInChildren<Text>().text = message;
