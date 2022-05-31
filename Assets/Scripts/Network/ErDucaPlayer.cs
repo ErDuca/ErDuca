@@ -363,15 +363,16 @@ public class ErDucaPlayer : NetworkBehaviour
         else if (isLocalPlayer && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             RaycastHit hit;
+                Ray ray;
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                ray = _camera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out hit))
 #endif
 
 #if UNITY_ANDROID
-                Ray rayMobile = _camera.ScreenPointToRay(Input.GetTouch(0).position);
-                if (Physics.Raycast(rayMobile, out hit))
+                ray = _camera.ScreenPointToRay(Input.GetTouch(0).position);
+                if (Physics.Raycast(ray, out hit))
 #endif
 
             {
