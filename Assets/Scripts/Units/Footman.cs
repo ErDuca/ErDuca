@@ -21,6 +21,6 @@ public class Footman : ErDucaPiece
         _PhaseTwoMovementArray.Add(new Movement(-1, 1, Ptype.Walk));
         _PhaseTwoMovementArray.Add(new Movement(1, 1, Ptype.Walk));
         _PhaseTwoMovementArray.Add(new Movement(1, -1, Ptype.Walk));
-        _PhaseTwoMovementArray.Add(new Movement(0, -2, Ptype.Walk));
+        _PhaseTwoMovementArray.Add(new Movement(2, 0, Ptype.Walk));
     }
 }
