@@ -17,9 +17,9 @@ public class Longbowman : ErDucaPiece
         _PhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Walk));
         _PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Walk));
 
+        _PhaseTwoMovementArray.Add(new Movement(-1, -1, Ptype.Walk));
         _PhaseTwoMovementArray.Add(new Movement(-1, 1, Ptype.Walk));
-        _PhaseTwoMovementArray.Add(new Movement(1, 1, Ptype.Walk));
-        _PhaseTwoMovementArray.Add(new Movement(0, -2, Ptype.Strike));
-        _PhaseTwoMovementArray.Add(new Movement(0, -3, Ptype.Strike));
+        _PhaseTwoMovementArray.Add(new Movement(2, 0, Ptype.Strike));
+        _PhaseTwoMovementArray.Add(new Movement(3, 0, Ptype.Strike));
     }
 }

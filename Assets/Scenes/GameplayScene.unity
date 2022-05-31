@@ -4004,8 +4004,8 @@ MonoBehaviour:
   unitMovingTables:
   - {fileID: 21300000, guid: de41143af9d1e4f4b9294658849aee51, type: 3}
   - {fileID: 21300000, guid: bcb5d8afbb341d7489dcf614346ef13f, type: 3}
-  - {fileID: 21300000, guid: 43f4124a33ae98c4d921f605394f3226, type: 3}
-  - {fileID: 21300000, guid: 9e13d6eb5a21c7e43b8b954bd6796f85, type: 3}
+  - {fileID: 21300000, guid: 047a33bfa19adb3439370434172b0cc9, type: 3}
+  - {fileID: 21300000, guid: e3cb58b80db7b1649b46e6afd0ff2bf5, type: 3}
   - {fileID: 21300000, guid: 4ce9f1bba01fa5f48bc5afa08b16a623, type: 3}
   - {fileID: 21300000, guid: 11f3a79673e45994f896bea63ff99274, type: 3}
   - {fileID: 21300000, guid: 95579f4f4e76aad468c17dfc3a62a678, type: 3}

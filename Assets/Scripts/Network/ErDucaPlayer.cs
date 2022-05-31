@@ -345,8 +345,16 @@ public class ErDucaPlayer : NetworkBehaviour
 
     private void Update()
     {
-        
-        if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn &&!hasDoneSomething)
+
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+    if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn && !hasDoneSomething)
+#endif
+
+#if UNITY_ANDROID
+    if (isLocalPlayer && _erDucaGameManager.IsOurTurn && Input.touchCount > 0 
+    && Input.GetTouch(0).phase == TouchPhase.Began && !_gameUIBehaviour.changingTurn && !hasDoneSomething)
+#endif
+
         {
             StartCoroutine(HandleInput(_erDucaGameManager.CurrentState));
         } 
@@ -355,9 +363,17 @@ public class ErDucaPlayer : NetworkBehaviour
         else if (isLocalPlayer && Input.GetMouseButtonDown(0) && !_gameUIBehaviour.changingTurn)
         {
             RaycastHit hit;
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit))
+#endif
+
+#if UNITY_ANDROID
+                Ray rayMobile = _camera.ScreenPointToRay(Input.GetTouch(0).position);
+                if (Physics.Raycast(rayMobile, out hit))
+#endif
+
             {
                 Transform objectHit = hit.transform;
                 if (objectHit.CompareTag("Piece"))
