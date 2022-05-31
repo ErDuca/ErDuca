@@ -443,7 +443,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &67292260
 MonoBehaviour:
@@ -4083,12 +4083,11 @@ MonoBehaviour:
   networkDiscovery: {fileID: 1028859632}
   firstTurnBoxText: {fileID: 67292260}
   firstTurnBoxGO: {fileID: 3432500759756726957}
-  isFirstTurn: 0
   firstTurnMessages:
-  - You place the duke
-  - Opponent places the duke
-  - You place the pikemen
-  - Opponent places the pikemen
+  - Place the duke
+  - Opponent is placing the duke...
+  - Place the footmen
+  - Opponent is placing the footmen...
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3
