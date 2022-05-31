@@ -124,7 +124,7 @@ public class GameUIBehaviour : MonoBehaviour
         changingTurn = true;
 
         //TODO: This cannot be the right way to do this, right?
-        myFirstTurnMessages = new string[] {"", "", "", "" };        
+        myFirstTurnMessages = new string[] {"", "", "", "" };
     }
 
     private void Update()
@@ -189,12 +189,11 @@ public class GameUIBehaviour : MonoBehaviour
         isFirstTurn = true;
         //hasMatchBegun = true;
 
-        Debug.Log(gameAnimator.GetInteger("startingPlayer"));
-        Debug.Log(ErDucaPlayer.LocalPlayer.MyNetId);
-
         //Define the order of messages during the first turn of the match
         //depending if you're the first or the second to start
-        if (ErDucaPlayer.LocalPlayer.MyNetId == gameAnimator.GetInteger("startingPlayer"))
+        Debug.Log("netid: "+ErDucaPlayer.LocalPlayer.MyNetId);
+        Debug.Log("starting: "+gameAnimator.GetInteger("startingPlayer"));
+        if ((ErDucaPlayer.LocalPlayer.MyNetId == gameAnimator.GetInteger("startingPlayer")) || ((ErDucaPlayer.LocalPlayer.MyNetId == 0 && gameAnimator.GetInteger("startingPlayer") == 2)))
         {
             myFirstTurnMessages = firstTurnMessages;
         }
@@ -642,6 +641,19 @@ public class GameUIBehaviour : MonoBehaviour
         //the main menu is open the player gets a loss
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
         gameAnimator.SetTrigger("gameOver");
+
+        if (NetworkServer.active && NetworkClient.isConnected)
+        {
+            ErDucaNetworkManager.singleton.StopHost();
+            networkDiscovery.StopDiscovery();
+        }
+
+        // stop client if client-only
+        else if (NetworkClient.isConnected)
+        { 
+            ErDucaNetworkManager.singleton.StopClient();
+            networkDiscovery.StopDiscovery();
+        }
     }
 
     #endregion
