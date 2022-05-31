@@ -640,6 +640,7 @@ public class GameUIBehaviour : MonoBehaviour
         //This is an "anti-ragequit": if the player doesn't finish the match, this is not set to 0 and the next time
         //the main menu is open the player gets a loss
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+        gameAnimator.SetTrigger("gameOver");
 
         if (NetworkServer.active && NetworkClient.isConnected)
         {
@@ -653,8 +654,6 @@ public class GameUIBehaviour : MonoBehaviour
             ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
         }
-
-        gameAnimator.SetTrigger("gameOver");
     }
 
     #endregion
