@@ -16,13 +16,13 @@ public class Duke : ErDucaPiece
     {
         _PhaseOneMovementArray.Add(new Movement(0,1, Ptype.Slide));
         _PhaseOneMovementArray.Add(new Movement(0,-1, Ptype.Slide));
-        _PhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Slide));
-        _PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
+        //_PhaseOneMovementArray.Add(new Movement(1, 0, Ptype.Slide));
+        //_PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
 
-        _PhaseTwoMovementArray.Add(new Movement(1, 0, Ptype.Strike));
-        _PhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Strike));
-        _PhaseTwoMovementArray.Add(new Movement(-1, 0, Ptype.Strike));
-        _PhaseTwoMovementArray.Add(new Movement(0, -1, Ptype.Strike));
+        _PhaseTwoMovementArray.Add(new Movement(1, 0, Ptype.Slide));
+        //_PhaseTwoMovementArray.Add(new Movement(0, 1, Ptype.Slide));
+        _PhaseTwoMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
+        //_PhaseTwoMovementArray.Add(new Movement(0, -1, Ptype.Slide));
     }
 }
 
