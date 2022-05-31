@@ -280,6 +280,7 @@ public class ErDucaPlayer : NetworkBehaviour
         RpcUpdateLocalNetIdMatrix(selectedPieceScript.GetComponent<ErDucaPiece>().I, selectedPieceScript.GetComponent<ErDucaPiece>().J, 0);
 
         selectedPieceScript.GetComponent<ErDucaPiece>().StartMoveTo(newTransform.position + new Vector3(0f, 30f, 0f));
+        selectedPieceScript.GetComponent<ErDucaPiece>().SwitchPhase();
 
         NetworkServer.Destroy(enemyPiece.gameObject);
 
