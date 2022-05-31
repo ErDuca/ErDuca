@@ -4,14 +4,31 @@ using UnityEngine;
 
 public enum Sound
 {
+    #region Menu Sounds
     click,
     enemyFound,
     menuWhoosh,
     titleEntrance,
     pageLeft,
+    #endregion
+
+    #region Gameplay Sounds
     startingTurn,
-    attack,
-    death
+    coinFlip,
+    unitDraw,
+    unitPlaced,
+    unitWalk,
+    unitJump,
+    unitSlide,
+    gameOver,
+    openInfoBox,
+    closeInfoBox,
+    
+    attackMelee,
+    attackRanged,
+    death,
+    playerPick
+    #endregion
 }
 
 [System.Serializable]

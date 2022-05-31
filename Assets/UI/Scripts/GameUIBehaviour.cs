@@ -289,7 +289,7 @@ public class GameUIBehaviour : MonoBehaviour
         int mappedPieceValue = (netId % 2 == 0) ? piece * 2 : (piece * 2 ) + 1;
 
         infoBlock.SetActive(true);
-
+        soundManager.PlaySound(Sound.openInfoBox);
         if (netId == 2)
         {
             infoSpriteRenderer.flipX = false;
@@ -363,6 +363,7 @@ public class GameUIBehaviour : MonoBehaviour
             infoAnimator.SetTrigger("hide");
             yield return new WaitUntil(() => infoAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"));
             infoBlock.SetActive(false);
+            soundManager.PlaySound(Sound.closeInfoBox);
         }
         
     }
@@ -497,6 +498,7 @@ public class GameUIBehaviour : MonoBehaviour
 
     public void DrawUnit()
     {
+        soundManager.PlaySound(Sound.unitDraw);
         drawBoxAnimator.SetTrigger("unitDrawn");
         int cardIndex = ErDucaPlayer.LocalPlayer.DrawCard();
         int playerColor = ErDucaPlayer.LocalPlayer.MyNetId;
@@ -576,6 +578,10 @@ public class GameUIBehaviour : MonoBehaviour
     public void CallSoundManagerAttacks()
     {
 
+    }
+
+    public void playClickSound() {
+        soundManager.PlaySound(Sound.click);
     }
 
     #endregion
