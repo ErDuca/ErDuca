@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.06134022, g: 0.065903984, b: 0.06602601, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2057,6 +2057,10 @@ PrefabInstance:
     - target: {fileID: 9005597397912098730, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Name
       value: StartMatchButton (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005597397912098730, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9005597398088346908, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_Text
@@ -8544,7 +8548,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2140131313}
   m_HandleRect: {fileID: 2140131312}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

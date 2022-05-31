@@ -17,7 +17,6 @@ public class ErDucaNetworkManager : NetworkManager
     private int _boardSize = 480;
     private int _tileSize = 80;
     private int _tileSpawningHeight = -644;
-
     private int coinFlip;
 
     //Players Connections
@@ -225,11 +224,14 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 2;
             erDucaPlayer.MyColor = p2Color;
+            erDucaPlayer.IGaveUp = false;
+            erDucaPlayer.IAmHostAtStart = false;
 
             InitializeTilesGrid();
 
-            //Starting Match - Coin Flip
             playersConnections[1] = conn;
+
+            //Starting Match - Coin Flip
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1, false);
 
@@ -242,6 +244,8 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 1;
             erDucaPlayer.MyColor = p1Color;
+            erDucaPlayer.IGaveUp = false;
+            erDucaPlayer.IAmHostAtStart = true;
 
             playersConnections[0] = conn;
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
@@ -257,6 +261,7 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
         base.OnServerDisconnect(conn);
+        StopHost();
     }
 
     /// <summary>

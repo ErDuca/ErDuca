@@ -5,7 +5,6 @@ using Mirror;
 
 public enum BattleState
 {
-    Ante,
     CoinFlip,
     PDuke,
     PPikemen,
@@ -48,16 +47,21 @@ public class ErDucaGameManager : NetworkBehaviour
                     currentState = BattleState.PDuke;
                     ErDucaPlayer.LocalPlayer.SpawnDuke();
                     ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
                     break;
 
                 case BattleState.PDuke:
                     currentState = BattleState.PPikemen;
                     ErDucaPlayer.LocalPlayer.SpawnPikemen();
                     ErDucaPlayer.LocalPlayer.hasDoneSomething = false;
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(localPlayerId);
                     break;
 
                 case BattleState.PPikemen:
                     currentState = BattleState.PTurn;
+
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.IsFirstTurn = false;
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.KillFirstTurnMessage();
 
                     if (!ErDucaPlayer.LocalPlayer.IsDeckEmpty() && ErDucaPlayer.LocalPlayer.AreDukeNearTilesFree())
                     {
@@ -69,7 +73,6 @@ public class ErDucaGameManager : NetworkBehaviour
                     break;
 
                 case BattleState.PTurn:
-
                     if (!ErDucaPlayer.LocalPlayer.IsDeckEmpty() && ErDucaPlayer.LocalPlayer.AreDukeNearTilesFree())
                     {
                         ErDucaPlayer.LocalPlayer.GameUIBehavior.ShowDrawBox();
@@ -89,15 +92,28 @@ public class ErDucaGameManager : NetworkBehaviour
 
             switch (currentState)
             {
+                case BattleState.CoinFlip:
+                    break;
+
+                case BattleState.PDuke:
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
+                    break;
+
                 case BattleState.PPikemen:
-                    if(!iStartFirst)
-                        ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
+
+                    if (!iStartFirst)
+                    {
+                        //Stai uscendo da Pikemen, e vedendo il primo turno
+                        ErDucaPlayer.LocalPlayer.GameUIBehavior.IsFirstTurn = false;
+                        ErDucaPlayer.LocalPlayer.GameUIBehavior.KillFirstTurnMessage();
+                    }
+
+                    ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
                     break;
 
                 case BattleState.PTurn:
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.HideDrawBox();
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
-
                     ErDucaPlayer.LocalPlayer.GameUIBehavior.TurnStart(invertedIdForAnimation);
                     break;
             }

@@ -57,6 +57,11 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
 
+    public Animator GameAnimator
+    {
+        get => gameAnimator;
+    }
+
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
     private bool isHost;
@@ -75,8 +80,25 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Transitions related")]
     [SerializeField] private GameObject sceneTransitionManager;
-    private TransitionScript transitionScript;
+    //private TransitionScript transitionScript;
     public NetworkDiscovery networkDiscovery;
+
+    [Header("Turn related")]
+    [SerializeField] private Text firstTurnBoxText;
+    [SerializeField] private GameObject firstTurnBoxGO;
+    private bool isFirstTurn;
+    [SerializeField] private string[] firstTurnMessages;
+    private string[] myFirstTurnMessages;
+    private int firstTurnIndex = 0;
+
+    public bool IsFirstTurn
+    {
+        get => isFirstTurn;
+        set
+        {
+            isFirstTurn = value;
+        }
+    }
 
     private SoundManager soundManager;
 
@@ -100,6 +122,9 @@ public class GameUIBehaviour : MonoBehaviour
 
         //This makes sure that the timer does not start until the animations are done
         changingTurn = true;
+
+        //TODO: This cannot be the right way to do this, right?
+        myFirstTurnMessages = new string[] {"", "", "", "" };        
     }
 
     private void Update()
@@ -137,7 +162,7 @@ public class GameUIBehaviour : MonoBehaviour
 
                 else
                 {
-                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONE-PER-MATCH ADDITIONAL TIME GRANTED"));
+                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED"));
                     timeRemaining = turnTime;
                 }
             }
@@ -161,8 +186,26 @@ public class GameUIBehaviour : MonoBehaviour
     {
         timeRemaining = turnTime;
         changingTurn = true;
+        isFirstTurn = true;
         //hasMatchBegun = true;
-        
+
+        Debug.Log(gameAnimator.GetInteger("startingPlayer"));
+        Debug.Log(ErDucaPlayer.LocalPlayer.MyNetId);
+
+        //Define the order of messages during the first turn of the match
+        //depending if you're the first or the second to start
+        if (ErDucaPlayer.LocalPlayer.MyNetId == gameAnimator.GetInteger("startingPlayer"))
+        {
+            myFirstTurnMessages = firstTurnMessages;
+        }
+        else
+        {
+            myFirstTurnMessages[0] = firstTurnMessages[1];
+            myFirstTurnMessages[1] = firstTurnMessages[0];
+            myFirstTurnMessages[2] = firstTurnMessages[3];
+            myFirstTurnMessages[3] = firstTurnMessages[2];
+        }
+
         eventSystem.SetActive(false);
         StartCoroutine(GameStartAnimationCoroutine());
     }
@@ -245,24 +288,25 @@ public class GameUIBehaviour : MonoBehaviour
 
     public void GiveUpMatch()
     {
-        PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
-        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-        ///
-        //chiamare 
+        // host
         if (NetworkServer.active && NetworkClient.isConnected)
         {
-            NetworkManager.singleton.StopHost();
+            ErDucaPlayer.LocalPlayer.IGaveUp = true;
+            PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            ErDucaNetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
+
         // stop client if client-only
         else if (NetworkClient.isConnected)
         {
-            NetworkManager.singleton.StopClient();
+            ErDucaPlayer.LocalPlayer.IGaveUp = true;
+            PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
+            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
         }
-        ///
-        transitionManagerGO.GetComponent<TransitionScript>().LoadSceneByID(0);
-        
     }
 
     public void CancelButton()
@@ -272,6 +316,8 @@ public class GameUIBehaviour : MonoBehaviour
             NetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
+
+        /*
         // stop client if client-only
         else if (NetworkClient.isConnected)
         {
@@ -279,6 +325,7 @@ public class GameUIBehaviour : MonoBehaviour
             networkDiscovery.StopDiscovery();
         }
         transitionScript.LoadSceneByID(0);
+        */
     }
 
     #endregion
@@ -418,7 +465,6 @@ public class GameUIBehaviour : MonoBehaviour
                 break;
         }
     }
-
     private void PlayersTurnStart() => StartCoroutine(PlayersTurnStartCoroutine());
     private IEnumerator PlayersTurnStartCoroutine()
     {
@@ -428,7 +474,7 @@ public class GameUIBehaviour : MonoBehaviour
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
-        yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone"));
+        yield return new WaitUntil(() => (gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone")));
 
         //Everything turn-related gets moved to the left side
         timeSliderImageRight.SetActive(false);
@@ -471,6 +517,38 @@ public class GameUIBehaviour : MonoBehaviour
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
     }
 
+    public void ShowFirstTurnMessage(string message)
+    {
+        if (isFirstTurn)
+        {
+            firstTurnBoxGO.SetActive(true);
+
+            firstTurnBoxText.text = myFirstTurnMessages[firstTurnIndex];
+            if(firstTurnIndex < 4)
+                firstTurnIndex++;
+        }
+    }
+
+    public void HideFirstTurnMessage()
+    {
+        if (isFirstTurn)
+        {
+            StartCoroutine(HideFirstTurnMessageCoroutine());
+        }
+    }
+
+    public void KillFirstTurnMessage()
+    {
+        firstTurnBoxGO.SetActive(false);
+    }
+    
+    public IEnumerator HideFirstTurnMessageCoroutine()
+    {
+        firstTurnBoxGO.GetComponent<Animator>().SetTrigger("firstMessageFadeOut");
+        yield return new WaitUntil(() => firstTurnBoxGO.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("firstTurnMessageDone"));
+        firstTurnBoxGO.SetActive(false);
+    }
+    
     private IEnumerator ShowToast(string message)
     {
         messageToast.GetComponentInChildren<Text>().text = message;
