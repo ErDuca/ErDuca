@@ -147,8 +147,8 @@ public class MMenuBehaviour : MonoBehaviour
     public void GoToScreen1From4() => StartCoroutine(MoveToScreenCoroutine(screen4Position, screen1Position));
     //Screen Multiplayer Menu -> Join Menu
     public void GoToScreen5From3() { 
-        JoinSearch();
         StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
+        JoinSearch();
     }
 
     //Screen Join Menu -> Multiplayer Menu
@@ -202,13 +202,15 @@ public class MMenuBehaviour : MonoBehaviour
         //TODO: Actual searching of the match
         ///////
         ///scrollViewContentGO.transform
+        
         foreach (Transform child in scrollViewContentGO.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
+        
         discoveredServers.Clear();
         networkDiscovery.StartDiscovery();
-        //JoinSpawn(); 
+        JoinSpawn(); 
         ///////
     }
 

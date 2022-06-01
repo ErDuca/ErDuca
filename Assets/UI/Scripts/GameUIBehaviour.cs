@@ -471,7 +471,7 @@ public class GameUIBehaviour : MonoBehaviour
         //changingturn stops time during turn swap animations
         changingTurn = true;
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
-        thinkingIcon.SetActive(false);
+        //thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
         yield return new WaitUntil(() => (gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone")));
 
@@ -508,7 +508,7 @@ public class GameUIBehaviour : MonoBehaviour
         timeSliderFill.GetComponent<Image>().color = colorRed;
 
         //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
-        thinkingIcon.SetActive(true);
+        //thinkingIcon.SetActive(true);
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
@@ -641,11 +641,14 @@ public class GameUIBehaviour : MonoBehaviour
         //the main menu is open the player gets a loss
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
         gameAnimator.SetTrigger("gameOver");
+    }
 
+    public void BackToMenuButton()
+    {
         if (NetworkServer.active && NetworkClient.isConnected)
         {
             ErDucaNetworkManager.singleton.StopHost();
-            networkDiscovery.StopDiscovery();
+            networkDiscovery.StopDiscovery(); // verificare che venga chiamata sul Client
         }
 
         // stop client if client-only

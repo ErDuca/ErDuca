@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using Mirror.Discovery;
 
 
 public class ErDucaNetworkManager : NetworkManager
@@ -347,7 +348,10 @@ public class ErDucaNetworkManager : NetworkManager
     /// <summary>
     /// This is called when a client is stopped.
     /// </summary>
-    public override void OnStopClient() { }
+    public override void OnStopClient() 
+    {
+        GetComponent<NetworkDiscovery>().StopDiscovery();
+    }
 
     #endregion
 }
