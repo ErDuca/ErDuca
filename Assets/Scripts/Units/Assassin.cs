@@ -15,12 +15,12 @@ public class Assassin : ErDucaPiece
     {
         //Primo valore : su e giu
         //Secondo valore : destra e sinistra
-        _PhaseOneMovementArray.Add(new Movement(-1, 0, Ptype.Slide));
-        _PhaseOneMovementArray.Add(new Movement(1, -1, Ptype.Slide));
-        _PhaseOneMovementArray.Add(new Movement(1, 1, Ptype.Slide));
+        _PhaseOneMovementArray.Add(new Movement(-2, 0, Ptype.Fly));
+        _PhaseOneMovementArray.Add(new Movement(2, -2, Ptype.Fly));
+        _PhaseOneMovementArray.Add(new Movement(2, 2, Ptype.Fly));
 
-        _PhaseTwoMovementArray.Add(new Movement(-1, -1, Ptype.Slide));
-        _PhaseTwoMovementArray.Add(new Movement(-1, 1, Ptype.Slide));
-        _PhaseTwoMovementArray.Add(new Movement(1, 0, Ptype.Slide));
+        _PhaseTwoMovementArray.Add(new Movement(-2, -2, Ptype.Fly));
+        _PhaseTwoMovementArray.Add(new Movement(-2, 2, Ptype.Fly));
+        _PhaseTwoMovementArray.Add(new Movement(2, 0, Ptype.Fly));
     }
 }

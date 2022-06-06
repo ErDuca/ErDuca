@@ -53,9 +53,17 @@ public class ErDucaMoveManager : MonoBehaviour
 
                 //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Fly:
-                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
-                    if (temp != null)
-                        availableMoves.Add(temp, Ptype.Fly);
+                    int ifl = i;
+                    int jfl = j;
+                    bool foundEnemyPieceFly = false;
+                    do
+                    {
+                        temp = GetFlyMoves(netId, ifl, jfl, m._offsetX, m._offsetY, ref foundEnemyPieceFly, ref ifl, ref jfl);
+
+                        if (temp != null)
+                            availableMoves.Add(temp, Ptype.Fly);
+                    }
+                    while (temp != null && !foundEnemyPieceFly);
                     break;
 
                 case Ptype.Strike:
@@ -201,5 +209,43 @@ public class ErDucaMoveManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    private Tuple<int, int> GetFlyMoves(int netId, int i, int j, int xOffset, int yOffset, ref bool hasFoundEnemy,
+        ref int isl, ref int jsl)
+    {
+        if (invertIndex)
+        {
+            xOffset = -xOffset;
+            yOffset = -yOffset;
+        }
+
+        //Bounds checking
+        if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
+            return null;
+
+        //Checking if there's a piece of mine, in the tile i want to go
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
+            return null;
+
+        //Found an enemy piece
+        if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != netId &&
+            ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != 0)
+        {
+            hasFoundEnemy = true;
+        }
+
+        if (xOffset > 0)
+            isl += 1;
+        else if (xOffset < 0)
+            isl += -1;
+        if (yOffset > 0)
+            jsl += 1;
+        else if (yOffset < 0)
+            jsl += -1; 
+
+        Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
+
+        return tupleToRet;
     }
 }
