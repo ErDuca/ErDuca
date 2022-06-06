@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.06134022, g: 0.065903984, b: 0.06602601, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6040,24 +6040,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Text
-      value: 'EXAMPLE OF TUTORIAL PAGE.
-
-        WRITING A LOT OF TEXT!
-
-        WRITING
-        A LOT OF TEXT!
-
-        WRITING A LOT OF TEXT!
-
-        WRITING A LOT OF
-        TEXT!
-
-        WRITING A LOT OF TEXT! WRITING A LOT OF TEXT!
-
-        HOLY
-        SHIT WHAT A LOAD OF TEXT!
-
-        AMAZING! INCREDIBLE!'
+      value: "In The Duke, players move their troops (tiles) around the board and
+        flip them over after each\r move. \nEach tile\u2019s side shows a different
+        movement profile.\n\nIf you end your movement in a square\r\noccupied by
+        an opponent\u2019s tile, you capture that tile. \nCapture your opponent\u2019s
+        Duke to win!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2361738307282175222, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Pivot.x
@@ -8548,7 +8539,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2140131313}
   m_HandleRect: {fileID: 2140131312}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

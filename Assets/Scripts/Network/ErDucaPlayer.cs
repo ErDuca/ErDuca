@@ -71,6 +71,11 @@ public class ErDucaPlayer : NetworkBehaviour
     [SerializeField]
     [SyncVar] private bool _iAmHostAtStart = false;
 
+    //Colors
+    private Color32 strikeColor = new Color32(243, 193, 77, 255);
+    private Color32 moveColor = new Color32(255, 255, 255, 255);
+    private Color32 highlightColor = new Color32(200, 140, 75, 255);
+
     public bool IGaveUp
     {
         get => _iGaveUp;
@@ -199,27 +204,27 @@ public class ErDucaPlayer : NetworkBehaviour
         switch (moveType)
         {
             case Ptype.Walk:
-                tile.SetMaterialColor(Color.yellow);
+                tile.SetMaterialColor(moveColor);
                 break;
 
             case Ptype.Jump:
-                tile.SetMaterialColor(Color.green);
+                tile.SetMaterialColor(moveColor);
                 break;
 
             case Ptype.Slide:
-                tile.SetMaterialColor(Color.blue);
+                tile.SetMaterialColor(moveColor);
                 break;
 
             case Ptype.Fly:
-                tile.SetMaterialColor(Color.white);
+                tile.SetMaterialColor(moveColor);
                 break;
 
             case Ptype.Strike:
-                tile.SetMaterialColor(Color.cyan);
+                tile.SetMaterialColor(strikeColor);
                 break;
 
             case Ptype.Spawn:
-                tile.SetMaterialColor(Color.magenta);
+                tile.SetMaterialColor(highlightColor);
                 break;
 
             default:
