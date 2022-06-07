@@ -182,6 +182,8 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void HostBeginMatch()
     {
+        //Only shows transition without changing scene
+        transitionScript.SceneTransitionPlay();
 
         networkDiscovery.globalRoomName = roomNameTextGO.text;
         if (string.IsNullOrEmpty(networkDiscovery.globalRoomName))
@@ -194,12 +196,10 @@ public class MMenuBehaviour : MonoBehaviour
 
         //TODO: This is limited to 20 characters, look for the reason and increase it to 40
         PlayerPrefs.SetString("Room Name", networkDiscovery.globalRoomName);
-        //transitionScript.LoadSceneByID(1); 
     }
 
     public void JoinSearch()
     {
-        //TODO: Actual searching of the match
         ///////
         ///scrollViewContentGO.transform
         
@@ -214,7 +214,6 @@ public class MMenuBehaviour : MonoBehaviour
         ///////
     }
 
-    //TODO: PLACEHOLDER METHOD (spawns an entry in the rooms list)
     public void JoinSpawn()
     {
         ////
@@ -233,7 +232,7 @@ public class MMenuBehaviour : MonoBehaviour
     {
         GameObject roomButton = Instantiate(roomButtonPrefab);
         roomButton.transform.SetParent(scrollViewContentGO.transform);
-        //TODO: This is a stupid fix, why these value changes from prefab???
+        //TODO: This is a stupid fix, why these value are different from the ones in the prefab???
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
         roomButton.GetComponentInChildren<Text>().text = roomName;

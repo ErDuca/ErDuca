@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,5 +14,11 @@ public class TransitionScript : MonoBehaviour
         transitionAnimator.SetTrigger("sceneSwap");        
         yield return new WaitForSeconds(transitionStartAnimation.length);
         SceneManager.LoadSceneAsync(id, LoadSceneMode.Single);
+    }
+
+    //Method that just executes the animation without changing the scene (for the host button)
+    public void SceneTransitionPlay()
+    {
+        transitionAnimator.SetTrigger("sceneSwap");
     }
 }
