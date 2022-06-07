@@ -16,7 +16,7 @@ public class Dragoon : ErDucaPiece
         _PhaseOneMovementArray.Add(new Movement(0, 1, Ptype.Walk));
         _PhaseOneMovementArray.Add(new Movement(2, 0, Ptype.Strike));
         _PhaseOneMovementArray.Add(new Movement(2, -2, Ptype.Strike));
-        _PhaseOneMovementArray.Add(new Movement(2, 22, Ptype.Strike));
+        _PhaseOneMovementArray.Add(new Movement(2, 2, Ptype.Strike));
 
         _PhaseTwoMovementArray.Add(new Movement(1, 0, Ptype.Walk));
         _PhaseTwoMovementArray.Add(new Movement(2, 0, Ptype.Walk));
