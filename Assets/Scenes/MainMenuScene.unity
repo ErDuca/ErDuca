@@ -232,7 +232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 180
+      value: 147
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1077,7 +1077,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Text
-      value: STATE_1
+      value: STATE 2
       objectReference: {fileID: 0}
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_FontData.m_FontSize
@@ -1343,6 +1343,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5823642287098550940, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -91.8
+      objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098724, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -1401,11 +1405,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 160
+      value: 192
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_LocalScale.x
@@ -1453,7 +1457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -125
+      value: -141
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2051,7 +2055,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_FontData.m_FontSize
-      value: 22
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 2361738307282175222, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Pivot.x
@@ -2564,7 +2568,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.2162, y: -14.7069}
+  m_AnchoredPosition: {x: 1, y: -2}
   m_SizeDelta: {x: 87.36, y: 51.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &461486093
@@ -3881,7 +3885,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Text
-      value: STATE_0
+      value: STATE 1
       objectReference: {fileID: 0}
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_FontData.m_FontSize
@@ -4229,7 +4233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8665714323938735443, guid: 83cd53ab32af7ef4c9bc8a3f20712c7a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -180
+      value: -147.99994
       objectReference: {fileID: 0}
     - target: {fileID: 8665714323938735443, guid: 83cd53ab32af7ef4c9bc8a3f20712c7a, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4419,6 +4423,7 @@ MonoBehaviour:
   - {fileID: 294414662}
   pageNumberText: {fileID: 2057653689}
   firstTimeScreenGO: {fileID: 974389325}
+  mainCamera: {fileID: 0}
   musicSliderGO: {fileID: 2094767032}
   sfxSliderGO: {fileID: 860584482}
   soundManager: {fileID: 0}
@@ -4596,8 +4601,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180, y: -15}
-  m_SizeDelta: {x: 359.3481, y: 146.0233}
+  m_AnchoredPosition: {x: -180, y: 0}
+  m_SizeDelta: {x: 359.3481, y: 213.4272}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &820769073
 MonoBehaviour:
@@ -4621,22 +4626,22 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: a6011b8ef76679840b5014b952422cf0, type: 3}
-    m_FontSize: 18
+    m_FontSize: 22
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'WELCOME TO *INCREDIBLE GAME FOR THE MOBILE PROJECT*!
+  m_Text: 'WELCOME TO WAR OF THE DUKES!
 
 
-    IF YOU WISH
-    TO REVIEW THE RULES OF THE GAME YOU CAN FIND EVERYTHING IN THE "EXTRAS" MENU'
+    IF YOU WISH TO REVIEW THE RULES OF
+    THE GAME YOU CAN FIND EVERYTHING IN THE "EXTRAS" MENU'
 --- !u!222 &820769074
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5368,7 +5373,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 450}
+  m_SizeDelta: {x: 805, y: 455}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1015285881 stripped
 RectTransform:
@@ -5864,7 +5869,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_Text
-      value: LONGBOWMAN
+      value: ASSASSIN
       objectReference: {fileID: 0}
     - target: {fileID: 1572552298265329283, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_FontData.m_FontSize
@@ -7227,7 +7232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6055137892202274726, guid: a6c27e73009c4c945af7ba2da70b811e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 120
+      value: 143
       objectReference: {fileID: 0}
     - target: {fileID: 8639855634853308744, guid: a6c27e73009c4c945af7ba2da70b811e, type: 3}
       propertyPath: m_IsActive
@@ -7327,7 +7332,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896262033}
   m_HandleRect: {fileID: 896262032}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -7485,7 +7490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -180
+      value: -148
       objectReference: {fileID: 0}
     - target: {fileID: 9005597397912098725, guid: 8461bd99b1abb784db77c13e24ff5cd7, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8230,7 +8235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2361738307282175222, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -180
+      value: -147.99994
       objectReference: {fileID: 0}
     - target: {fileID: 2361738307282175222, guid: 5909ad1c2efe217408ccaf5f8b7ebecd, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -9772,7 +9777,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2140131313}
   m_HandleRect: {fileID: 2140131312}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -10227,7 +10232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5382174239546411004, guid: 32d78b002ec1617489f7951cd53e79da, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5382174239567144036, guid: 32d78b002ec1617489f7951cd53e79da, type: 3}
       propertyPath: m_SizeDelta.x
