@@ -134,6 +134,7 @@ public class MMenuBehaviour : MonoBehaviour
             sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
         }
         //UnityEvent OnNewServer = networkDiscovery.OnServerFound
+        discoveredServers.Clear();
         networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
     }
 
