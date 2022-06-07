@@ -677,5 +677,9 @@ public class GameUIBehaviour : MonoBehaviour
         soundManager.PlaySound(Sound.click);
     }
 
+    public void playDrawSound() {
+        soundManager.PlaySound(Sound.unitDraw);
+    }
+
     #endregion
 }

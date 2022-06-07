@@ -2240,12 +2240,12 @@ AnimationClip:
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 0
+    intParameter: 15
     messageOptions: 0
   - time: 1.4833333
     functionName: CallSoundManager
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 16
+    intParameter: 17
     messageOptions: 0

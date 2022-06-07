@@ -160,7 +160,6 @@ public class MMenuBehaviour : MonoBehaviour
 
     IEnumerator MoveToScreenCoroutine(Vector3 fromPos, Vector3 toPos)
     {
-        soundManager.PlaySound(Sound.click);
         float elapsedTime = 0f;
         eventSystem.SetActive(false);
         while (elapsedTime < screenChangeWaitTime)
@@ -312,6 +311,10 @@ public class MMenuBehaviour : MonoBehaviour
     public void UpdateSFXVolume(float value)
     {
         PlayerPrefs.SetFloat("SFXVolume", value);
+    }
+
+    public void CallSoundManagerClick() {
+        soundManager.PlaySound(Sound.click);
     }
 
     public void CallSoundManager(Sound sound) {
