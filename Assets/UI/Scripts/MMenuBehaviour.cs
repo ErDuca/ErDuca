@@ -52,6 +52,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     [Header("First time page related")]
     [SerializeField] private GameObject firstTimeScreenGO;
+    [SerializeField] private Camera mainCamera;
 
     [Header("Settings page related")]
     [SerializeField] private Slider musicSliderGO;
@@ -73,6 +74,7 @@ public class MMenuBehaviour : MonoBehaviour
     public NetworkDiscovery networkDiscovery;
     readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
     ///
+    
     private enum Screen6IDs
     {
         RULES,       //0
@@ -94,10 +96,13 @@ public class MMenuBehaviour : MonoBehaviour
         if(PlayerPrefs.GetInt("FirstTimePlayer") == 0)
         {
             firstTimeScreenGO.SetActive(true);
+            AudioListener.volume = 0;
         }
         else
         {
             firstTimeScreenGO.SetActive(false);
+            //TODO: See if this needs changing when the sound volume will be linked to the playerprefs' values
+            AudioListener.volume = 1;
 
             screen1Position = mMenuGO.transform.position;
             screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
@@ -300,7 +305,6 @@ public class MMenuBehaviour : MonoBehaviour
             currentPagesArray[currentScreen6Page += offset].SetActive(true);
             pageNumberText.text = "Page " + (currentScreen6Page + 1) + " / " + currentPagesArray.Length;
         }
-        
     }
 
     public void UpdateMusicVolume(float value)
