@@ -22,7 +22,6 @@ public class ErDucaMoveManager : MonoBehaviour
 
         foreach (Movement m in pieceRelativeMoves)
         {
-            Debug.Log("Analizzo una mossa di tipo " + m._mType);
             switch (m._mType)
             {
                 case Ptype.Walk:
@@ -51,7 +50,6 @@ public class ErDucaMoveManager : MonoBehaviour
                     while (temp != null && !foundEnemyPiece);
                     break;
 
-                //TEMPORARY LIKE JUMP (DEBUGGING)!
                 case Ptype.Fly:
                     int ifl = i;
                     int jfl = j;
@@ -92,30 +90,22 @@ public class ErDucaMoveManager : MonoBehaviour
         int absoluteDirX = Math.Sign(xOffset);
         int absoluteDirY = Math.Sign(yOffset);
 
-        Debug.Log("Direzione X = " + absoluteDirX);
-        Debug.Log("Direzione Y = " + absoluteDirY);
-
         //Bounds checking
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
         {
-            Debug.Log("Out of Bounds");
             return null;
         }
 
         //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
         {
-            Debug.Log("Nella mia destinazione finale c'è una mia pedina");
             return null;
         }
 
         for(int x = i + absoluteDirX, y = j + absoluteDirY; x <= 5 && x >= 0 && y <= 5 && y >= 0; x += absoluteDirX, y += absoluteDirY)
         {
-                Debug.Log("Controllo se posso muovermi in: " + x + " " + y);
-
                 if ((x == i + xOffset && y == j + yOffset))
                 {
-                    Debug.Log("Sono dovevo volevo essere, aggiungo la mossa");
                     Tuple<int, int> tupleToRet = new Tuple<int, int>(i + xOffset, j + yOffset);
 
                     return tupleToRet;
@@ -123,7 +113,6 @@ public class ErDucaMoveManager : MonoBehaviour
 
                 if (ErDucaNetworkManager.singleton.GetMatrixIdAt(x, y) != 0)
                 {
-                    Debug.Log("In " + x + " " + y + " c'è qualcuno, ritorno Null");
                     return null;
                 }
         }

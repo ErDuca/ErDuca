@@ -21,6 +21,7 @@ public class ErDucaGameManager : NetworkBehaviour
     private bool isOurTurn = false;
     [SerializeField]
     private BattleState currentState = BattleState.CoinFlip;
+
     public bool IsOurTurn
     {
         get => isOurTurn;
@@ -100,10 +101,8 @@ public class ErDucaGameManager : NetworkBehaviour
                     break;
 
                 case BattleState.PPikemen:
-
                     if (!iStartFirst)
                     {
-                        //Stai uscendo da Pikemen, e vedendo il primo turno
                         ErDucaPlayer.LocalPlayer.GameUIBehavior.IsFirstTurn = false;
                         ErDucaPlayer.LocalPlayer.GameUIBehavior.KillFirstTurnMessage();
                     }
@@ -181,7 +180,7 @@ public class ErDucaGameManager : NetworkBehaviour
         ErDucaPlayer.LocalPlayer.SpawnDuke();
     }
 
-    //Setting the clients Animator values
+    //Setting the client's Animator values
     [TargetRpc]
     public void RpcSetAnimatorValues(NetworkConnection target, int playerColor, int coinFlipResult, bool isHost)
     {

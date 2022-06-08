@@ -10,6 +10,7 @@ using Mirror.Discovery;
 public class ErDucaNetworkManager : NetworkManager
 {
     //Server-side stuff
+    //Associate a Tile to a couple of indexes
     [SerializeField]
     public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
 
@@ -37,6 +38,7 @@ public class ErDucaNetworkManager : NetworkManager
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the move-algorithms
     private int[,] _netIdMatrix = new int[6, 6];
 
+    //Matrix Methods
     public int GetMatrixIdAt(int i, int j)
     {
         return _netIdMatrix[i,j];

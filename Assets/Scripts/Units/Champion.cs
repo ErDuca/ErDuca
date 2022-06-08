@@ -10,7 +10,6 @@ public class Champion : ErDucaPiece
     {
         return unitIndex;
     }
-
     void Start()
     {
         _PhaseOneMovementArray.Add(new Movement(0, -1, Ptype.Walk));

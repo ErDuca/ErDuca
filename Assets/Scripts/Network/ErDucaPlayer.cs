@@ -335,7 +335,7 @@ public class ErDucaPlayer : NetworkBehaviour
         }
 
         //Initialize Deck (without the Duke!!)
-        for (int i = 1; i < _numberOfUnits - 1; i++)
+        for (int i = 1; i < _numberOfUnits; i++)
         {
             _cards.Add(i);
         }
@@ -351,7 +351,7 @@ public class ErDucaPlayer : NetworkBehaviour
     #region Unity Callbacks
     private void Start()
     {
-        _erDucaGameManager = GameObject.FindObjectOfType<ErDucaGameManager>();
+        _erDucaGameManager = FindObjectOfType<ErDucaGameManager>();
     }
 
     private void Update()
@@ -424,7 +424,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
                     if (objectHit.CompareTag("Tile"))
                     {
-                        //Debug.Log("Ho selezionato un tile e ci voglio spawnare sopra il Duca");
                         int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                         int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -515,7 +514,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
                             if (objectHit.gameObject.GetComponent<ErDucaPiece>().MyPlayerNetId == _myNetId)
                             {
-                                //Debug.Log("Ho selezionato una mia pedina");
                                 int piece_i_index = _currentSelectedPiece.I;
                                 int piece_j_index = _currentSelectedPiece.J;
 
@@ -550,7 +548,6 @@ public class ErDucaPlayer : NetworkBehaviour
                             {
                                 _gameUIBehaviour.HidePieceInfo();
 
-                                //Debug.Log("Ho selezionato una pedina nemica");
                                 int enemyPiece_i_index = enemyPiece.I;
                                 int enemyPiece_j_index = enemyPiece.J;
                                 int enemyPieceUnitIndex = enemyPiece.UnitIndex();
@@ -607,7 +604,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
                             else if (enemyPiece.MyPlayerNetId == _myNetId)
                             {
-                                //Debug.Log("Ho ri-selezionato una mia pedina");
                                 _currentSelectedPiece = objectHit.gameObject.GetComponent<ErDucaPiece>();
                                 _gameUIBehaviour.ShowPieceInfo(_currentSelectedPiece.UnitIndex(), _myNetId, _currentSelectedPiece.IsPhaseOne, false);
 
@@ -640,7 +636,6 @@ public class ErDucaPlayer : NetworkBehaviour
                             CmdDeHighlightAllTiles(this.connectionToClient);
                             _gameUIBehaviour.HidePieceInfo();
 
-                            //Debug.Log("Ho selezionato un tile mentre ho una pedina selezionata");
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -714,7 +709,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
                         if (objectHit.CompareTag("Tile"))
                         {
-                            //Debug.Log("Ho selezionato un tile e devo spawnare la carta che ho pescato");
                             int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                             int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -983,20 +977,6 @@ public class ErDucaPlayer : NetworkBehaviour
                 }
             }
         }
-    }
-
-    public override void OnStopClient()
-    {
-        /*
-        Debug.Log(_erDucaNetworkManager.numPlayers);
-        if(_erDucaNetworkManager.numPlayers == 2)
-        {
-            if (!_erDucaNetworkManager.IGaveUp)
-            {
-                Debug.Log("Ho ragequittato io");
-            }
-        }
-        */
     }
 
     #endregion

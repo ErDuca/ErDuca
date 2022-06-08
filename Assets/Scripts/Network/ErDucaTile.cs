@@ -12,6 +12,7 @@ public class ErDucaTile : NetworkBehaviour
     [SyncVar]private int _i;
     [SerializeField]
     [SyncVar]private int _j;
+
     public int I
     {
         get => _i;
@@ -28,6 +29,7 @@ public class ErDucaTile : NetworkBehaviour
             _j = value;
         }
     }
+
     private void Start()
     {
         _material = GetComponent<MeshRenderer>().material;

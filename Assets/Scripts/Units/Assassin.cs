@@ -10,11 +10,8 @@ public class Assassin : ErDucaPiece
     {
         return unitIndex;
     }
-
     void Start()
     {
-        //Primo valore : su e giu
-        //Secondo valore : destra e sinistra
         _PhaseOneMovementArray.Add(new Movement(-2, 0, Ptype.Fly));
         _PhaseOneMovementArray.Add(new Movement(2, -2, Ptype.Fly));
         _PhaseOneMovementArray.Add(new Movement(2, 2, Ptype.Fly));
