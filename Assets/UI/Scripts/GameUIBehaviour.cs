@@ -51,6 +51,15 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private Slider sfxSliderGO;
     [SerializeField] private GameObject confirmationWindowGO;
 
+    [SerializeField] private GameObject rulesScreenGO;
+    [SerializeField] private GameObject unitsGuideScreenGO;
+    [SerializeField] private GameObject extraScreenButtonsGO;
+    private int currentExtraPage;
+    [SerializeField] private GameObject[] rulesPages;
+    [SerializeField] private GameObject[] unitGuidePages;
+    private GameObject[] currentPagesArray;
+    [SerializeField] private Text pageNumberText;
+
     [Header("Transitions related")]
     [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
@@ -304,6 +313,50 @@ public class GameUIBehaviour : MonoBehaviour
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
+        }
+    }
+
+    public void OpenRulesScreen()
+    {
+        currentExtraPage = 0;
+        currentPagesArray = rulesPages;
+        foreach (GameObject page in currentPagesArray)
+            page.SetActive(false);
+        rulesScreenGO.SetActive(true);
+        unitsGuideScreenGO.SetActive(false);
+        extraScreenButtonsGO.SetActive(true);
+        currentPagesArray[currentExtraPage].SetActive(true);
+        pageNumberText.text = "Page " + (currentExtraPage + 1) + " / " + currentPagesArray.Length;
+    }
+
+    public void OpenUnitsGuideScreen()
+    {
+        currentExtraPage = 0;
+        currentPagesArray = unitGuidePages;
+        foreach (GameObject page in currentPagesArray)
+            page.SetActive(false);
+        rulesScreenGO.SetActive(false);
+        unitsGuideScreenGO.SetActive(true);
+        extraScreenButtonsGO.SetActive(true);
+        currentPagesArray[currentExtraPage].SetActive(true);
+        pageNumberText.text = "Page " + (currentExtraPage + 1) + " / " + currentPagesArray.Length;
+    }
+
+    public void CloseExtraScreen()
+    {
+        rulesScreenGO.SetActive(false);
+        unitsGuideScreenGO.SetActive(false);
+        extraScreenButtonsGO.SetActive(false);
+    }
+
+    public void ChangePage(int offset)
+    {
+        soundManager.PlaySound(Sound.pageLeft);
+        if (currentExtraPage + offset >= 0 && currentExtraPage + offset < currentPagesArray.Length)
+        {
+            currentPagesArray[currentExtraPage].SetActive(false);
+            currentPagesArray[currentExtraPage += offset].SetActive(true);
+            pageNumberText.text = "Page " + (currentExtraPage + 1) + " / " + currentPagesArray.Length;
         }
     }
 
