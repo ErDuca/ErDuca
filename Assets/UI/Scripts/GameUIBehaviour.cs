@@ -43,7 +43,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private float turnTime;
     [SerializeField] private GameObject messageToast;
     [HideInInspector] public bool changingTurn;
-    //private bool hasMatchBegun = false;
 
     [Header("Options menu related")]
     [SerializeField] private GameObject pauseMenu;
@@ -56,7 +55,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
-
     public Animator GameAnimator
     {
         get => gameAnimator;
@@ -72,6 +70,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private Image drawBoxUnitIcon;
     [SerializeField] private Image drawBoxBaseColor;
     [SerializeField] private Sprite[] unitIcons;
+    [SerializeField] private Text unitsInPoolTextbox;
 
     [Header("Game Over Screen Related")]
     [SerializeField] private GameObject gameOverScreenGO;
@@ -155,14 +154,14 @@ public class GameUIBehaviour : MonoBehaviour
                     }
                     else
                     {
-                        StartCoroutine(ShowToast("PLACEHOLDER WARNING\nYOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
+                        StartCoroutine(ShowToast("WARNING\nYOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
                         timeRemaining = turnTime;
                     }
                 }
 
                 else
                 {
-                    StartCoroutine(ShowToast("PLACEHOLDER WARNING\nOPPONENT'S TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED"));
+                    StartCoroutine(ShowToast("OPPONENT'S TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED"));
                     timeRemaining = turnTime;
                 }
             }
@@ -563,6 +562,7 @@ public class GameUIBehaviour : MonoBehaviour
     public void ShowDrawBox()
     {
         drawBoxGO.SetActive(true);
+        unitsInPoolTextbox.text = ErDucaPlayer.LocalPlayer.Cards.Count.ToString();
     }
 
     public void HideDrawBox() => StartCoroutine(HideDrawBoxCoroutine());

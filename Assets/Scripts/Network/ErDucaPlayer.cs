@@ -103,6 +103,11 @@ public class ErDucaPlayer : NetworkBehaviour
             _hasDrawn = value;
         }
     }
+
+    public List<int> Cards
+    {
+        get => _cards;
+    }
     public int MyNetId
     {
         get => _myNetId;
