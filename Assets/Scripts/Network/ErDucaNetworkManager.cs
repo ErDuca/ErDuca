@@ -265,6 +265,19 @@ public class ErDucaNetworkManager : NetworkManager
     {
         base.OnServerDisconnect(conn);
         StopHost();
+        /*
+        //The host disconnected
+        if(conn == playersConnections[0])
+        {
+            base.OnServerDisconnect(conn);
+            //StopServer();
+        } 
+        else if(conn == playersConnections[1])
+        {
+            base.OnServerDisconnect(conn);
+            StopHost();
+        }
+        */
     }
 
     /// <summary>
