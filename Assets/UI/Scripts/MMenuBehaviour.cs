@@ -35,6 +35,7 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject scrollViewContentGO;
     [SerializeField] private GameObject roomButtonPrefab;
     [SerializeField] private Text roomNameTextGO;
+    private string roomName;
 
     [Header("Extras screen related")]
     [SerializeField] private Text recordsText;

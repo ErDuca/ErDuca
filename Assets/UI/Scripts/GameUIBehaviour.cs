@@ -50,14 +50,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private Slider musicSliderGO;
     [SerializeField] private Slider sfxSliderGO;
     [SerializeField] private GameObject confirmationWindowGO;
-    [SerializeField] private GameObject rulesScreenGO;
-    [SerializeField] private GameObject unitsGuideScreenGO;
-    [SerializeField] private GameObject rulesScreenButtonsGO;
-    private int currentPausePage;
-    [SerializeField] private GameObject[] rulesPages;
-    [SerializeField] private GameObject[] unitGuidePages;
-    private GameObject[] currentPagesArray;
-    [SerializeField] private Text pageNumberText;
 
     [Header("Transitions related")]
     [SerializeField] private GameObject transitionManagerGO;
@@ -312,36 +304,6 @@ public class GameUIBehaviour : MonoBehaviour
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
-        }
-    }
-
-    public void OpenRulesScreen()
-    {
-        rulesScreenGO.SetActive(true);
-        rulesScreenButtonsGO.SetActive(true);
-    }
-
-    public void OpenUnitsGuideScreen()
-    {
-        unitsGuideScreenGO.SetActive(true);
-        rulesScreenButtonsGO.SetActive(true);
-    }
-
-    public void CloseExtraScreen()
-    {
-        rulesScreenGO.SetActive(false);
-        unitsGuideScreenGO.SetActive(false);
-        rulesScreenButtonsGO.SetActive(false);
-    }
-
-    public void ChangePage(int offset)
-    {
-        soundManager.PlaySound(Sound.pageLeft);
-        if (currentPausePage + offset >= 0 && currentPausePage + offset < currentPagesArray.Length)
-        {
-            currentPagesArray[currentPausePage].SetActive(false);
-            currentPagesArray[currentPausePage += offset].SetActive(true);
-            pageNumberText.text = "Page " + (currentPausePage + 1) + " / " + currentPagesArray.Length;
         }
     }
 
