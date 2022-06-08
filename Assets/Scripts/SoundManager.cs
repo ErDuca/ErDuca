@@ -50,6 +50,7 @@ public class SoundManager : MonoBehaviour
 
         GameObject audioGO = new GameObject("Sound");
         AudioSource audioSource =  audioGO.AddComponent<AudioSource>();
+        audioSource.volume = PlayerPrefs.GetFloat("SFXVolume");
         audioSource.PlayOneShot(GetAudioClip(sound));
         StartCoroutine(waitUntilSoundEnds(audioGO, audioSource));            
 

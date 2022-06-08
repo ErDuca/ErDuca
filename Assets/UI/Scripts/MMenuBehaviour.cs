@@ -12,6 +12,8 @@ using System;
 ///
 public class MMenuBehaviour : MonoBehaviour
 {
+    [SerializeField] private AudioSource ostSource;
+
     [Header("Animations related")]
     [SerializeField] private GameObject mMenuGO;
     [SerializeField] private GameObject eventSystem;
@@ -310,6 +312,7 @@ public class MMenuBehaviour : MonoBehaviour
     public void UpdateMusicVolume(float value)
     {
         PlayerPrefs.SetFloat("MusicVolume", value);
+        ostSource.volume = value;
     }
 
     public void UpdateSFXVolume(float value)
