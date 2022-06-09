@@ -53,7 +53,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private Slider musicSliderGO;
     [SerializeField] private Slider sfxSliderGO;
     [SerializeField] private GameObject confirmationWindowGO;
-
     [SerializeField] private GameObject rulesScreenGO;
     [SerializeField] private GameObject unitsGuideScreenGO;
     [SerializeField] private GameObject extraScreenButtonsGO;
@@ -62,6 +61,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject[] unitGuidePages;
     private GameObject[] currentPagesArray;
     [SerializeField] private Text pageNumberText;
+    private bool isPauseMenuActive;
 
     [Header("Transitions related")]
     [SerializeField] private GameObject transitionManagerGO;
@@ -105,6 +105,11 @@ public class GameUIBehaviour : MonoBehaviour
         {
             isFirstTurn = value;
         }
+    }
+
+    public bool IsPauseMenuActive
+    {
+        get => isPauseMenuActive;
     }
 
     private SoundManager soundManager;
@@ -275,6 +280,7 @@ public class GameUIBehaviour : MonoBehaviour
         if(infoBlock.activeSelf)
             HidePieceInfo();
         pauseMenu.SetActive(true);
+        isPauseMenuActive = true;
         gameAnimator.SetBool("paused", true);
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("paused"));
         eventSystem.SetActive(true);
@@ -287,6 +293,7 @@ public class GameUIBehaviour : MonoBehaviour
         gameAnimator.SetBool("paused", false);
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("idle"));
         pauseMenu.SetActive(false);
+        isPauseMenuActive = false;
         eventSystem.SetActive(true);
     }
 

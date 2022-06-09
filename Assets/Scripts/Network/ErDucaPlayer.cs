@@ -362,12 +362,12 @@ public class ErDucaPlayer : NetworkBehaviour
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 ray = _camera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
 #endif
 
 #if UNITY_ANDROID
                 ray = _camera.ScreenPointToRay(Input.GetTouch(0).position);
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
 #endif
 
             {
@@ -402,7 +402,7 @@ public class ErDucaPlayer : NetworkBehaviour
                 Ray rayDuke = _camera.ScreenPointToRay(Input.mousePosition);
 
                 //Hit something - Gotta place the Duke
-                if (Physics.Raycast(rayDuke, out hitDuke))
+                if (Physics.Raycast(rayDuke, out hitDuke) && !_gameUIBehaviour.IsPauseMenuActive)
                 {
                     Transform objectHit = hitDuke.transform;
 
@@ -439,7 +439,7 @@ public class ErDucaPlayer : NetworkBehaviour
                 Ray rayPikemen = _camera.ScreenPointToRay(Input.mousePosition);
 
                 //Hit something - Gotta place the Pikemen
-                if (Physics.Raycast(rayPikemen, out hitPikemen))
+                if (Physics.Raycast(rayPikemen, out hitPikemen) && !_gameUIBehaviour.IsPauseMenuActive)
                 {
                     Transform objectHit = hitPikemen.transform;
                     if (objectHit.CompareTag("Tile"))
@@ -484,7 +484,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
                     //Hit something
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
                     {
                         Transform objectHit = hit.transform;
 
@@ -696,7 +696,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     RaycastHit hit;
                     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
                     {
                         Transform objectHit = hit.transform;
 
