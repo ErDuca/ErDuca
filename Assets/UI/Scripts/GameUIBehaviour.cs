@@ -165,13 +165,15 @@ public class GameUIBehaviour : MonoBehaviour
                     timeoutPenalty++;
                     if(timeoutPenalty > maxPenalties)
                     {
+                        //Closes the pause menu if open
                         ResumeGame();
+                        //Gives the win to the other player
                         int winnerId = (ErDucaPlayer.LocalPlayer.MyNetId == 1) ? 2 : 1;
                         ErDucaPlayer.LocalPlayer.CmdForfeitMatch(winnerId);
                     }
                     else
                     {
-                        StartCoroutine(ShowToast("YOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
+                        StartCoroutine(ShowToast("YOUR TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
                         timeRemaining = turnTime;
                     }
                 }
