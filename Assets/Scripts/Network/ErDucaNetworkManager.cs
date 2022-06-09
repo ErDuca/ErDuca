@@ -228,8 +228,6 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 2;
             erDucaPlayer.MyColor = p2Color;
-            erDucaPlayer.IGaveUp = false;
-            erDucaPlayer.IAmHostAtStart = false;
 
             InitializeTilesGrid();
 
@@ -238,7 +236,6 @@ public class ErDucaNetworkManager : NetworkManager
             //Starting Match - Coin Flip
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[1], 2, coinFlip + 1, false);
-
             gameManager.RpcBeginMatch(playersConnections[coinFlip]);
 
             //Host player
@@ -248,8 +245,6 @@ public class ErDucaNetworkManager : NetworkManager
         {
             erDucaPlayer.MyNetId = 1;
             erDucaPlayer.MyColor = p1Color;
-            erDucaPlayer.IGaveUp = false;
-            erDucaPlayer.IAmHostAtStart = true;
 
             playersConnections[0] = conn;
 
@@ -267,19 +262,6 @@ public class ErDucaNetworkManager : NetworkManager
     {
         base.OnServerDisconnect(conn);
         StopHost();
-        /*
-        //The host disconnected
-        if(conn == playersConnections[0])
-        {
-            base.OnServerDisconnect(conn);
-            //StopServer();
-        } 
-        else if(conn == playersConnections[1])
-        {
-            base.OnServerDisconnect(conn);
-            StopHost();
-        }
-        */
     }
 
     /// <summary>

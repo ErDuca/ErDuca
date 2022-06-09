@@ -210,7 +210,9 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = true;
         isFirstTurn = true;
-        //hasMatchBegun = true;
+
+        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
+        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
 
         //Define the order of messages during the first turn of the match
         //depending if you're the first or the second to start
@@ -314,24 +316,33 @@ public class GameUIBehaviour : MonoBehaviour
         // host
         if (NetworkServer.active && NetworkClient.isConnected)
         {
-            ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-            ErDucaPlayer.LocalPlayer.CmdSetGivenUpMatchPref();
-            ErDucaNetworkManager.singleton.StopHost();
-            networkDiscovery.StopDiscovery();
+            StartCoroutine(GiveUpMatchCoroutine(true));
         }
 
         // stop client if client-only
         else if (NetworkClient.isConnected)
         {
-            ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-            ErDucaPlayer.LocalPlayer.CmdSetGivenUpMatchPref();
-            ErDucaNetworkManager.singleton.StopClient();
-            networkDiscovery.StopDiscovery();
+            StartCoroutine(GiveUpMatchCoroutine(false));
         }
+    }
+
+    private IEnumerator GiveUpMatchCoroutine(bool hostMode)
+    {
+        ErDucaPlayer.LocalPlayer.CmdSetGivenUpMatchPref();
+        yield return new WaitForSeconds(0.75f);
+        if (hostMode)
+        {
+            ErDucaNetworkManager.singleton.StopHost();
+        }
+        else
+        {
+            ErDucaNetworkManager.singleton.StopClient();
+        }
+        networkDiscovery.StopDiscovery();
     }
 
     public void OpenRulesScreen()
@@ -556,9 +567,6 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
-
-        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
-        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
     }
 
     private void OpponentsTurnStart() => StartCoroutine(OpponentsTurnStartCoroutine());
@@ -583,9 +591,6 @@ public class GameUIBehaviour : MonoBehaviour
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
-
-        PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
-        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
     }
 
     public void ShowFirstTurnMessage(string message)

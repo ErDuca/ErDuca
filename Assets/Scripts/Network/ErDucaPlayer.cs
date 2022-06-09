@@ -66,33 +66,10 @@ public class ErDucaPlayer : NetworkBehaviour
     [SerializeField]
     [SyncVar] private bool _hasDrawn = false;
 
-    [SerializeField]
-    [SyncVar] private bool _iGaveUp = false;
-    [SerializeField]
-    [SyncVar] private bool _iAmHostAtStart = false;
-
     //Colors
     private Color32 strikeColor = new Color32(243, 193, 77, 255);
     private Color32 moveColor = new Color32(255, 255, 255, 255);
     private Color32 highlightColor = new Color32(200, 140, 75, 255);
-
-    public bool IGaveUp
-    {
-        get => _iGaveUp;
-        set
-        {
-            _iGaveUp = value;
-        }
-    }
-
-    public bool IAmHostAtStart
-    {
-        get => _iAmHostAtStart;
-        set
-        {
-            _iAmHostAtStart = value;
-        }
-    }
 
     //Getters & Setters
     public bool HasDrawn
@@ -174,6 +151,7 @@ public class ErDucaPlayer : NetworkBehaviour
     [Command]
     public void CmdSetGivenUpMatchPref()
     {
+        Debug.Log("Sto per mandare le RPC");
         _erDucaGameManager.RpcSetGivenUpMatchPref();
     }
 
