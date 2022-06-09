@@ -576,7 +576,11 @@ public class ErDucaPlayer : NetworkBehaviour
                                             yield return new WaitUntil(() => _currentSelectedPiece.transform.position.x == xTarget &&
                                             _currentSelectedPiece.transform.position.z == zTarget);
                                         }
-                                        
+
+                                        //PROVA
+                                        _gameUIBehaviour.changingTurn = true;
+                                        //
+
                                         yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
 
                                         //Moved the Duke, so i update his indexes
@@ -646,6 +650,11 @@ public class ErDucaPlayer : NetworkBehaviour
                                 if (item.Key.Item1 == tile_i_index && item.Key.Item2 == tile_j_index)
                                 {
                                     hasDoneSomething = true;
+
+                                    //PROVA
+                                    _gameUIBehaviour.changingTurn = true;
+                                    //
+
                                     yield return StartCoroutine(MovingAnimationCoroutine(_myNetId, currentPieceUnitIndex, item.Value));
 
                                     CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
