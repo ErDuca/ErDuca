@@ -3,17 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
-///
 using Mirror;
 using Mirror.Discovery;
-using UnityEngine.Events;
 using System.Net;
 using System;
-///
+
 public class MMenuBehaviour : MonoBehaviour
 {
-    [SerializeField] private AudioSource ostSource;
-
     [Header("Animations related")]
     [SerializeField] private GameObject mMenuGO;
     [SerializeField] private GameObject eventSystem;
@@ -58,10 +54,9 @@ public class MMenuBehaviour : MonoBehaviour
     [Header("Settings page related")]
     [SerializeField] private Slider musicSliderGO;
     [SerializeField] private Slider sfxSliderGO;
-
+    [SerializeField] private AudioSource ostSource;
     public SoundManager soundManager;
 
-    /// 
     public struct HostMessage : NetworkMessage
     {
         public IPEndPoint EndPoint { get; set; }
@@ -74,7 +69,6 @@ public class MMenuBehaviour : MonoBehaviour
     }
     public NetworkDiscovery networkDiscovery;
     readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
-    ///
     
     private enum Screen6IDs
     {
@@ -94,6 +88,7 @@ public class MMenuBehaviour : MonoBehaviour
     {
         soundManager = GetComponent<SoundManager>();
 
+        //Show first time screen if 
         if(PlayerPrefs.GetInt("FirstTimePlayer") == 0)
         {
             firstTimeScreenGO.SetActive(true);
@@ -102,7 +97,9 @@ public class MMenuBehaviour : MonoBehaviour
         else
         {
             firstTimeScreenGO.SetActive(false);
+            AudioListener.volume = 1;
 
+            //Sets the position of all menu screens
             screen1Position = mMenuGO.transform.position;
             screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
             screen3Position = new Vector3(mMenuGO.transform.position.x + Screen.width, mMenuGO.transform.position.y, mMenuGO.transform.position.z);
@@ -112,13 +109,14 @@ public class MMenuBehaviour : MonoBehaviour
 
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
-            //Extra menu stats
+            //If the previous match ended by disconnection, assign a loss
             if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
 
+            //Show playerprefs stats on the extra menu page
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
             losses = PlayerPrefsUtility.GetEncryptedInt("Losses");
             gamesPlayed = wins + losses;
@@ -129,18 +127,19 @@ public class MMenuBehaviour : MonoBehaviour
                 recordsText.text = "NO GAMES PLAYED YET!";
 
             //Setting sliders
-            AudioListener.volume = 1;
             musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
             sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
             ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
         }
-        //UnityEvent OnNewServer = networkDiscovery.OnServerFound
+
+        //Clears servers list
         networkDiscovery = FindObjectOfType<NetworkDiscovery>();
         discoveredServers.Clear();
         networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
     }
 
-    
+    #region menu screens
+
     //Main Menu -> Options Menu
     public void GoToScreen2() => StartCoroutine(MoveToScreenCoroutine(screen1Position, screen2Position));
     //Main Menu -> Multiplayer Menu
@@ -181,11 +180,16 @@ public class MMenuBehaviour : MonoBehaviour
         yield return null;
     }
 
+    //When exiting from the first time screen, just reload the scene
     public void ReloadSceneFirstTimeScreen()
     {
         PlayerPrefs.SetInt("FirstTimePlayer", 1);
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
+
+    #endregion
+
+    #region networking
 
     public void HostBeginMatch()
     {
@@ -195,11 +199,11 @@ public class MMenuBehaviour : MonoBehaviour
         networkDiscovery.globalRoomName = roomNameTextGO.text;
         if (string.IsNullOrEmpty(networkDiscovery.globalRoomName))
             networkDiscovery.globalRoomName = "GameRoom";
-        /////
+
         discoveredServers.Clear();
         NetworkManager.singleton.StartHost();
         networkDiscovery.AdvertiseServer();
-        /////
+
 
         //TODO: This is limited to 20 characters, look for the reason and increase it to 40
         PlayerPrefs.SetString("Room Name", networkDiscovery.globalRoomName);
@@ -207,32 +211,25 @@ public class MMenuBehaviour : MonoBehaviour
 
     public void JoinSearch()
     {
-        ///////
-        ///scrollViewContentGO.transform
-        
+        //Delete old room buttons
         foreach (Transform child in scrollViewContentGO.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            Destroy(child.gameObject);
         }
         
         discoveredServers.Clear();
         networkDiscovery.StartDiscovery();
         JoinSpawn(); 
-        ///////
     }
 
     public void JoinSpawn()
     {
-        ////
+        //Make new room buttons
         foreach (ServerResponse info in discoveredServers.Values)
         {
-            //string roomName = info.EndPoint.Address.ToString();
             string roomName = info.name;
             CreateRoomButton(roomName, info);
         }
-        /////
-        //string roomName = "Lorem Ipsum dolor sit";
-        //CreateRoomButton(roomName, new ServerResponse()); 
     }
 
     private void CreateRoomButton(string roomName, ServerResponse info)
@@ -243,19 +240,35 @@ public class MMenuBehaviour : MonoBehaviour
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
         roomButton.GetComponentInChildren<Text>().text = roomName;
-        ///
         roomButton.GetComponent<Button>().onClick.AddListener(delegate { JoinBeginMatch(info); });
-        ///
     }
 
     public void JoinBeginMatch(ServerResponse info)
     {
-        //TODO: Pass variables to game scene
-        ///
         Connect(info);
-        ///
         //transitionScript.LoadSceneByID(1); 
     }
+
+    void Connect(ServerResponse info)
+    {
+        networkDiscovery.StopDiscovery();
+        NetworkManager.singleton.StartClient(info.uri);
+    }
+
+    public void OnDiscoveredServer(ServerResponse info)
+    {
+        // Note that you can check the versioning to decide if you can connect to the server or not using this method
+        if (!(discoveredServers.ContainsKey(info.serverId)))
+        {
+            discoveredServers[info.serverId] = info;
+            JoinSpawn();
+        }
+
+    }
+
+    #endregion
+
+    #region extra screen
 
     private void SwitchExtraScreen(int screenId)
     {
@@ -309,6 +322,10 @@ public class MMenuBehaviour : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region sound
+
     public void UpdateMusicVolume(float value)
     {
         PlayerPrefs.SetFloat("MusicVolume", value);
@@ -328,49 +345,11 @@ public class MMenuBehaviour : MonoBehaviour
         soundManager.PlaySound(sound);
     }
 
-    ///////////
-    void Connect(ServerResponse info)
-    {
-        networkDiscovery.StopDiscovery();
-        NetworkManager.singleton.StartClient(info.uri);
-    }
-
-    public void OnDiscoveredServer(ServerResponse info)
-    {
-        // Note that you can check the versioning to decide if you can connect to the server or not using this method
-        if (!(discoveredServers.ContainsKey(info.serverId)))
-        {
-            discoveredServers[info.serverId] = info;
-            JoinSpawn(); 
-        }
-        
-    }
-
-
+    #endregion
 
     //TEMPORARY
     public void DeletePlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
     }
-
-
-    ///////////
 }
-
-
-
-
-
-
-//TEST PLAYERPREFSEDITOR
-
-//ON WINDOWS PLAYERPREFS ARE STORED IN HKCU\Software\ExampleCompanyName\ExampleProductName registry key.
-//ON ANDROID PLAYERPREFS ARE STORED IN /data/data/pkg-name/shared_prefs/pkg-name.v2.playerprefs.xml
-
-//PlayerPrefsUtility.SetEncryptedInt("test", 50);
-//int loadedNumber = PlayerPrefsUtility.GetEncryptedInt("test");
-//Debug.Log(loadedNumber);
-//TO CHECK IF PLAYERPREFS HAS ALREADY BEEN SET
-//if (!PlayerPrefs.HasKey("example"))
-//TEST PLAYERPREFSEDITOR

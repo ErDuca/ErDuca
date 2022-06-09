@@ -42,6 +42,7 @@ public class GameUIBehaviour : MonoBehaviour
     private float timeRemaining;
     private float timeToDisplay;
     private int timeoutPenalty = 0;
+    private int opponentTimeoutPenalty = 0;
     [SerializeField] private float turnTime;
     [SerializeField] private GameObject messageToast;
     [HideInInspector] public bool changingTurn;
@@ -126,6 +127,7 @@ public class GameUIBehaviour : MonoBehaviour
     {
         transitionAnimator.SetTrigger("sceneStart");
 
+        //Volume settings
         musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
         ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
@@ -141,10 +143,11 @@ public class GameUIBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if(!changingTurn)
+        if (!changingTurn)
+        {
             if (timeRemaining > 0)
             {
-                
+
                 timeRemaining -= Time.deltaTime;
                 //We add 1 so it's more intuitive (if I set 70 secs it starts as 01:10 and not 01:09; time ends as soon as displaying 0)
                 timeToDisplay = timeRemaining + 1;
@@ -155,29 +158,35 @@ public class GameUIBehaviour : MonoBehaviour
             }
             else
             {
-                //If a player times out there are maxPenalties "warnings" with a toast appearing on the screen and additional time added
-                //After that the player automatically loses
+                //If a player times out there are #maxPenalties "warnings" with a toast appearing on the screen and additional time granted
+                //Next time time is over after that the player automatically loses
                 if (ErDucaPlayer.LocalPlayer.isMyTurn && !(ErDucaPlayer.LocalPlayer.myCurrentBattleState.Equals(BattleState.PWin)))
                 {
                     timeoutPenalty++;
-                    if (timeoutPenalty > maxPenalties)
+                    if(timeoutPenalty > maxPenalties)
                     {
+                        ResumeGame();
                         int winnerId = (ErDucaPlayer.LocalPlayer.MyNetId == 1) ? 2 : 1;
                         ErDucaPlayer.LocalPlayer.CmdForfeitMatch(winnerId);
                     }
                     else
                     {
-                        StartCoroutine(ShowToast("WARNING\nYOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
+                        StartCoroutine(ShowToast("YOUR TIME IS UP!\nNEXT TIME THIS HAPPENS, YOU'LL AUTOMATICALLY LOSE THE MATCH"));
                         timeRemaining = turnTime;
                     }
                 }
-
+                //If it's not my turn show a message saying that more time was granted to the opponent
                 else
                 {
-                    StartCoroutine(ShowToast("OPPONENT'S TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED"));
-                    timeRemaining = turnTime;
+                    opponentTimeoutPenalty++;
+                    if(opponentTimeoutPenalty<=maxPenalties)
+                    {
+                        StartCoroutine(ShowToast("OPPONENT'S TIME IS UP!\nONCE-PER-MATCH ADDITIONAL TIME GRANTED"));
+                        timeRemaining = turnTime;
+                    }                    
                 }
             }
+        }
     }
 
     #region host menu

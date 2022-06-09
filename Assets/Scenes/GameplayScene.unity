@@ -4334,7 +4334,7 @@ MonoBehaviour:
   timeSliderImageLeft: {fileID: 889297408}
   timeSliderImageRight: {fileID: 2118326503}
   maxPenalties: 1
-  turnTime: 120
+  turnTime: 5
   messageToast: {fileID: 337379410}
   changingTurn: 0
   pauseMenu: {fileID: 1698679723}
