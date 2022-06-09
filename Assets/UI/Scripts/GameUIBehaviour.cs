@@ -7,6 +7,8 @@ using Mirror.Discovery;
 
 public class GameUIBehaviour : MonoBehaviour
 {
+    [SerializeField] private AudioSource ostSource;
+
     [Header("Info card related")]
     [SerializeField] private float infoTurnAnimTime;
     [SerializeField] private GameObject infoImage;
@@ -64,10 +66,6 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject transitionManagerGO;
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private Animator gameAnimator;
-    public Animator GameAnimator
-    {
-        get => gameAnimator;
-    }
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
@@ -119,12 +117,18 @@ public class GameUIBehaviour : MonoBehaviour
         }
     }
 
+    public Animator GameAnimator
+    {
+        get => gameAnimator;
+    }
+
     private void Start()
     {
         transitionAnimator.SetTrigger("sceneStart");
 
-        musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
-        sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
+        musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
+        sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
+        ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
 
         soundManager = GetComponent<SoundManager>();
 
@@ -276,6 +280,7 @@ public class GameUIBehaviour : MonoBehaviour
     public void UpdateMusicVolume(float value)
     {
         PlayerPrefs.SetFloat("MusicVolume", value);
+        ostSource.volume = value;
     }
 
     public void UpdateSFXVolume(float value)
@@ -661,14 +666,16 @@ public class GameUIBehaviour : MonoBehaviour
     public void ShowGameOverScreen(int winner)
     {
         gameOverScreenGO.SetActive(true);
+        // 1 = red
+        // 2 = blue
         if(winner == 2)
         {
             blueWinsScreenGO.SetActive(true);
-            if (gameAnimator.GetInteger("startingPlayer") == 2)
+            if (gameAnimator.GetInteger("playerColor") == 2)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
             }
-            else if(gameAnimator.GetInteger("startingPlayer") == 1)
+            else if(gameAnimator.GetInteger("playerColor") == 1)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             }
@@ -676,18 +683,18 @@ public class GameUIBehaviour : MonoBehaviour
         else if(winner == 1)
         {
             redWinsScreenGO.SetActive(true);
-            if (gameAnimator.GetInteger("startingPlayer") == 2)
+            if (gameAnimator.GetInteger("playerColor") == 2)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             }
-            else if (gameAnimator.GetInteger("startingPlayer") == 1)
+            else if (gameAnimator.GetInteger("playerColor") == 1)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
             }
         }
         else
         {
-            //Just a default, it doesn't add wins or losses (but it shows blue as the winner)
+            //Just a default for consistency, it doesn't add wins or losses (but it shows blue as the winner)
             blueWinsScreenGO.SetActive(true);
         }
         //This is an "anti-ragequit": if the player doesn't finish the match, this is not set to 0 and the next time

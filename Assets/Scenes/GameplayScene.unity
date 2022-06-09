@@ -4266,6 +4266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce239fd2486e4e4b832d37f5050627c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ostSource: {fileID: 917277565}
   infoTurnAnimTime: 0.1
   infoImage: {fileID: 1589083827}
   infoBlock: {fileID: 928692292}
@@ -4404,10 +4405,10 @@ MonoBehaviour:
   firstTurnBoxText: {fileID: 67292260}
   firstTurnBoxGO: {fileID: 3432500759756726957}
   firstTurnMessages:
-  - Place the duke
+  - Place the duke!
   - Opponent is placing the duke...
-  - Place the footmen
-  - Opponent is placing the footmen...
+  - Place the two footmen!
+  - Opponent is placing the two footmen...
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3

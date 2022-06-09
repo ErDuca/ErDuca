@@ -215,19 +215,19 @@ AnimatorStateMachine:
     m_Position: {x: 560, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6337290787744013415}
-    m_Position: {x: 300, y: 20, z: 0}
+    m_Position: {x: 350, y: -100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4395774171172273575}
-    m_Position: {x: 680, y: 20, z: 0}
+    m_Position: {x: 680, y: -110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -671185718095682554}
-    m_Position: {x: 370, y: 480, z: 0}
+    m_Position: {x: 440, y: 470, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2587678866365365946}
-    m_Position: {x: 490, y: 550, z: 0}
+    m_Position: {x: 560, y: 540, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1646660364527631602}
-    m_Position: {x: 610, y: 480, z: 0}
+    m_Position: {x: 680, y: 470, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7897058080846818760}
     m_Position: {x: 1950, y: -50, z: 0}
@@ -278,19 +278,19 @@ AnimatorStateMachine:
     m_Position: {x: -640, y: -130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7898190071085212942}
-    m_Position: {x: -650, y: 60, z: 0}
+    m_Position: {x: -640, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1345132655848729647}
     m_Position: {x: -400, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3307411572580504756}
-    m_Position: {x: -120, y: -40, z: 0}
+    m_Position: {x: -130, y: -130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2255211655369952974}
     m_Position: {x: -150, y: 70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7423992852110771614}
-    m_Position: {x: 500, y: -180, z: 0}
+    m_Position: {x: 500, y: -280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3084582201239383556}
     m_Position: {x: -1370, y: 530, z: 0}
@@ -1361,55 +1361,55 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: opponentsTurn
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: paused
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: hostScreen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: animID
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: playerColor
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: -1
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: startingPlayer
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: -1
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: testing
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: gameOver
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer

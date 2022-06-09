@@ -35,7 +35,6 @@ public class MMenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject scrollViewContentGO;
     [SerializeField] private GameObject roomButtonPrefab;
     [SerializeField] private Text roomNameTextGO;
-    private string roomName;
 
     [Header("Extras screen related")]
     [SerializeField] private Text recordsText;
@@ -103,8 +102,6 @@ public class MMenuBehaviour : MonoBehaviour
         else
         {
             firstTimeScreenGO.SetActive(false);
-            //TODO: See if this needs changing when the sound volume will be linked to the playerprefs' values
-            AudioListener.volume = 1;
 
             screen1Position = mMenuGO.transform.position;
             screen2Position = new Vector3(mMenuGO.transform.position.x, mMenuGO.transform.position.y + Screen.height, mMenuGO.transform.position.z);
@@ -118,7 +115,7 @@ public class MMenuBehaviour : MonoBehaviour
             //Extra menu stats
             if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
             {
-                PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
+                PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
 
@@ -132,8 +129,10 @@ public class MMenuBehaviour : MonoBehaviour
                 recordsText.text = "NO GAMES PLAYED YET!";
 
             //Setting sliders
-            musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
-            sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
+            AudioListener.volume = 1;
+            musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
+            sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
+            ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
         }
         //UnityEvent OnNewServer = networkDiscovery.OnServerFound
         networkDiscovery = FindObjectOfType<NetworkDiscovery>();
@@ -347,9 +346,19 @@ public class MMenuBehaviour : MonoBehaviour
         
     }
 
-    
+
+
+    //TEMPORARY
+    public void DeletePlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+
     ///////////
 }
+
+
 
 
 
