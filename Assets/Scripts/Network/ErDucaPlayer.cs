@@ -172,6 +172,12 @@ public class ErDucaPlayer : NetworkBehaviour
     }
 
     [Command]
+    public void CmdSetGivenUpMatchPref()
+    {
+        _erDucaGameManager.RpcSetGivenUpMatchPref();
+    }
+
+    [Command]
     public void CmdHighlightTile(int i, int j, Ptype moveType, NetworkConnectionToClient conn)
     {
         ErDucaTile tileToHighlight;

@@ -132,8 +132,6 @@ public class GameUIBehaviour : MonoBehaviour
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
         ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
 
-        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
-
         soundManager = GetComponent<SoundManager>();
 
         //This makes sure that the timer does not start until the animations are done
@@ -318,8 +316,8 @@ public class GameUIBehaviour : MonoBehaviour
         {
             ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
-            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0); 
-            PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 1);
+            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            ErDucaPlayer.LocalPlayer.CmdSetGivenUpMatchPref();
             ErDucaNetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
@@ -330,7 +328,7 @@ public class GameUIBehaviour : MonoBehaviour
             ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
-            PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 1);
+            ErDucaPlayer.LocalPlayer.CmdSetGivenUpMatchPref();
             ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
         }
@@ -560,6 +558,7 @@ public class GameUIBehaviour : MonoBehaviour
         eventSystem.SetActive(true);
 
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
+        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
     }
 
     private void OpponentsTurnStart() => StartCoroutine(OpponentsTurnStartCoroutine());
@@ -586,6 +585,7 @@ public class GameUIBehaviour : MonoBehaviour
         eventSystem.SetActive(true);
 
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
+        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
     }
 
     public void ShowFirstTurnMessage(string message)

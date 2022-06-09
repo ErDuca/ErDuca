@@ -186,4 +186,10 @@ public class ErDucaGameManager : NetworkBehaviour
     {
         ErDucaPlayer.LocalPlayer.GameUIBehavior.SetPlayerInitialValues(playerColor, coinFlipResult, isHost);
     }
+
+    [ClientRpc]
+    public void RpcSetGivenUpMatchPref()
+    {
+        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 1);
+    }
 }
