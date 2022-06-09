@@ -252,6 +252,7 @@ public class ErDucaNetworkManager : NetworkManager
             erDucaPlayer.IAmHostAtStart = true;
 
             playersConnections[0] = conn;
+
             ErDucaGameManager gameManager = FindObjectOfType<ErDucaGameManager>();
             gameManager.RpcSetAnimatorValues(playersConnections[0], 1, coinFlip + 1, true);
         }

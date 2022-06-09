@@ -132,6 +132,8 @@ public class GameUIBehaviour : MonoBehaviour
         sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
         ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
 
+        PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
+
         soundManager = GetComponent<SoundManager>();
 
         //This makes sure that the timer does not start until the animations are done
@@ -316,7 +318,8 @@ public class GameUIBehaviour : MonoBehaviour
         {
             ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
-            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0); 
+            PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 1);
             ErDucaNetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
@@ -327,6 +330,7 @@ public class GameUIBehaviour : MonoBehaviour
             ErDucaPlayer.LocalPlayer.IGaveUp = true;
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
             PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 1);
             ErDucaNetworkManager.singleton.StopClient();
             networkDiscovery.StopDiscovery();
         }

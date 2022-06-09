@@ -110,11 +110,17 @@ public class MMenuBehaviour : MonoBehaviour
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
             //If the previous match ended by disconnection, assign a loss
-            if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1)
+            if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1 && PlayerPrefsUtility.GetEncryptedInt("GivenUpMatch") == 0)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
+            else if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1 && PlayerPrefsUtility.GetEncryptedInt("GivenUpMatch") == 1)
+            {
+                PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
+                PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
+            }
+
 
             //Show playerprefs stats on the extra menu page
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
