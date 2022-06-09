@@ -123,12 +123,6 @@ public class ErDucaNetworkManager : NetworkManager
         base.OnDestroy();
     }
 
-    public override void OnApplicationQuit()
-    {
-        base.OnApplicationQuit();
-        StopClient();
-    }
-
     #endregion
 
     #region Start & Stop
@@ -148,6 +142,7 @@ public class ErDucaNetworkManager : NetworkManager
     public override void OnApplicationQuit()
     {
         base.OnApplicationQuit();
+        StopClient();
     }
 
     #endregion
