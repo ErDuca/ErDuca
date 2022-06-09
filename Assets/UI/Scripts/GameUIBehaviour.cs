@@ -87,7 +87,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Transitions related")]
     [SerializeField] private GameObject sceneTransitionManager;
-    //private TransitionScript transitionScript;
     public NetworkDiscovery networkDiscovery;
 
     [Header("Turn related")]
@@ -97,6 +96,7 @@ public class GameUIBehaviour : MonoBehaviour
     [SerializeField] private string[] firstTurnMessages;
     private string[] myFirstTurnMessages;
     private int firstTurnIndex = 0;
+    [SerializeField] private Animator firstTurnMessageAnimator;
 
     public bool IsFirstTurn
     {
@@ -403,16 +403,6 @@ public class GameUIBehaviour : MonoBehaviour
             NetworkManager.singleton.StopHost();
             networkDiscovery.StopDiscovery();
         }
-
-        /*
-        // stop client if client-only
-        else if (NetworkClient.isConnected)
-        {
-            NetworkManager.singleton.StopClient();
-            networkDiscovery.StopDiscovery();
-        }
-        transitionScript.LoadSceneByID(0);
-        */
     }
 
     #endregion
@@ -548,7 +538,6 @@ public class GameUIBehaviour : MonoBehaviour
                 break;
 
             default:
-                PlayersTurnStart();
                 break;
         }
     }
@@ -600,7 +589,7 @@ public class GameUIBehaviour : MonoBehaviour
         eventSystem.SetActive(true);
     }
 
-    public void ShowFirstTurnMessage(string message)
+    public void ShowFirstTurnMessage()
     {
         if (isFirstTurn)
         {
@@ -627,8 +616,11 @@ public class GameUIBehaviour : MonoBehaviour
     
     public IEnumerator HideFirstTurnMessageCoroutine()
     {
-        firstTurnBoxGO.GetComponent<Animator>().SetTrigger("firstMessageFadeOut");
-        yield return new WaitUntil(() => firstTurnBoxGO.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("firstTurnMessageDone"));
+        if(firstTurnMessageAnimator.gameObject.activeSelf)
+        {
+            firstTurnMessageAnimator.SetTrigger("firstMessageFadeOut");
+            yield return new WaitUntil(() => firstTurnMessageAnimator.GetCurrentAnimatorStateInfo(0).IsName("firstTurnMessageDone"));
+        }        
         firstTurnBoxGO.SetActive(false);
     }
     

@@ -482,11 +482,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'PLACEHOLDER
 
-    THE OPPONENT IS
+    PLACEHOLDER
 
-    PLACING THE DUKE.
-
-    PLEASE WAIT...'
+    PLACEHOLDER'
 --- !u!222 &67292261
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4409,6 +4407,7 @@ MonoBehaviour:
   - Opponent is placing the duke...
   - Place the two footmen!
   - Opponent is placing the two footmen...
+  firstTurnMessageAnimator: {fileID: 3432500759756726958}
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3
