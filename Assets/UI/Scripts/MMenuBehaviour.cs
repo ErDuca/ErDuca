@@ -166,7 +166,6 @@ public class MMenuBehaviour : MonoBehaviour
         StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
         JoinSearch();
     }
-
     //Screen Join Menu -> Multiplayer Menu
     public void GoToScreen3From5() => StartCoroutine(MoveToScreenCoroutine(screen5Position, screen3Position));
     //Screen Guide -> Screen Extras
@@ -213,7 +212,6 @@ public class MMenuBehaviour : MonoBehaviour
         NetworkManager.singleton.StartHost();
         networkDiscovery.AdvertiseServer();
 
-
         //TODO: This is limited to 20 characters, look for the reason and increase it to 40
         PlayerPrefs.SetString("Room Name", networkDiscovery.globalRoomName);
     }
@@ -228,24 +226,12 @@ public class MMenuBehaviour : MonoBehaviour
         
         discoveredServers.Clear();
         networkDiscovery.StartDiscovery();
-        JoinSpawn(); 
-    }
-
-    public void JoinSpawn()
-    {
-        //Make new room buttons
-        foreach (ServerResponse info in discoveredServers.Values)
-        {
-            string roomName = info.name;
-            CreateRoomButton(roomName, info);
-        }
     }
 
     private void CreateRoomButton(string roomName, ServerResponse info)
     {
         GameObject roomButton = Instantiate(roomButtonPrefab);
         roomButton.transform.SetParent(scrollViewContentGO.transform);
-        //TODO: This is a stupid fix, why these value are different from the ones in the prefab???
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
         roomButton.GetComponentInChildren<Text>().text = roomName;
@@ -255,7 +241,6 @@ public class MMenuBehaviour : MonoBehaviour
     public void JoinBeginMatch(ServerResponse info)
     {
         Connect(info);
-        //transitionScript.LoadSceneByID(1); 
     }
 
     void Connect(ServerResponse info)
@@ -270,9 +255,9 @@ public class MMenuBehaviour : MonoBehaviour
         if (!(discoveredServers.ContainsKey(info.serverId)))
         {
             discoveredServers[info.serverId] = info;
-            JoinSpawn();
+            string roomName = info.name;
+            CreateRoomButton(roomName, info);
         }
-
     }
 
     #endregion
