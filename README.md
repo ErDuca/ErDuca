@@ -2,7 +2,7 @@
 
 ## What is it?
 
-War of the Dukes is a chess-like game loosely inspired on "The Duke" by Catalyst Game Labs.
+War of the Dukes is a chess-like board game loosely inspired by "The Duke" by Catalyst Game Labs.
 
 Place your units on a 6x6 board and move them around to capture enemy units.
 The first to capture the opposing duke wins the game!
