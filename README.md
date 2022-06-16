@@ -1,2 +1,3 @@
-# ErDuca
-The Best Game You Will Ever Play!
+[TitleImage](Assets/UI/Assets/Titles/TitleLogo.png?raw=true)
+
+This is war of the Dukes dude
