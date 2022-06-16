@@ -198,7 +198,6 @@ public class ErDucaGameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcSetGivenUpMatchPref()
     {
-        Debug.Log("RPC arrivata!");
         PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 1);
     }
 }

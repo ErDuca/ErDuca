@@ -22,16 +22,16 @@ public class ErDucaMoveManager : MonoBehaviour
 
         foreach (Movement m in pieceRelativeMoves)
         {
-            switch (m._mType)
+            switch (m.mType)
             {
                 case Ptype.Walk:
-                    temp = GetWalkMoves(netId, i, j, m._offsetX, m._offsetY);
+                    temp = GetWalkMoves(netId, i, j, m.offsetX, m.offsetY);
                     if (temp != null)
                         availableMoves.Add(temp, Ptype.Walk);
                     break;
 
                 case Ptype.Jump:
-                    temp = GetJumpMoves(netId, i, j, m._offsetX, m._offsetY);
+                    temp = GetJumpMoves(netId, i, j, m.offsetX, m.offsetY);
                     if (temp != null)
                         availableMoves.Add(temp, Ptype.Jump);
                     break;
@@ -42,7 +42,7 @@ public class ErDucaMoveManager : MonoBehaviour
                     bool foundEnemyPiece = false;
                     do
                     {
-                        temp = GetSlideMoves(netId, isl, jsl, m._offsetX, m._offsetY, ref foundEnemyPiece, ref isl, ref jsl);
+                        temp = GetSlideMoves(netId, isl, jsl, m.offsetX, m.offsetY, ref foundEnemyPiece, ref isl, ref jsl);
 
                         if (temp != null)
                             availableMoves.Add(temp, Ptype.Slide);
@@ -56,7 +56,7 @@ public class ErDucaMoveManager : MonoBehaviour
                     bool foundEnemyPieceFly = false;
                     do
                     {
-                        temp = GetFlyMoves(netId, ifl, jfl, m._offsetX, m._offsetY, ref foundEnemyPieceFly, ref ifl, ref jfl);
+                        temp = GetFlyMoves(netId, ifl, jfl, m.offsetX, m.offsetY, ref foundEnemyPieceFly, ref ifl, ref jfl);
 
                         if (temp != null)
                             availableMoves.Add(temp, Ptype.Fly);
@@ -65,7 +65,7 @@ public class ErDucaMoveManager : MonoBehaviour
                     break;
 
                 case Ptype.Strike:
-                    temp = GetStrikeMoves(netId, i, j, m._offsetX, m._offsetY);
+                    temp = GetStrikeMoves(netId, i, j, m.offsetX, m.offsetY);
                     if (temp != null)
                         availableMoves.Add(temp, Ptype.Strike);
                     break;

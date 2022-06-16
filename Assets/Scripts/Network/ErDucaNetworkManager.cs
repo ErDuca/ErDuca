@@ -15,10 +15,10 @@ public class ErDucaNetworkManager : NetworkManager
     public Dictionary<Tuple<int, int>, ErDucaTile> _tiles = new Dictionary<Tuple<int, int>, ErDucaTile>();
 
     //Parameters for grid-instantiation
-    private int _gridRowsNumber = 6;
-    private int _boardSize = 480;
-    private int _tileSize = 80;
-    private int _tileSpawningHeight = -644;
+    private int gridRowsNumber = 6;
+    private int boardSize = 480;
+    private int tileSize = 80;
+    private int tileSpawningHeight = -644;
     private int coinFlip;
 
     //Players Connections
@@ -26,7 +26,7 @@ public class ErDucaNetworkManager : NetworkManager
 
     public int GridRowsNumber
     {
-        get => _gridRowsNumber;
+        get => gridRowsNumber;
     }
 
     //Players Parameters
@@ -36,35 +36,26 @@ public class ErDucaNetworkManager : NetworkManager
     private Color p2Color = new Color(63 / 255f, 81 / 255f, 181 / 255f, 1f);
     
     //Contains a grid with all the pieces'player netId in the relative positions, used to perform the move-algorithms
-    private int[,] _netIdMatrix = new int[6, 6];
+    private int[,] netIdMatrix = new int[6, 6];
 
     //Matrix Methods
     public int GetMatrixIdAt(int i, int j)
     {
-        return _netIdMatrix[i,j];
+        return netIdMatrix[i,j];
     }
     public void SetMatrixIdAt(int value, int i, int j)
     {
-        _netIdMatrix[i, j] = value;
-    }
-    public void PrintMatrixId()
-    {
-        for (int i = 0; i < _gridRowsNumber; i++)
-        {
-            Debug.Log("["+_netIdMatrix[i, 0]+"]"+"["+ _netIdMatrix[i, 1]
-                +"["+_netIdMatrix[i, 2]+"]"+"["+ _netIdMatrix[i, 3]+"]"
-                +"["+_netIdMatrix[i, 4]+"]"+"["+ _netIdMatrix[i, 5]+"]");
-        }
+        netIdMatrix[i, j] = value;
     }
     private void InitializeTilesGrid()
     {
-        for (int i = 0; i < _gridRowsNumber; i++)
+        for (int i = 0; i < gridRowsNumber; i++)
         {
-            for (int j = 0; j < _gridRowsNumber; j++)
+            for (int j = 0; j < gridRowsNumber; j++)
             {
-                Vector3 position = new Vector3(-(((_boardSize / 2) - ((_tileSize) / 2)))
-                    + (j * _tileSize), _tileSpawningHeight, -(((_boardSize / 2) - ((_tileSize) / 2)))
-                    + (i * _tileSize));
+                Vector3 position = new Vector3(-(((boardSize / 2) - ((tileSize) / 2)))
+                    + (j * tileSize), tileSpawningHeight, -(((boardSize / 2) - ((tileSize) / 2)))
+                    + (i * tileSize));
 
                 GameObject tile = Instantiate(spawnPrefabs[0], position, Quaternion.identity);
                 tile.GetComponent<ErDucaTile>().I = i;

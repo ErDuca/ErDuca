@@ -32,15 +32,15 @@ public enum Ptype
 }
 public struct Movement
 {
-    public int _offsetX;
-    public int _offsetY;
-    public Ptype _mType;
+    public int offsetX;
+    public int offsetY;
+    public Ptype mType;
 
     public Movement(int x, int y, Ptype type)
     {
-        _offsetX = x;
-        _offsetY = y;
-        _mType = type;
+        offsetX = x;
+        offsetY = y;
+        mType = type;
     }
 }
 public abstract class ErDucaPiece : NetworkBehaviour
@@ -49,13 +49,13 @@ public abstract class ErDucaPiece : NetworkBehaviour
     protected List<Movement> _PhaseTwoMovementArray = new List<Movement>();
 
     [SerializeField]
-    [SyncVar] private int _i;
+    [SyncVar] private int i;
     [SerializeField]
-    [SyncVar] private int _j;
+    [SyncVar] private int j;
     [SerializeField]
-    [SyncVar] private int _myPlayerNetId;
+    [SyncVar] private int myPlayerNetId;
     [SerializeField]
-    [SyncVar] private bool _isPhaseOne = true;
+    [SyncVar] private bool isPhaseOne = true;
 
     public List<Movement> P1MOVARR
     {
@@ -67,41 +67,41 @@ public abstract class ErDucaPiece : NetworkBehaviour
     }
     public int I
     {
-        get => _i;
+        get => i;
         set
         {
-            _i = value;
+            i = value;
         }
     }
     public int J
     {
-        get => _j;
+        get => j;
         set
         {
-            _j = value;
+            j = value;
         }
     }
     public int MyPlayerNetId
     {
-        get => _myPlayerNetId;
+        get => myPlayerNetId;
         set
         {
-            _myPlayerNetId = value;
+            myPlayerNetId = value;
         }
     }
     public bool IsPhaseOne
     {
-        get => _isPhaseOne;
+        get => isPhaseOne;
         set
         {
-            _isPhaseOne = value;
+            isPhaseOne = value;
         }
     }
 
     public abstract int UnitIndex();
     public void SwitchPhase()
     {
-        _isPhaseOne = !_isPhaseOne;
+        isPhaseOne = !isPhaseOne;
     }
     public void StartMoveTo(Vector3 target)
     {
