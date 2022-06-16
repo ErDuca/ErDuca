@@ -1,14 +1,28 @@
-![Alt text](/Assets/UI/Assets/Titles/TitleLogo.png?raw=true "Optional Title")
+![Alt text](/Assets/UI/Assets/Titles/TitleLogo.png?raw=true "War of the Dukes Logo")
 
-Chess-like board-game made using Unity and the Mirror networking package.
+## What is it?
 
-You can play it both on Windows and Android platforms: just clone the repo, open in Unity, build it for the relative platform and run it.
+War of the Dukes is a chess-like game loosely inspired on "The Duke" by Catalyst Game Labs.
+Place your units on a 6x6 board and move them around to capture enemy units.
+The first to capture the opposing duke wins the game!
 
-Made by:
-Stefano Caldana - Andrea Ricci - Matteo Rubino - Gianluca Gentile
+## How do I play?
 
-Made for the Mobile Game module of the Game Development Master at University of Verona.
-Have fun!
+War of the Dukes is playable on Android devices connected to the same network.
+Just download the apk from the "APK" folder and install it on your device.
 
-![Alt text](/Assets/UI/Assets/Titles/screen1_1.png?raw=true "Optional Title")
-![Alt text](/Assets/UI/Assets/Titles/screen2.png?raw=true "Optional Title")
+War of the Dukes is also playable on Windows PCs, but you'll need to change the build platform in Unity (2020.3.30f1 or above) and build the exe yourself.
+
+## Made by
+
+- Stefano Caldana
+- Andrea Ricci 
+- Matteo Rubino 
+- Gianluca Gentile
+
+Originally made for the mobile programming course @ Master Game Dev - University of Verona
+
+## Screenshots
+
+![Alt text](/Assets/UI/Assets/Titles/screen1_1.png?raw=true "Game")
+![Alt text](/Assets/UI/Assets/Titles/screen2.png?raw=true "Animation")
