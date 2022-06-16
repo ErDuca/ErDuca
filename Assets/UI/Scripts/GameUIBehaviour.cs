@@ -70,7 +70,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
-    //private bool isHost;
 
     [Header("Draw Box Related")]
     [SerializeField] private GameObject drawBoxGO;
@@ -113,20 +112,6 @@ public class GameUIBehaviour : MonoBehaviour
     {
         get => isPauseMenuActive;
     }
-
-    //public bool IsHost
-    //{
-    //    get => isHost;
-    //    set
-    //    {
-    //        isHost = value;
-    //    }
-    //}
-
-    //public Animator GameAnimator
-    //{
-    //    get => gameAnimator;
-    //}
 
     #region start & update
 
@@ -761,7 +746,6 @@ public class GameUIBehaviour : MonoBehaviour
 
     #region sound
 
-    //TODO: Fix method with first letter lowercase & empty method
     public void CallSoundManager(Sound element)
     {
         soundManager.PlaySound(element);
