@@ -479,7 +479,6 @@ public class GameUIBehaviour : MonoBehaviour
             infoAnimator.SetTrigger("hide");
             yield return new WaitUntil(() => infoAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"));
             infoBlock.SetActive(false);
-            soundManager.PlaySound(Sound.closeInfoBox);
         }
         
     }
@@ -743,9 +742,8 @@ public class GameUIBehaviour : MonoBehaviour
         soundManager.PlaySound(element);
     }
 
-    public void CallSoundManagerAttacks()
-    {
-
+    public void PlayNextPageSound() {
+        soundManager.PlaySound(Sound.pageLeft);
     }
 
     public void playClickSound() {
