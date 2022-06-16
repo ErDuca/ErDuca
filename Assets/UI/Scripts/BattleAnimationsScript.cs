@@ -4,11 +4,6 @@ using UnityEngine.Experimental.U2D.Animation;
 
 public class BattleAnimationsScript : MonoBehaviour
 {
-    [Header("DEBUG animation sprite setter")]
-    [SerializeField] private int animationID;
-    [SerializeField] private int playerSpriteID;
-    [SerializeField] private int opponentSpriteID;
-
     [Header("GameObjects references")]
     [SerializeField] private GameObject eventSystem;
     [SerializeField] private Animator gameAnimator;
@@ -100,8 +95,6 @@ public class BattleAnimationsScript : MonoBehaviour
         OPPONENT_SEER        //27
     }
 
-    //TEMP: Necessary to assign the method to an UI button. Remove later
-    public void OnClickAttack() => SpritesAnimation(animationID, playerSpriteID, opponentSpriteID);
     public void SpritesAnimation(int animationID, int playerId, int opponentId)
     {
         eventSystem.SetActive(false);

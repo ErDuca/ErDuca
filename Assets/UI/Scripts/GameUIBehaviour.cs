@@ -213,8 +213,6 @@ public class GameUIBehaviour : MonoBehaviour
 
         //Define the order of messages during the first turn of the match
         //depending if you're the first or the second to start
-        Debug.Log("netid: "+ErDucaPlayer.LocalPlayer.MyNetId);
-        Debug.Log("starting: "+gameAnimator.GetInteger("startingPlayer"));
         if ((ErDucaPlayer.LocalPlayer.MyNetId == gameAnimator.GetInteger("startingPlayer")) || ((ErDucaPlayer.LocalPlayer.MyNetId == 0 && gameAnimator.GetInteger("startingPlayer") == 2)))
         {
             myFirstTurnMessages = firstTurnMessages;
