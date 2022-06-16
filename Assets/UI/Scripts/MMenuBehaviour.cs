@@ -109,18 +109,19 @@ public class MMenuBehaviour : MonoBehaviour
 
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
-            //If the previous match ended by disconnection, assign a loss
+            //In case of disconnection both players get a loss
             if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1 && PlayerPrefsUtility.GetEncryptedInt("GivenUpMatch") == 0)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
+
+            //Else if the other player gave up the match via the menu give the player a win
             else if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1 && PlayerPrefsUtility.GetEncryptedInt("GivenUpMatch") == 1)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
-
 
             //Show playerprefs stats on the extra menu page
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
@@ -132,7 +133,7 @@ public class MMenuBehaviour : MonoBehaviour
             else
                 recordsText.text = "NO GAMES PLAYED YET!";
 
-            //Setting sliders
+            //Setting music sliders
             musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
             sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
             ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
@@ -163,7 +164,6 @@ public class MMenuBehaviour : MonoBehaviour
         StartCoroutine(MoveToScreenCoroutine(screen3Position, screen5Position));
         JoinSearch();
     }
-
     //Screen Join Menu -> Multiplayer Menu
     public void GoToScreen3From5() => StartCoroutine(MoveToScreenCoroutine(screen5Position, screen3Position));
     //Screen Guide -> Screen Extras
@@ -210,7 +210,6 @@ public class MMenuBehaviour : MonoBehaviour
         NetworkManager.singleton.StartHost();
         networkDiscovery.AdvertiseServer();
 
-
         //TODO: This is limited to 20 characters, look for the reason and increase it to 40
         PlayerPrefs.SetString("Room Name", networkDiscovery.globalRoomName);
     }
@@ -225,24 +224,12 @@ public class MMenuBehaviour : MonoBehaviour
         
         discoveredServers.Clear();
         networkDiscovery.StartDiscovery();
-        JoinSpawn(); 
-    }
-
-    public void JoinSpawn()
-    {
-        //Make new room buttons
-        foreach (ServerResponse info in discoveredServers.Values)
-        {
-            string roomName = info.name;
-            CreateRoomButton(roomName, info);
-        }
     }
 
     private void CreateRoomButton(string roomName, ServerResponse info)
     {
         GameObject roomButton = Instantiate(roomButtonPrefab);
         roomButton.transform.SetParent(scrollViewContentGO.transform);
-        //TODO: This is a stupid fix, why these value are different from the ones in the prefab???
         roomButton.GetComponent<RectTransform>().localScale = Vector3.one;
         roomButton.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 492);
         roomButton.GetComponentInChildren<Text>().text = roomName;
@@ -252,7 +239,6 @@ public class MMenuBehaviour : MonoBehaviour
     public void JoinBeginMatch(ServerResponse info)
     {
         Connect(info);
-        //transitionScript.LoadSceneByID(1); 
     }
 
     void Connect(ServerResponse info)
@@ -267,15 +253,16 @@ public class MMenuBehaviour : MonoBehaviour
         if (!(discoveredServers.ContainsKey(info.serverId)))
         {
             discoveredServers[info.serverId] = info;
-            JoinSpawn();
+            string roomName = info.name;
+            CreateRoomButton(roomName, info);
         }
-
     }
 
     #endregion
 
     #region extra screen
 
+    //Handles the extra page containing rules, units guide, etc.
     private void SwitchExtraScreen(int screenId)
     {
         currentScreen6Page = 0;
@@ -353,7 +340,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     #endregion
 
-    //TEMPORARY
+    //TODO: TEMPORARY
     public void DeletePlayerPrefs()
     {
         PlayerPrefs.DeleteAll();

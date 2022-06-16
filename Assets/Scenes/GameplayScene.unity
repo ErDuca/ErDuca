@@ -482,11 +482,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'PLACEHOLDER
 
-    THE OPPONENT IS
+    PLACEHOLDER
 
-    PLACING THE DUKE.
-
-    PLEASE WAIT...'
+    PLACEHOLDER'
 --- !u!222 &67292261
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2049,7 +2047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &484036145
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2083,7 +2081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundManager: {fileID: 638709437}
-  sound: 15
+  sound: 7
 --- !u!114 &484036147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4334,7 +4332,7 @@ MonoBehaviour:
   timeSliderImageLeft: {fileID: 889297408}
   timeSliderImageRight: {fileID: 2118326503}
   maxPenalties: 1
-  turnTime: 60
+  turnTime: 90
   messageToast: {fileID: 337379410}
   changingTurn: 0
   pauseMenu: {fileID: 1698679723}
@@ -4409,6 +4407,7 @@ MonoBehaviour:
   - Opponent is placing the duke...
   - Place the two footmen!
   - Opponent is placing the two footmen...
+  firstTurnMessageAnimator: {fileID: 3432500759756726958}
 --- !u!95 &917277564
 Animator:
   serializedVersion: 3
@@ -8359,48 +8358,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 917277563}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 917277563}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangePage
       objectReference: {fileID: 0}
     - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayNextPageSound
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GameUIBehaviour, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: GameUIBehaviour, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792746756146240, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6498792746826359116, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -8431,48 +8398,16 @@ PrefabInstance:
       value: BACK
       objectReference: {fileID: 0}
     - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 917277563}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 917277563}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangePage
       objectReference: {fileID: 0}
     - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: playClickSound
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GameUIBehaviour, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: GameUIBehaviour, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6498792747369616724, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed6b8cf602defc64eba7db8da92c42df, type: 3}
@@ -11733,7 +11668,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4192565489053107867, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -33.033936
+      value: -33.03392
       objectReference: {fileID: 0}
     - target: {fileID: 4192565489053107867, guid: 9f239b1409e91ff4c833913c256942d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

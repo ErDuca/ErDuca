@@ -66,33 +66,10 @@ public class ErDucaPlayer : NetworkBehaviour
     [SerializeField]
     [SyncVar] private bool _hasDrawn = false;
 
-    [SerializeField]
-    [SyncVar] private bool _iGaveUp = false;
-    [SerializeField]
-    [SyncVar] private bool _iAmHostAtStart = false;
-
     //Colors
     private Color32 strikeColor = new Color32(243, 193, 77, 255);
     private Color32 moveColor = new Color32(255, 255, 255, 255);
     private Color32 highlightColor = new Color32(200, 140, 75, 255);
-
-    public bool IGaveUp
-    {
-        get => _iGaveUp;
-        set
-        {
-            _iGaveUp = value;
-        }
-    }
-
-    public bool IAmHostAtStart
-    {
-        get => _iAmHostAtStart;
-        set
-        {
-            _iAmHostAtStart = value;
-        }
-    }
 
     //Getters & Setters
     public bool HasDrawn
@@ -174,6 +151,7 @@ public class ErDucaPlayer : NetworkBehaviour
     [Command]
     public void CmdSetGivenUpMatchPref()
     {
+        Debug.Log("Sto per mandare le RPC");
         _erDucaGameManager.RpcSetGivenUpMatchPref();
     }
 
@@ -384,12 +362,12 @@ public class ErDucaPlayer : NetworkBehaviour
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 ray = _camera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
 #endif
 
 #if UNITY_ANDROID
                 ray = _camera.ScreenPointToRay(Input.GetTouch(0).position);
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
 #endif
 
             {
@@ -424,7 +402,7 @@ public class ErDucaPlayer : NetworkBehaviour
                 Ray rayDuke = _camera.ScreenPointToRay(Input.mousePosition);
 
                 //Hit something - Gotta place the Duke
-                if (Physics.Raycast(rayDuke, out hitDuke))
+                if (Physics.Raycast(rayDuke, out hitDuke) && !_gameUIBehaviour.IsPauseMenuActive)
                 {
                     Transform objectHit = hitDuke.transform;
 
@@ -461,7 +439,7 @@ public class ErDucaPlayer : NetworkBehaviour
                 Ray rayPikemen = _camera.ScreenPointToRay(Input.mousePosition);
 
                 //Hit something - Gotta place the Pikemen
-                if (Physics.Raycast(rayPikemen, out hitPikemen))
+                if (Physics.Raycast(rayPikemen, out hitPikemen) && !_gameUIBehaviour.IsPauseMenuActive)
                 {
                     Transform objectHit = hitPikemen.transform;
                     if (objectHit.CompareTag("Tile"))
@@ -506,7 +484,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
                     //Hit something
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
                     {
                         Transform objectHit = hit.transform;
 
@@ -583,9 +561,7 @@ public class ErDucaPlayer : NetworkBehaviour
                                             _currentSelectedPiece.transform.position.z == zTarget);
                                         }
 
-                                        //PROVA
                                         _gameUIBehaviour.changingTurn = true;
-                                        //
 
                                         yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
 
@@ -718,7 +694,7 @@ public class ErDucaPlayer : NetworkBehaviour
                     RaycastHit hit;
                     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit) && !_gameUIBehaviour.IsPauseMenuActive)
                     {
                         Transform objectHit = hit.transform;
 
