@@ -561,9 +561,7 @@ public class ErDucaPlayer : NetworkBehaviour
                                             _currentSelectedPiece.transform.position.z == zTarget);
                                         }
 
-                                        //PROVA
                                         _gameUIBehaviour.changingTurn = true;
-                                        //
 
                                         yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
 

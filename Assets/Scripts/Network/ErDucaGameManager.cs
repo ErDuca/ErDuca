@@ -42,6 +42,10 @@ public class ErDucaGameManager : NetworkBehaviour
         //Player who's about to start the turn - Logic
         if (isOurTurn)
         {
+            //If the options menu is open when a turn ends, it automatically closes
+            if(ErDucaPlayer.LocalPlayer.GameUIBehavior.IsPauseMenuActive)
+                ErDucaPlayer.LocalPlayer.GameUIBehavior.ResumeGame();
+
             switch (currentState)
             {
                 case BattleState.CoinFlip:
@@ -166,6 +170,10 @@ public class ErDucaGameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcPlayAnimation(int animId, int idBlue, int idRed)
     {
+        //If the options menu is open when a turn ends, it automatically closes
+        if (ErDucaPlayer.LocalPlayer.GameUIBehavior.IsPauseMenuActive)
+            ErDucaPlayer.LocalPlayer.GameUIBehavior.ResumeGame();
+
         ErDucaPlayer.LocalPlayer.GameUIBehavior.HidePieceInfo();
         ErDucaPlayer.LocalPlayer.BattleAnimationScript.SpritesAnimation(animId, idBlue, idRed);
     }

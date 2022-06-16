@@ -70,7 +70,7 @@ public class GameUIBehaviour : MonoBehaviour
 
     [Header("Host menu related")]
     [SerializeField] private GameObject hostMenuGO;
-    private bool isHost;
+    //private bool isHost;
 
     [Header("Draw Box Related")]
     [SerializeField] private GameObject drawBoxGO;
@@ -98,6 +98,8 @@ public class GameUIBehaviour : MonoBehaviour
     private int firstTurnIndex = 0;
     [SerializeField] private Animator firstTurnMessageAnimator;
 
+    private SoundManager soundManager;
+
     public bool IsFirstTurn
     {
         get => isFirstTurn;
@@ -112,21 +114,21 @@ public class GameUIBehaviour : MonoBehaviour
         get => isPauseMenuActive;
     }
 
-    private SoundManager soundManager;
+    //public bool IsHost
+    //{
+    //    get => isHost;
+    //    set
+    //    {
+    //        isHost = value;
+    //    }
+    //}
 
-    public bool IsHost
-    {
-        get => isHost;
-        set
-        {
-            isHost = value;
-        }
-    }
+    //public Animator GameAnimator
+    //{
+    //    get => gameAnimator;
+    //}
 
-    public Animator GameAnimator
-    {
-        get => gameAnimator;
-    }
+    #region start & update
 
     private void Start()
     {
@@ -142,12 +144,13 @@ public class GameUIBehaviour : MonoBehaviour
         //This makes sure that the timer does not start until the animations are done
         changingTurn = true;
 
-        //TODO: This cannot be the right way to do this, right?
-        myFirstTurnMessages = new string[] {"", "", "", "" };
+        //Creates an array of 4 strings to store the first turn messages (set from editor)
+        myFirstTurnMessages = new string[] {"", "", "", ""};
     }
 
     private void Update()
     {
+        //Timer management
         if (!changingTurn)
         {
             if (timeRemaining > 0)
@@ -196,6 +199,8 @@ public class GameUIBehaviour : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region host menu
 
     public void CloseHostMenu() => StartCoroutine(CloseHostMenuCoroutine());
@@ -216,6 +221,8 @@ public class GameUIBehaviour : MonoBehaviour
         changingTurn = true;
         isFirstTurn = true;
 
+        //If the game is not finished "normally" (aka ragequit) LastGameComplete will not be set to 1 and the 
+        //player will be getting a loss
         PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 1);
         PlayerPrefsUtility.SetEncryptedInt("GivenUpMatch", 0);
 
@@ -295,6 +302,9 @@ public class GameUIBehaviour : MonoBehaviour
         pauseMenu.SetActive(false);
         isPauseMenuActive = false;
         eventSystem.SetActive(true);
+        rulesScreenGO.SetActive(false);
+        unitsGuideScreenGO.SetActive(false);
+        extraScreenButtonsGO.SetActive(false);
     }
 
     public void UpdateMusicVolume(float value)
@@ -308,6 +318,7 @@ public class GameUIBehaviour : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVolume", value);
     }
 
+    //Confirmation window when giving up the match
     public void OpenConfirmationWindow()
     {
         confirmationWindowGO.SetActive(true);
@@ -320,7 +331,7 @@ public class GameUIBehaviour : MonoBehaviour
 
     public void GiveUpMatch()
     {
-        // host
+        //Case host
         if (NetworkServer.active && NetworkClient.isConnected)
         {
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
@@ -328,7 +339,7 @@ public class GameUIBehaviour : MonoBehaviour
             StartCoroutine(GiveUpMatchCoroutine(true));
         }
 
-        // stop client if client-only
+        //Case client
         else if (NetworkClient.isConnected)
         {
             PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
@@ -352,6 +363,7 @@ public class GameUIBehaviour : MonoBehaviour
         networkDiscovery.StopDiscovery();
     }
 
+    //Subpages of the options menu
     public void OpenRulesScreen()
     {
         currentExtraPage = 0;
@@ -378,6 +390,7 @@ public class GameUIBehaviour : MonoBehaviour
         pageNumberText.text = "Page " + (currentExtraPage + 1) + " / " + currentPagesArray.Length;
     }
 
+    //Closessubpages of the options menu
     public void CloseExtraScreen()
     {
         rulesScreenGO.SetActive(false);
@@ -396,6 +409,7 @@ public class GameUIBehaviour : MonoBehaviour
         }
     }
 
+    //Cancel button when waiting for opponent as host (stops searching and goes back to main menu)
     public void CancelButton()
     {
         if (NetworkServer.active && NetworkClient.isConnected)
@@ -414,6 +428,8 @@ public class GameUIBehaviour : MonoBehaviour
 
         infoBlock.SetActive(true);
         soundManager.PlaySound(Sound.openInfoBox);
+
+        //Shows piece info for the BLUE player
         if (netId == 2)
         {
             infoSpriteRenderer.flipX = false;
@@ -445,7 +461,7 @@ public class GameUIBehaviour : MonoBehaviour
                 pieceInfoMoveTable2.rectTransform.localScale = new Vector2(1, 1);
             }
         }
-
+        //Shows piece info for the RED player
         else
         {
             infoSpriteRenderer.flipX = true;
@@ -547,12 +563,11 @@ public class GameUIBehaviour : MonoBehaviour
         eventSystem.SetActive(false);
         //changingturn stops time during turn swap animations
         changingTurn = true;
-        //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         //thinkingIcon.SetActive(false);
         gameAnimator.SetTrigger("playersTurn");
         yield return new WaitUntil(() => (gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone")));
 
-        //Everything turn-related gets moved to the left side
+        //Every turn-related UI thing gets moved to the left side
         timeSliderImageRight.SetActive(false);
         timeSliderImageLeft.SetActive(true);
         turnText.alignment = TextAnchor.MiddleLeft;
@@ -574,21 +589,22 @@ public class GameUIBehaviour : MonoBehaviour
         gameAnimator.SetTrigger("opponentsTurn");
         yield return new WaitUntil(() => gameAnimator.GetCurrentAnimatorStateInfo(0).IsName("turnChangeDone"));
 
-        //Everything turn-related gets moved to the right side
+        //Every turn-related UI thing gets moved to the left side
         timeSliderImageLeft.SetActive(false);
         timeSliderImageRight.SetActive(true);
         turnText.alignment = TextAnchor.MiddleRight;
         turnText.text = "RED'S\nTURN";
         timeSlider.direction = Slider.Direction.RightToLeft;
         timeSliderFill.GetComponent<Image>().color = colorRed;
-
-        //TODO: Implement true behaviour for thinking icon (it should disappear when the opponent's move animations start playing out)
         //thinkingIcon.SetActive(true);
+
         timeRemaining = turnTime;
         changingTurn = false;
         eventSystem.SetActive(true);
     }
 
+    //Shows on screen message during the first "special" turns of the match
+    //(e.g. place the duke, opponent is placing the footmen, etc.)
     public void ShowFirstTurnMessage()
     {
         if (isFirstTurn)
@@ -609,6 +625,7 @@ public class GameUIBehaviour : MonoBehaviour
         }
     }
 
+    //After the first turn we don't want on screen messages anymore
     public void KillFirstTurnMessage()
     {
         firstTurnBoxGO.SetActive(false);
@@ -624,6 +641,7 @@ public class GameUIBehaviour : MonoBehaviour
         firstTurnBoxGO.SetActive(false);
     }
     
+    //Toasts warning the player when its time is up
     private IEnumerator ShowToast(string message)
     {
         messageToast.GetComponentInChildren<Text>().text = message;
@@ -657,7 +675,6 @@ public class GameUIBehaviour : MonoBehaviour
         int cardIndex = ErDucaPlayer.LocalPlayer.DrawCard();
         int playerColor = ErDucaPlayer.LocalPlayer.MyNetId;
 
-        //Pass in some way the unit to display
         drawBoxBaseColor.color = ErDucaPlayer.LocalPlayer.MyColor;
         drawBoxUnitIcon.sprite = unitIcons[cardIndex];
 
@@ -668,7 +685,6 @@ public class GameUIBehaviour : MonoBehaviour
     private IEnumerator DrawnUnitPlacedCoroutine()
     {
         drawBoxAnimator.SetTrigger("unitPlaced");
-        //HidePieceInfo();
         yield return new WaitUntil(() => drawBoxAnimator.GetCurrentAnimatorStateInfo(0).IsName("drawBoxHidden"));
         drawBoxGO.SetActive(false);           
     }
@@ -684,9 +700,14 @@ public class GameUIBehaviour : MonoBehaviour
 
     public void ShowGameOverScreen(int winner)
     {
+        //If the options menu is open when a turn ends, it automatically closes
+        if (IsPauseMenuActive)
+            ResumeGame();
+
         gameOverScreenGO.SetActive(true);
         // 1 = red
         // 2 = blue
+        //Gives wins and losses shown on the stats page
         if(winner == 2)
         {
             blueWinsScreenGO.SetActive(true);
@@ -727,10 +748,9 @@ public class GameUIBehaviour : MonoBehaviour
         if (NetworkServer.active && NetworkClient.isConnected)
         {
             ErDucaNetworkManager.singleton.StopHost();
-            networkDiscovery.StopDiscovery(); // verificare che venga chiamata sul Client
+            networkDiscovery.StopDiscovery();
         }
 
-        // stop client if client-only
         else if (NetworkClient.isConnected)
         { 
             ErDucaNetworkManager.singleton.StopClient();
@@ -742,6 +762,7 @@ public class GameUIBehaviour : MonoBehaviour
 
     #region sound
 
+    //TODO: Fix method with first letter lowercase & empty method
     public void CallSoundManager(Sound element)
     {
         soundManager.PlaySound(element);

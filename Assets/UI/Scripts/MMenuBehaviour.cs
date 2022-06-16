@@ -109,21 +109,19 @@ public class MMenuBehaviour : MonoBehaviour
 
             transitionScript = sceneTransitionManager.GetComponent<TransitionScript>();
 
-            //If the previous match ended by disconnection, assign a loss
-
-            //Disconnessione - penalizza entrambi
+            //In case of disconnection both players get a loss
             if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1 && PlayerPrefsUtility.GetEncryptedInt("GivenUpMatch") == 0)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Losses", PlayerPrefsUtility.GetEncryptedInt("Losses") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
 
+            //Else if the other player gave up the match via the menu give the player a win
             else if (PlayerPrefsUtility.GetEncryptedInt("LastGameComplete") == 1 && PlayerPrefsUtility.GetEncryptedInt("GivenUpMatch") == 1)
             {
                 PlayerPrefsUtility.SetEncryptedInt("Wins", PlayerPrefsUtility.GetEncryptedInt("Wins") + 1);
                 PlayerPrefsUtility.SetEncryptedInt("LastGameComplete", 0);
             }
-
 
             //Show playerprefs stats on the extra menu page
             wins = PlayerPrefsUtility.GetEncryptedInt("Wins");
@@ -135,7 +133,7 @@ public class MMenuBehaviour : MonoBehaviour
             else
                 recordsText.text = "NO GAMES PLAYED YET!";
 
-            //Setting sliders
+            //Setting music sliders
             musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
             sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
             ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
@@ -264,6 +262,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     #region extra screen
 
+    //Handles the extra page containing rules, units guide, etc.
     private void SwitchExtraScreen(int screenId)
     {
         currentScreen6Page = 0;
@@ -341,7 +340,7 @@ public class MMenuBehaviour : MonoBehaviour
 
     #endregion
 
-    //TEMPORARY
+    //TODO: TEMPORARY
     public void DeletePlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
