@@ -80,4 +80,12 @@ public class SoundManager : MonoBehaviour
         yield return new WaitUntil(() => !audioSource.isPlaying);
         Destroy(audio);
     }
+
+    public void playClickSound() {
+        PlaySound(Sound.click);
+    }
+
+    public void PlayNextPageSound() {
+        PlaySound(Sound.pageLeft);
+    }
 }
