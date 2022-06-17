@@ -151,7 +151,6 @@ public class ErDucaPlayer : NetworkBehaviour
     [Command]
     public void CmdSetGivenUpMatchPref()
     {
-        Debug.Log("Sto per mandare le RPC");
         _erDucaGameManager.RpcSetGivenUpMatchPref();
     }
 
@@ -444,7 +443,6 @@ public class ErDucaPlayer : NetworkBehaviour
                     Transform objectHit = hitPikemen.transform;
                     if (objectHit.CompareTag("Tile"))
                     {
-                        //Debug.Log("Ho selezionato un tile e ci voglio spawnare il Footman");
                         int tile_i_index = objectHit.gameObject.GetComponent<ErDucaTile>().I;
                         int tile_j_index = objectHit.gameObject.GetComponent<ErDucaTile>().J;
 
@@ -633,10 +631,8 @@ public class ErDucaPlayer : NetworkBehaviour
                                 {
                                     hasDoneSomething = true;
 
-                                    //PROVA
                                     _gameUIBehaviour.changingTurn = true;
-                                    //
-
+                                    
                                     yield return StartCoroutine(MovingAnimationCoroutine(_myNetId, currentPieceUnitIndex, item.Value));
 
                                     CmdMovePiece(_currentSelectedPiece.gameObject, objectHit.transform, tile_i_index, tile_j_index);
@@ -969,6 +965,5 @@ public class ErDucaPlayer : NetworkBehaviour
             }
         }
     }
-
     #endregion
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum Sound
@@ -43,26 +42,14 @@ public class SoundManager : MonoBehaviour
     public SoundAudioClip[] soundAudioClipArray;
     public AudioSource sfxAudioSource;
 
-
-
-    //Mettere volume da playerprefs
-    public void PlaySound(Sound sound) {
-
+    public void PlaySound(Sound sound) 
+    {
         GameObject audioGO = new GameObject("Sound");
         AudioSource audioSource =  audioGO.AddComponent<AudioSource>();
         audioSource.volume = PlayerPrefs.GetFloat("SFXVolume");
         audioSource.PlayOneShot(GetAudioClip(sound));
-        StartCoroutine(waitUntilSoundEnds(audioGO, audioSource));            
-
-    }
-
-    private bool CanPlaySound(Sound sound) {
-        switch (sound) {
-            //Da fare
-            default:
-                return true;
-        }
-    }
+        StartCoroutine(WaitUntilSoundEnds(audioGO, audioSource));
+    }   
 
     private AudioClip GetAudioClip(Sound sound) {
         foreach (SoundAudioClip soundAudioClip in soundAudioClipArray) {
@@ -70,12 +57,11 @@ public class SoundManager : MonoBehaviour
                 return soundAudioClip.audioClip;
             }
         }
-
         Debug.LogError("Sound " + sound + " not found!");
         return null;
     }
 
-    private IEnumerator waitUntilSoundEnds(GameObject audio, AudioSource audioSource) {
+    private IEnumerator WaitUntilSoundEnds(GameObject audio, AudioSource audioSource) {
 
         yield return new WaitUntil(() => !audioSource.isPlaying);
         Destroy(audio);
