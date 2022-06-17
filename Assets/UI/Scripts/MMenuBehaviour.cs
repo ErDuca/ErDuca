@@ -133,9 +133,13 @@ public class MMenuBehaviour : MonoBehaviour
             else
                 recordsText.text = "NO GAMES PLAYED YET!";
 
-            //Setting music sliders
-            musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume", 1);
-            sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume", 1);
+            //Setting music volumes & sliders
+            if (!PlayerPrefs.HasKey("MusicVolume"))
+                PlayerPrefs.SetFloat("MusicVolume", .5f);
+            if (!PlayerPrefs.HasKey("SFXVolume"))
+                PlayerPrefs.SetFloat("SFXVolume", 1f);
+            musicSliderGO.value = PlayerPrefs.GetFloat("MusicVolume");
+            sfxSliderGO.value = PlayerPrefs.GetFloat("SFXVolume");
             ostSource.volume = PlayerPrefs.GetFloat("MusicVolume");
         }
 

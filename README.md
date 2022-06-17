@@ -23,11 +23,12 @@ War of the Dukes is also playable on Windows PCs, but you'll need to change the 
 
 Originally made for the mobile programming course @ Master Game Dev - University of Verona
 
+## Demo Video
+
+[Youtube link](https://www.youtube.com/watch?v=TjCFk3woABg)
+
 ## Screenshots
 
 ![Alt text](/Assets/UI/Assets/Titles/screen1_1.png?raw=true "Game")
 ![Alt text](/Assets/UI/Assets/Titles/screen2.png?raw=true "Animation")
-
-## Demo Video
-
-PLACEHOLDER LINK
+![Alt text](/Assets/UI/Assets/Titles/screen3.png?raw=true "Menus")
