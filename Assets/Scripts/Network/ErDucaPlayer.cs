@@ -67,8 +67,11 @@ public class ErDucaPlayer : NetworkBehaviour
     [SyncVar] private bool _hasDrawn = false;
 
     //Colors
+    [SerializeField]
     private Color32 strikeColor = new Color32(243, 193, 77, 255);
+    [SerializeField]
     private Color32 moveColor = new Color32(255, 255, 255, 255);
+    [SerializeField]
     private Color32 highlightColor = new Color32(200, 140, 75, 255);
 
     //Getters & Setters
@@ -310,7 +313,6 @@ public class ErDucaPlayer : NetworkBehaviour
         _battleAnimationScript = GameObject.FindGameObjectWithTag("GameAnims").GetComponent<BattleAnimationsScript>();
         _gridSize = _erDucaNetworkManager.GridRowsNumber;
         
-
         //Rotate the Opponent's camera
         if(_myNetId > 1)
         {
@@ -476,7 +478,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
             case BattleState.PTurn:
                 //Handling moves
-                if (!_hasDrawn)// && !hasMoved)
+                if (!_hasDrawn)
                 {
                     RaycastHit hit;
                     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -519,7 +521,7 @@ public class ErDucaPlayer : NetworkBehaviour
                             }
                         }
 
-                        //Piece in cache, hit a piece (KILLING ENEMY)
+                        //Piece in cache, hit a piece (KILLING AN ENEMY)
                         else if (_currentSelectedPiece != null && objectHit.CompareTag("Piece")) 
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
@@ -543,7 +545,7 @@ public class ErDucaPlayer : NetworkBehaviour
                                 {
                                     if(item.Key.Item1 == enemyPiece_i_index && item.Key.Item2 == enemyPiece_j_index)
                                     {
-                                        //Strike
+                                        //Strike case
                                         if (item.Value.Equals(Ptype.Strike))
                                         {
                                             hasDoneSomething = true;
@@ -563,7 +565,7 @@ public class ErDucaPlayer : NetworkBehaviour
 
                                         yield return StartCoroutine(BattleAnimationCoroutine(_myNetId, enemyPieceUnitIndex, currentPieceUnitIndex));
 
-                                        //Moved the Duke, so i update his indexes
+                                        //Moved the Duke, update his indexes
                                         if (_currentSelectedPiece.UnitIndex() == 0)
                                         {
                                             _dukeI = enemyPiece_i_index;
@@ -614,7 +616,7 @@ public class ErDucaPlayer : NetworkBehaviour
                             }
                         }
 
-                        //Piece in cache, hit a tile (MOVING PIECE)
+                        //Piece in cache, hit a tile (MOVING A PIECE)
                         else if (_currentSelectedPiece != null && objectHit.CompareTag("Tile"))
                         {
                             CmdDeHighlightAllTiles(this.connectionToClient);
@@ -844,7 +846,6 @@ public class ErDucaPlayer : NetworkBehaviour
 
         yield return new WaitUntil(() => _canvasAnimator.GetCurrentAnimatorStateInfo(0).IsName("animationDone"));
     }
-
 
     public bool IsDeckEmpty()
     {

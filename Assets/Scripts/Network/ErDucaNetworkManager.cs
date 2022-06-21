@@ -47,6 +47,7 @@ public class ErDucaNetworkManager : NetworkManager
     {
         netIdMatrix[i, j] = value;
     }
+
     private void InitializeTilesGrid()
     {
         for (int i = 0; i < gridRowsNumber; i++)

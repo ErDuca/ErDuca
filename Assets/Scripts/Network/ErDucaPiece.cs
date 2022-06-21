@@ -103,6 +103,7 @@ public abstract class ErDucaPiece : NetworkBehaviour
     {
         isPhaseOne = !isPhaseOne;
     }
+
     public void StartMoveTo(Vector3 target)
     {
         StartCoroutine(MoveTo(target));

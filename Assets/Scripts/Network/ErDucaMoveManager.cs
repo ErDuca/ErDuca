@@ -78,7 +78,6 @@ public class ErDucaMoveManager : MonoBehaviour
         return availableMoves;
     }
 
-    //APPARENTLY WORKING
     private Tuple<int, int> GetWalkMoves(int netId, int i, int j, int xOffset, int yOffset)
     {
         if (invertIndex)
@@ -128,11 +127,9 @@ public class ErDucaMoveManager : MonoBehaviour
             yOffset = -yOffset;
         }
 
-        //Bounds checking
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
@@ -150,11 +147,9 @@ public class ErDucaMoveManager : MonoBehaviour
             yOffset = -yOffset;
         }
 
-        //Bounds checking
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
@@ -181,11 +176,9 @@ public class ErDucaMoveManager : MonoBehaviour
             yOffset = -yOffset;
         }
 
-        //Bounds checking
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Checking if there's a piece of mine, where i want to shoot/strike
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
@@ -209,15 +202,12 @@ public class ErDucaMoveManager : MonoBehaviour
             yOffset = -yOffset;
         }
 
-        //Bounds checking
         if (i + xOffset < 0 || i + xOffset > 5 || j + yOffset < 0 || j + yOffset > 5)
             return null;
 
-        //Checking if there's a piece of mine, in the tile i want to go
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) == netId)
             return null;
 
-        //Found an enemy piece
         if (ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != netId &&
             ErDucaNetworkManager.singleton.GetMatrixIdAt(i + xOffset, j + yOffset) != 0)
         {
