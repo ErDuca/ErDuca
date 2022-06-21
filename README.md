@@ -31,4 +31,4 @@ Originally made for the mobile programming course @ Master Game Dev - University
 
 ![Alt text](/Assets/UI/Assets/Titles/screen1_1.png?raw=true "Game")
 ![Alt text](/Assets/UI/Assets/Titles/screen2.png?raw=true "Animation")
-![Alt text](/Assets/UI/Assets/Titles/screen3.png?raw=true "Menus")
+![Alt text](/Assets/UI/Assets/Titles/screen3_1.png?raw=true "Menus")
