@@ -343,10 +343,4 @@ public class MMenuBehaviour : MonoBehaviour
     }
 
     #endregion
-
-    //TODO: TEMPORARY, REMOVE BEFORE PACKAGING
-    public void DeletePlayerPrefs()
-    {
-        PlayerPrefs.DeleteAll();
-    }
 }
