@@ -10,7 +10,7 @@ The first to capture the opposing duke wins the game!
 ## How do I play?
 
 War of the Dukes is playable on Android devices connected to the same network.
-Just download the apk from the "APK" folder and install it on your device.
+Just download the apk from the "Build" folder and install it on your device.
 
 War of the Dukes is also playable on Windows PCs, but you'll need to change the build platform in Unity (2020.3.30f1 or above) and build the exe yourself.
 
