@@ -25,7 +25,7 @@ Originally made for the mobile programming course @ Master Game Dev - University
 
 ## Demo Video
 
-[Youtube link](https://www.youtube.com/watch?v=TjCFk3woABg)
+[Youtube link](https://youtu.be/6Ljp-k_3pBY)
 
 ## Screenshots
 
